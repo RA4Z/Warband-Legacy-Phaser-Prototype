@@ -1,10 +1,10 @@
-# Status real da versão 0.2.0
+# Status real da versão 0.3.0
 
 ## Implementado no código
 
 - Menu, quartel e seleção de 2 comandantes com habilidades distintas.
 - 6 classes distintas de tropa com modelos low poly procedurais e equipamentos.
-- Mapa por seed com árvores, rochas, terreno, pontos de recrutamento, santuários, baús, fogueiras, patrulhas, 3 estandartes e fortaleza.
+- Mapa por seed com árvores, rochas, terreno, pontos de recrutamento, santuários, baús, fogueiras, patrulhas, 2 postos por andar e portais para guardiões em 4 andares.
 - Comandante controlável (teclado ou joystick), habilidades e comandos seguir/defender/recuar/formação.
 - Tropas individuais com nomes, traços, progressão XP, níveis, promoção, graduações e visual variável.
 - Combate autônomo corpo a corpo, projéteis, cura, dano, boss e telegráfico simples.
@@ -36,7 +36,7 @@
 
 Testar o arquivo HTML único no Chrome/Edge do Windows com WebGL2 e começar ajustes conforme bugs/prints reais, mantendo essa versão como ponto de partida para o Codex.
 
-## Alterações 0.2.0
+## Alterações 0.3.0
 
 - Zoom inicial mais próximo; câmera segue o comandante com menos atraso.
 - Movimentação do comandante e das tropas acelerada, com tropas alcançando a formação após corridas longas.
@@ -44,3 +44,13 @@ Testar o arquivo HTML único no Chrome/Edge do Windows com WebGL2 e começar aju
 - Poses de respiração, caminhada e ataque, sem arquivos de animação externos.
 - Malhas simplificadas à distância e testes automatizados para poses.
 - **11 testes passando**, 100 expedições simuladas (100 vitórias; duração média 55,3s); a jogabilidade continua em ajuste.
+
+
+## v0.3.0 — entregue
+
+- Quatro pisos e recompensa após chefes intermediários.
+- Quatro biomas com visuais e paletas de solo diferentes, árvores renovadas e adereços.
+- Combate direto com Espaço/ataque e Shift/esquiva.
+- Interações legíveis e HUD de progresso por andar.
+- Migração de saves anteriores do quartel.
+- 14 testes automatizados; validação visual e QA em celular pendentes.

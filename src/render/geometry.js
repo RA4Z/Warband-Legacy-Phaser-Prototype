@@ -234,9 +234,42 @@ export function addActorLite(out,u,time=0){
   put('cylinder',.70,1.6,.3,.11,1.7,.11,'#a27f56',-attack*.7);
  }else put('sphere',.70,2.13,.3,.22,.25,.22,u.classId==='mystic'?'#cab3ff':'#a4dfcc');
 }
-export function addTree(out,x,z,scale=1,variant=0){addMesh(out,'cylinder',x,.52*scale,z,.31*scale,1.05*scale,.31*scale,'#80654c');
- if(variant){addMesh(out,'sphere',x,1.8*scale,z,1.55*scale,1.8*scale,1.55*scale,'#527b54');addMesh(out,'sphere',x-.45*scale,1.32*scale,z+.1*scale,1.05*scale,1.1*scale,1.05*scale,'#638d60');}
- else{addMesh(out,'cone',x,1.55*scale,z,1.8*scale,2.35*scale,1.8*scale,'#4e7864');addMesh(out,'cone',x,2.55*scale,z,1.5*scale,2*scale,1.5*scale,'#628e6e');}}
+// Árvores com copa em camadas, galhos e variação orgânica; evita os cones repetidos da v0.2.
+export function addTree(out,x,z,scale=1,variant=0,biome=1){
+ const bark=biome===3?'#645650':biome===4?'#575c6b':'#775a43';
+ const greens=biome===3?['#95734f','#b28a59','#7e7356']:biome===4?['#718a9b','#91a9ae','#566c87']:biome===2?['#326851','#468363','#57966c']:['#46765a','#64966e','#77a77b'];
+ addMesh(out,'disc',x,.018,z,1.40*scale,.018,1.16*scale,'#3c5e4b');
+ addMesh(out,'armor',x,.57*scale,z,.43*scale,1.14*scale,.43*scale,bark);
+ if(variant){
+  for(let j=0;j<3;j++){const a=j*2.1+.2;addMesh(out,'cylinder',x+Math.sin(a)*.34*scale,1.11*scale,z+Math.cos(a)*.34*scale,.18*scale,.87*scale,.19*scale,bark,{rz:.28*Math.sin(a)});}
+  for(const [dx,dy,dz,r,c] of [[-.35,1.88,0,1.5,0],[.58,2.26,.26,1.33,1],[.02,2.72,-.37,1.28,2],[-.62,2.40,.45,1.14,1]])addMesh(out,'sphere',x+dx*scale,dy*scale,z+dz*scale,r*scale,r*.82*scale,r*scale,greens[c]);
+ }else{
+  for(const [dy,w,c] of [[1.50,1.58,0],[2.15,1.35,1],[2.78,1.03,2]]){
+   addMesh(out,'cone',x,dy*scale,z,w*scale,1.55*scale,w*scale,greens[c],{yaw:variant*.6});
+  }
+ }
+}
+export function addGroundDetail(out,d,biome=1){
+ const x=d.x,z=d.z,size=d.size,shade=biome===3?'#776950':biome===4?'#697f8b':biome===2?'#356d55':'#5a8b5f';
+ if(d.type<7){ // gramíneas pequenas com folhas orientadas, sem grandes manchas circulares
+  const h=(.24+.33*size)*(biome===3?.72:1);
+  for(let a=0;a<3;a++){
+   const phi=(d.seed%7)*.43+a*2.09;
+   addMesh(out,'cone',x+Math.cos(phi)*.12,.05+h*.49,z+Math.sin(phi)*.12,.065,h,.065,a===0?'#92ad75':shade,{rz:.2*Math.cos(phi),rx:.18*Math.sin(phi)});
+  }
+ }else if(d.type<10){
+  // pequenas flores; dão escala e textura ao bosque
+  addMesh(out,'cylinder',x,.14,z,.035,.27,.035,shade);
+  addMesh(out,'sphere',x,.31,z,.16,.13,.16,biome===4?'#d0bff1':biome===3?'#f0bc7e':d.type===8?'#f2d09a':'#f3a4a0');
+ }else if(d.type<12){
+  addMesh(out,'sphere',x,.11,z,.35*size,.22*size,.24*size,biome===3?'#8b837d':'#828f82');
+ }else{
+  for(let i=0;i<2;i++){
+   addMesh(out,'cylinder',x+i*.22,.15,z+i*.10,.055,.30,.055,'#e3d6aa');
+   addMesh(out,'cone',x+i*.22,.34,z+i*.10,.23,.22,.23,'#bc6859');
+  }
+ }
+}
 export function addSite(out,s,elapsed=0){const {x,z,kind}=s;const y=.08;
  const color=s.done?'#7f9375':kind==='banner'?'#d59b6e':kind==='boss'?'#ac6765':kind==='recruit'?'#6dd2af':kind==='shrine'?'#bc9ce7':'#e7ce8d';
  if(kind==='home'){
@@ -244,13 +277,18 @@ export function addSite(out,s,elapsed=0){const {x,z,kind}=s;const y=.08;
   addMesh(out,'cylinder',x,0.55,z-1.8,.9,1.1,.9,'#9c785a');addMesh(out,'cone',x,1.63,z-1.8,2.6,1.5,2.6,'#597c7b');
   addMesh(out,'box',x+2,.3,z+1.1,2.1,.6,1.7,'#8c6a48');addMesh(out,'cone',x+2,1.1,z+1.1,2.7,1.2,2.3,'#7b5a49');
   addMesh(out,'cylinder',x-2.5,1.2,z, .14,2.4,.14,'#957255');addMesh(out,'box',x-2.5,2,z,.93,.63,.11,'#69c4b9');
-  addMesh(out,'cone',x-1,.24,z+2,.6,.55,.6,'#ffca77');return;
+  addMesh(out,'cone',x-1,.24,z+2,.6,.55,.6,'#ffca77');
+  for(let i=0;i<7;i++){const a=i*Math.PI*2/7;addMesh(out,'box',x+Math.cos(a)*3.2,.13,z+Math.sin(a)*3.2,1.2,.26,.32,'#a1845e',{yaw:a});}
+  addMesh(out,'box',x-1.5,.27,z-2.6,1.6,.55,.75,'#886d49');addMesh(out,'box',x-1.5,.56,z-2.6,1.6,.11,.75,'#d1aa70');
+  return;
  }
  if(kind==='banner'||kind==='patrol'){
   addMesh(out,'disc',x,.02,z,3.5,.05,3.5,s.done?'#789575':'#8a7663');
   for(let i=0;i<3;i++){const a=i*2.1;addMesh(out,'cylinder',x+Math.cos(a)*2.6,.7,z+Math.sin(a)*2.6,.3,1.4,.3,'#71594e');}
   addMesh(out,'cylinder',x,1.5,z,.17,3,.17,'#91715b');addMesh(out,'box',x+.46,2.38,z,.91,1.14,.13,color);
-  addMesh(out,'box',x,0.27,z,1.8,.54,1.6,'#8b6e55');return;
+  addMesh(out,'box',x,0.27,z,1.8,.54,1.6,'#8b6e55');
+  for(const side of [-1,1]){addMesh(out,'box',x+side*2.1,.38,z-1.7,.32,.75,.45,'#6f6659',{yaw:.23*side});addMesh(out,'cone',x+side*2.1,1.04,z-1.7,.46,.30,.46,'#ab926e');}
+  return;
  }
  if(kind==='boss'){
   addMesh(out,'disc',x,.03,z,6.2,.06,6.2,'#7d6e68');

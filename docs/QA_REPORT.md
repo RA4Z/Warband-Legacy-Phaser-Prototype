@@ -44,3 +44,15 @@
 - Repetidas **100 expedições simuladas com bot recrutador: 100 vitórias, média de 55,3 segundos**. A velocidade torna o ritmo ainda mais curto; **a dificuldade/duração seguem pendentes**.
 
 **Limitação importante:** o navegador headless deste ambiente impede abrir páginas locais e não fornece WebGL2, portanto **a aparência final e os FPS não foram validados visualmente**. A primeira execução manual em Chrome/Edge com WebGL2 continua obrigatória, principalmente para confirmar animações e desempenho com muitas tropas.
+
+
+## Revisão 0.3.0 (23/11/2026)
+
+- Testes automatizados: **14/14 aprovados** após corrigir disputa entre modal de recompensa de andar e modal de vantagem de patrulha.
+- Cinco execuções de regressão sucessivas sem falhas.
+- `npm run check`: sintaxe dos principais arquivos validada.
+- Quatro andares: transições, recompensas, incremento de dificuldade, guardião final e salvamento validados por testes de domínio.
+- Ataque básico: alcance, recarga e redução de HP verificados.
+- Esquiva: deslocamento, invulnerabilidade e recarga verificados.
+- **Não validado**: renderização real WebGL2 e legibilidade no dispositivo do usuário; o Chromium headless deste ambiente não disponibilizou captura visual confiável.
+- **Próxima rodada de QA real:** navegação por todos os locais, desempenho GPU (PC/Android), visibilidade dos indicadores, ausência de travamentos em quatro andares consecutivos.

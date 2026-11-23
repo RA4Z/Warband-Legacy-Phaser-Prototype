@@ -1,14 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {rng} from '../src/core/random.js';
-import {makeWorld} from '../src/game/world.js';
+import {makeWorld,TOTAL_FLOORS,biomeForFloor} from '../src/game/world.js';
 import {freshMeta,saveMeta,loadMeta,SAVE_KEY} from '../src/game/persistence.js';
 import {generateSoldier,statsFor,awardXp,resolveDowned,canPromote,promote} from '../src/game/units.js';
 import {Game} from '../src/game/simulation.js';
 const storage=()=>{const m=new Map();return {getItem:k=>m.get(k)||null,setItem:(k,v)=>m.set(k,String(v)),removeItem:k=>m.delete(k)};};
 test('geração procedural produz 100 mundos consistentes, objetivos e pontos essenciais',()=>{
  for(let seed=1;seed<=100;seed++){
-  const w=makeWorld(seed*7331);assert.equal(w.sites.filter(s=>s.kind==='banner').length,3);
+  const w=makeWorld(seed*7331);assert.equal(w.sites.filter(s=>s.kind==='banner').length,2);
   assert.equal(w.sites.filter(s=>s.kind==='boss').length,1);
   assert.ok(w.sites.filter(s=>s.kind==='recruit').length>=2);
   assert.ok(w.sites.filter(s=>s.kind==='rest').length>=2);
@@ -33,22 +33,28 @@ test('salvamento tem versão, preserva progresso e não quebra com payload invá
  const s=storage(),data=freshMeta();data.legacy=77;saveMeta(data,s);assert.equal(loadMeta(s).legacy,77);
  s.setItem(SAVE_KEY,'{"version":-1}');assert.equal(loadMeta(s).legacy,3);
 });
-test('expedição completa: quartel, recrutamento, combate, 3 estandartes, chefe, recompensas e veteranos',()=>{
+test('expedição completa: quartel, recrutamento, combate, 4 andares, recompensas e veteranos',()=>{
  const store=storage();globalThis.localStorage=store;
  const g=new Game();assert.equal(g.meta.roster.length,6);g.startRun();assert.ok(g.run);
  const run=g.run;assert.equal(run.soldiers.length,5);
  const site=run.world.sites.find(s=>s.kind==='recruit');run.commander.x=site.x;run.commander.z=site.z;
  g.useInteract();assert.equal(run.pending.type,'recruit');const cost=run.pending.cards[0].cost;g.chooseModal(0);assert.equal(run.coins,16-cost);assert.equal(run.soldiers.length,7);
  const shrine=run.world.sites.find(s=>s.kind==='shrine');run.commander.x=shrine.x;run.commander.z=shrine.z;g.useInteract();assert.equal(run.pending.type,'perk');g.chooseModal(0);assert.equal(run.perks.length,1);
- for(const flag of run.world.sites.filter(s=>s.kind==='banner')){
-  run.commander.x=flag.x;run.commander.z=flag.z;g.spawnGroup(flag);
-  for(const e of run.enemies.filter(e=>e.groupId===flag.id))e.hp=0;
-  g.tick(1/30);if(run.pending?.type==='perk')g.chooseModal(0);
+ for(let floor=1;floor<=TOTAL_FLOORS;floor++){
+  assert.equal(run.floor,floor);
+  assert.equal(run.world.floor,floor);
+  for(const flag of run.world.sites.filter(s=>s.kind==='banner')){
+   run.commander.x=flag.x;run.commander.z=flag.z;g.spawnGroup(flag);
+   for(const e of run.enemies.filter(e=>e.groupId===flag.id))e.hp=0;
+   g.tick(1/30);if(run.pending?.type==='perk')g.chooseModal(0);
+  }
+  assert.equal(run.banners,2);
+  const boss=run.world.sites.find(s=>s.kind==='boss');run.commander.x=boss.x;run.commander.z=boss.z;g.spawnGroup(boss);
+  assert.ok(run.enemies.some(e=>e.boss));for(const e of run.enemies.filter(e=>e.groupId===boss.id))e.hp=0;
+  g.tick(1/30);
+  if(floor<TOTAL_FLOORS){assert.equal(run.pending?.type,'floor');assert.equal(run.pending.cards.length,3);g.chooseModal(floor%3);assert.equal(run.floor,floor+1);assert.equal(run.banners,0);assert.equal(run.commander.x,0);assert.equal(run.pending,null);}
  }
- assert.equal(run.banners,3);assert.equal(run.earnedLegacy,6);
- const boss=run.world.sites.find(s=>s.kind==='boss');run.commander.x=boss.x;run.commander.z=boss.z;g.spawnGroup(boss);
- assert.ok(run.enemies.some(e=>e.boss));for(const e of run.enemies.filter(e=>e.groupId===boss.id))e.hp=0;
- g.tick(1/30);assert.equal(run.finished,true);assert.equal(run.finalResult.type,'victory');
+ assert.equal(run.finished,true);assert.equal(run.finalResult.type,'victory');assert.equal(run.finalResult.floors,TOTAL_FLOORS);
  assert.ok(g.meta.legacy>3);assert.equal(g.meta.wins,1);
  g.keepRecruit(run.finalResult.returnables[0].id);assert.equal(g.meta.roster.length,7);
  g.returnBarracks();assert.equal(g.run,null);assert.equal(g.meta.activeRun,null);
@@ -107,4 +113,16 @@ test('modelos procedurais possuem poses distintas e geometria válida',async()=>
  assert.notDeepEqual(idle,idleLater,'animação de respiração em repouso');
  assert.notDeepEqual(idleLater,walk,'animação de pernas e braços na caminhada');
  assert.notDeepEqual(idleLater,strike,'animação da arma no golpe');
+});
+
+// Regressões v0.3 — interação direta do comandante, esquiva e progressão roguelite.
+test('comandante ataca manualmente no arco frontal com recarga e feedback',()=>{
+ globalThis.localStorage=storage();const g=new Game();g.startRun();const flag=g.run.world.sites.find(s=>s.kind==='banner');g.spawnGroup(flag);const e=g.run.enemies[0];g.run.commander.x=e.x;g.run.commander.z=e.z-2;
+ const original=g.run.enemies.reduce((sum,e)=>sum+e.hp,0);assert.equal(g.basicAttack(),true);assert.ok(g.run.enemies.reduce((sum,e)=>sum+e.hp,0)<original);assert.equal(g.basicAttack(),false);assert.ok(g.run.fx.some(x=>x.type==='slash'));g.tick(.56);assert.equal(g.basicAttack(),true);
+});
+test('esquiva desloca, concede invulnerabilidade temporária e tem cooldown',()=>{
+ globalThis.localStorage=storage();const g=new Game();g.startRun();const c=g.run.commander;g.input={x:0,z:1};const before=c.x;assert.equal(g.dodge(),true);assert.ok(c.x>before+3);assert.ok(c.invuln>0);const oldHp=c.hp;g.hurt(c,90,{id:'foe',team:'enemy'});assert.equal(c.hp,oldHp);assert.equal(g.dodge(),false);
+});
+test('todos os andares têm nomes distintos e geram cenários válidos',()=>{
+ assert.equal(TOTAL_FLOORS,4);const names=[];for(let floor=1;floor<=TOTAL_FLOORS;floor++){const w=makeWorld(7331+floor,floor);names.push(biomeForFloor(floor).name);assert.equal(w.floor,floor);assert.ok(w.details.length>300);assert.ok(w.biome.ground.length===3);assert.equal(w.sites.filter(s=>s.kind==='banner').length,2);}assert.equal(new Set(names).size,TOTAL_FLOORS);
 });

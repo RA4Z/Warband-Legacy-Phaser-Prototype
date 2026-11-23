@@ -1,8 +1,22 @@
-# ⚔ Warband Legacy — Protótipo 0.2.0
+# ⚔ Warband Legacy — Protótipo 0.3.0
 
 **Every soldier has a story.**
 
 Roguelite 3D isométrico de exércitos para navegador e celulares compatíveis. Cada soldado possui identidade, progressão, ferimentos e risco de morte permanente.
+
+## 🌳 Atualização 0.3.0 — cenário, combate e andares roguelite
+
+- **Quatro andares com progressão**: Bosque de Arven, Floresta Esmeralda, Ermos de Cinza e Altos do Crepúsculo. Cada andar tem dois postos inimigos, um Guardião, reforços inimigos mais fortes e uma escolha de recompensa antes do próximo andar. O chefe final encerra o quarto andar.
+- **Cenário redesenhado**: saiu o tabuleiro quadriculado. Entraram terreno contínuo com cores procedurais, caminhos entre locais, gramíneas, flores, rochas, arbustos, árvores mais orgânicas e paletas específicas de cada bioma.
+- **Cores nítidas**: shader sem névoa acinzentada à distância, iluminação ambiente equilibrada, maior densidade de pixels no desktop. Em celulares o limite de resolução é menor para preservar FPS.
+- **Comandante ativo**: ESPAÇO/botão ATAQUE executa golpe em arco, acerta até três oponentes próximos e mostra trilha de espada e faíscas. SHIFT/botão ESQUIVA avança, concede invulnerabilidade breve e tem recarga. Tropas continuam combatendo automaticamente; habilidades 1/2 permanecem.
+- **Feedback**: pontos de interesse próximos mostram nome, comando de interação, marcador no chão e destaque do botão E; impactos exibem partículas e números de dano.
+- **HUD**: faixa dos quatro andares, progresso por posto, botões reagrupados e painel de ordens mais discreto.
+- **Compatibilidade com saves v0.2**: quartel e veteranos permanecem; uma expedição v0.2 em andamento reinicia no primeiro andar para evitar bloqueios.
+
+### Limitações honestas
+
+Os personagens continuam sendo malhas 3D procedurais originais, não modelos GLB com animação esquelética. As novas animações são simples e o combate, o balanceamento e o desempenho em celulares reais ainda exigem validação manual. O cenário é um ambiente estilizado, não um mapa AAA. O renderizador continua sendo WebGL2 nativo; não é Three.js.
 
 ## 🎨 Atualização visual e de movimentação 0.2.0
 
@@ -40,6 +54,8 @@ node tools/build-standalone.mjs  # regenera o HTML único depois de alterações
 |---|---|---|
 | Movimento | WASD ou setas | Joystick esquerdo |
 | Interagir | E | Botão ✧ |
+| Ataque do comandante | Espaço | Botão ⚔ |
+| Esquiva com invulnerabilidade breve | Shift | Botão ➤ |
 | Habilidade 1 | 1 | Botão esquerdo de habilidade |
 | Habilidade 2 | 2 | Botão direito de habilidade |
 | Alternar seguir/defender | Q | Painel de ordens |
@@ -51,8 +67,8 @@ node tools/build-standalone.mjs  # regenera o HTML único depois de alterações
 1. Selecione até cinco soldados no quartel e um dos dois comandantes.
 2. Entre na expedição e explore o mapa. Os marcadores ficam no minimapa.
 3. Recrute soldados, abra baús, descanse, compre melhorias temporárias e derrote patrulhas.
-4. Conquiste **três estandartes** para desbloquear a fortaleza.
-5. Derrote o **Lorde da Cinza**, conquiste insígnias e escolha até dois novos recrutas para o quartel.
+4. Conquiste **dois estandartes** por andar para abrir o portal.
+5. Derrote os **Guardiões**, escolha recompensas entre andares e vença o quarto andar para terminar a jornada.
 6. Aprimore instalações, trate feridos e promova veteranos antes da próxima expedição.
 
 Se o comandante morrer, a expedição será perdida. Soldados derrotados podem voltar feridos ou morrer permanentemente. O memorial registra seus nomes.
