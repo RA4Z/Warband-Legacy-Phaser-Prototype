@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#101f25" />
+  <meta name="description" content="Warband Legacy: lidera seu exército, salva veteranos e constrói seu legado." />
+  <title>Warband Legacy — Protótipo</title>
+  <link rel="stylesheet" href="./src/ui/styles.css" />
+</head>
+<body>
+  <div id="game-shell">
+    <canvas id="scene" aria-label="Cenário tridimensional do jogo"></canvas>
+    <canvas id="overlay" aria-hidden="true"></canvas>
+    <div class="vignette" aria-hidden="true"></div>
+    <main id="ui"></main>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </div>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

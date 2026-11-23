@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#101f25" />
+  <meta name="description" content="Warband Legacy: lidera seu exército, salva veteranos e constrói seu legado." />
+  <title>Warband Legacy — Protótipo</title>
+  <style>:root{color-scheme:dark;--bg:#0b1a1d;--panel:#12262bf2;--panel2:#1c3538e9;--line:#526e6680;--cream:#f2e9d1;--muted:#afbfba;--teal:#80d3bc;--gold:#e4bd78;--red:#e18c7c;--black:#091a1c;--shadow:0 18px 60px #061c1be0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;font-synthesis:none}*{box-sizing:border-box}html,body{padding:0;margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--cream)}button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.43;cursor:not-allowed}button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}button,input,select{touch-action:manipulation}#game-shell{position:relative;width:100vw;height:100dvh;min-height:380px;overflow:hidden;background:#609477}#scene,#overlay,.vignette,#ui{position:absolute;inset:0;width:100%;height:100%}#scene{display:block;touch-action:none}#overlay{pointer-events:none}.vignette{pointer-events:none;background:radial-gradient(ellipse at 50% 45%,transparent 39%,#163b3a24 70%,#071a1c9b 110%)}#ui{pointer-events:none}#ui>*{pointer-events:auto}.screen{height:100%;width:100%;position:relative}.screen h1,.screen h2,.screen h3,p{margin-top:0}.eyebrow,.hud-eyebrow{color:var(--gold);font-size:10px;letter-spacing:.23em;font-weight:800;text-transform:uppercase}.btn{border:1px solid transparent;display:inline-flex;align-items:center;justify-content:center;min-height:43px;padding:11px 20px;border-radius:9px;letter-spacing:.035em;font-size:13px;font-weight:800;transition:background .12s,transform .12s;white-space:nowrap}.btn:active{transform:scale(.98)}.btn-primary{background:linear-gradient(145deg,#f6d695,#d7a961);color:#24302c;box-shadow:inset 0 1px #fff8,0 6px 22px #0005}.btn-primary:hover{background:#ffe2a5}.btn-muted{background:#2b4648cf;border-color:#55716c;color:#e1ede7}.btn-muted:hover{background:#395a5c}.btn-ghost{background:#192f33be;color:var(--cream);border-color:#60716e}.btn-tiny{min-height:34px;padding:7px 12px;background:#233a3d;border-color:#57706a;color:var(--cream);font-size:11px}.btn-mini{min-height:32px;padding:6px 9px;font-size:11px}.btn-gold{background:#d3b177;color:#152a28}.btn-danger{border-color:#914e4e;background:#4b2a30;color:#ffccc2}.btn-wide{width:100%}.menu-screen{background:linear-gradient(90deg,#0b2022f5 0%,#102d2ce8 39%,#13302b50 66%,#10292715 100%);display:flex;align-items:center;padding:clamp(30px,7vw,110px)}.hero-area{width:min(540px,58vw);padding-left:clamp(0px,2vw,36px);position:relative;z-index:1}.seal{display:grid;place-items:center;border:2px solid var(--gold);color:#e9c986;font-size:28px;height:64px;width:64px;transform:rotate(-45deg);border-radius:12px;margin-bottom:29px;box-shadow:0 0 0 7px #e6c58d13}.seal::first-letter{transform:rotate(45deg)}.menu-screen h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(55px,7.1vw,113px);line-height:.88;margin:16px 0 15px;letter-spacing:-.065em;font-weight:900;text-shadow:0 4px 35px #0008}.menu-screen h1 span{color:var(--gold)}.tagline{font-family:Georgia,serif;font-style:italic;font-size:clamp(16px,1.65vw,24px);letter-spacing:.07em;color:#d6e0cd}.hero-line{width:85px;height:3px;background:var(--gold);margin:26px 0}.menu-description{color:#d9e2da;font-size:clamp(13px,1.1vw,17px);line-height:1.6}.menu-actions{display:flex;flex-direction:column;gap:11px;width:min(330px,100%);margin-top:27px}.menu-actions .btn{font-size:13px;letter-spacing:.08em;min-height:52px}.version{margin-top:26px;font-size:9px;color:#b1c7bb;letter-spacing:.1em}.menu-side{position:absolute;bottom:11%;right:7%;border:1px solid #d6c49b55;border-radius:12px;padding:22px;background:#0e2426d1;box-shadow:var(--shadow)}.menu-side-badge{display:flex;align-items:center;gap:14px;max-width:285px}.menu-side-badge>span{font-size:35px;color:var(--gold)}.menu-side-badge strong{font-family:Georgia;font-size:22px;line-height:1.15}.menu-side-badge small{display:block;position:absolute;bottom:9px;right:12px;color:var(--muted);font-size:9px}
+.topbar,.hud-top{display:flex;align-items:center;justify-content:space-between;gap:13px;padding:12px 22px;background:linear-gradient(90deg,#0b1f21ee,#13302fea);border-bottom:1px solid #77928558;box-shadow:0 8px 20px #031a1c6a}.topbar{position:sticky;top:0;z-index:3;min-height:64px}.brand-small{font-family:Georgia,serif;letter-spacing:.06em;font-size:16px;white-space:nowrap}.brand-small>span{color:var(--gold);font-size:22px;margin-right:9px}.brand-small b{color:var(--gold)}.brand-small em{color:#a9beb4;font-style:normal;font:700 11px ui-sans-serif,system-ui;letter-spacing:.12em}.topbar-items{display:flex;align-items:center;gap:15px}.resource{display:flex;gap:6px;align-items:center;color:var(--gold);font-size:20px}.resource small{color:var(--muted);font-size:11px}.hub-screen{background:linear-gradient(140deg,#0c2224f2,#0c2426db 50%,#1a3437bb);overflow-y:auto;overscroll-behavior:contain}.hub-main{max-width:1470px;padding:22px 24px 70px;margin:0 auto}.hub-intro{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:20px}.hub-intro h2{font:700 clamp(31px,3vw,46px)/1 Georgia,serif;margin:7px 0 8px}.hub-intro p{font-size:13px;line-height:1.5;color:#c0cdc5;max-width:650px;margin:0}.hub-totals{display:flex;border:1px solid #78948942;background:#0e292aa9;border-radius:9px}.hub-totals>div{display:flex;flex-direction:column;align-items:center;min-width:93px;padding:13px 18px;border-right:1px solid #77908442}.hub-totals>div:last-child{border:0}.hub-totals b{font-size:25px;font-family:Georgia;color:var(--gold)}.hub-totals b small{font-size:13px;color:#9dafaa}.hub-totals span{text-transform:uppercase;letter-spacing:.08em;color:#a7c0b4;font-size:9px}.hub-columns{display:grid;grid-template-columns:minmax(250px,.88fr) minmax(360px,1.55fr) minmax(270px,.95fr);align-items:start;gap:15px}.panel{background:#112b2de8;border:1px solid #6d8d805f;border-radius:12px;padding:16px;box-shadow:0 13px 30px #0219196e}.panel-heading{display:flex;align-items:center;gap:11px;border-bottom:1px solid #6380775c;padding-bottom:13px;margin-bottom:14px}.panel-heading h3{font:700 19px Georgia,serif;margin:0 0 5px}.panel-heading p{color:#a6bcb1;font-size:10px;margin:0}.panel-icon{display:grid;place-items:center;width:36px;height:36px;border-radius:8px;background:#d1b37426;border:1px solid #d2bc8170;color:var(--gold);font-size:23px;flex:none}.commander-options{display:flex;flex-direction:column;gap:9px}.commander-card{border:1px solid #527b74;border-radius:9px;background:#193739e2;color:var(--cream);display:flex;align-items:center;text-align:left;padding:11px 9px;gap:9px;min-height:71px}.commander-card.active{border-color:var(--gold);background:#4c4c3569;box-shadow:inset 0 0 0 1px #d2ae6f77}.commander-medallion{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;background:#3e5550;border:2px solid #789e8e;color:#f6dca3;font-size:22px;flex:none}.commander-card b{display:block;font-size:12px}.commander-card small{display:block;font-size:10px;color:#afc9bf;margin-top:4px;line-height:1.3}.check{margin-left:auto;color:var(--gold);font-size:21px}.start-box{margin-top:19px;border-radius:9px;background:#091e21ad;border:1px dashed #7a958256;padding:15px;display:flex;flex-direction:column;gap:12px}.start-box strong{font-size:13px}.start-box small{display:block;color:#b2c5ba;font-size:10px;margin-top:4px}.btn-start{min-height:56px}.roster-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.soldier-card{background:#1b3738;border:1px solid #53766f;border-radius:9px;overflow:hidden;min-width:0;transition:border-color .12s}.soldier-card.picked{border-color:#e4c587;box-shadow:inset 0 0 0 1px #d8be7a4f}.soldier-card.injured{opacity:.76}.soldier-select{border:0;background:none;color:inherit;display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:8px 8px 5px}.soldier-avatar{display:grid;place-items:center;width:43px;height:43px;flex:none;border-radius:8px;border:1px solid #aac2b259;background:#3a6561;color:#e5dfc0;font-size:24px}.class-guardian{background:#526d7e}.class-archer{background:#416e50}.class-mystic{background:#63547b}.class-healer{background:#788061}.class-spearman{background:#7b7052}.soldier-details{flex:1;min-width:0}.soldier-details b{display:block;font-size:11px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}.soldier-details small{display:block;color:#bdd0c4;font-size:10px;margin:3px 0}.rank{display:inline-block;padding:2px 7px;border-radius:20px;font-size:9px;border:1px solid #bec4ad88}.rank-veteran{color:#b5dfaf}.rank-elite{color:#a3c8f0}.rank-legendary{color:#e9d193}.soldier-check{font-size:22px;color:#dfcc91;margin-left:auto}.xp-track{height:2px;background:#274744}.xp-track div{height:100%;background:#d4be83}.soldier-actions{display:flex;align-items:center;gap:9px;justify-content:space-between;padding:7px 9px}.condition{color:#a7d9c1;font-size:10px}.condition.wounded{color:#ffbd9d}.tiny-link{background:transparent;border:0;padding:3px 0;color:var(--gold);font-size:10px;text-decoration:underline}.roster-foot{display:flex;gap:8px;margin-top:15px;flex-wrap:wrap}.roster-foot .btn{font-size:10px;min-height:37px;flex:1}.upgrade-list{display:flex;flex-direction:column;gap:9px}.upgrade{display:flex;align-items:center;gap:9px;padding:10px 8px;border:1px solid #5e7b725b;background:#193638a6;border-radius:8px}.upgrade-symbol{width:31px;height:35px;display:grid;place-items:center;color:var(--gold);font-size:19px;flex:none}.upgrade-body{flex:1;min-width:0}.upgrade-body b{font-size:12px;display:block}.upgrade-body small{font-size:9px;display:block;margin:4px 0 6px;color:#adc3b7}.upgrade-level{display:flex;gap:4px}.upgrade-level span{width:21px;height:3px;background:#3e5751;border-radius:4px}.upgrade-level span.filled{background:#e2c488}
+.hud-screen{position:relative;width:100%;height:100%;pointer-events:none}.hud-screen button{pointer-events:auto}.hud-top{position:absolute;top:0;left:0;right:0;z-index:2;padding:9px 16px;min-height:73px;pointer-events:auto}.hud-leader{display:flex;align-items:center;gap:10px;min-width:230px}.portrait{width:49px;height:49px;display:grid;place-items:center;background:linear-gradient(135deg,#39565c,#a28b58);color:#f6e6b4;font-size:30px;border-radius:10px;border:2px solid var(--gold)}.hud-leader>div{flex:1}.hud-leader b{font-family:Georgia;font-size:14px}.hpbar{height:9px;margin:6px 0 3px;width:min(220px,22vw);background:#273937;border-radius:4px;border:1px solid #668c74;overflow:hidden}.hpbar span{height:100%;display:block;background:linear-gradient(90deg,#c04d51,#e2a06b,#8ed2a7);transition:width .2s}.hud-leader small{color:#b8cfbf;font-size:10px}.hud-objective{text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center}.hud-objective strong{font:700 18px Georgia,serif;color:#ffe6a8}.hud-objective small{font-size:10px;color:#e2eadf}.hud-resources{display:flex;align-items:center;gap:14px}.hud-resources>span{font-size:19px;color:var(--gold);white-space:nowrap}.hud-resources b{color:#fff4d4;font-size:15px}.hud-pause{background:#304a4d;border:1px solid #82958b;border-radius:7px;width:38px;height:38px;color:#f1e8d7;font-size:22px}.hud-left{position:absolute;top:90px;left:15px;display:flex;flex-direction:column;gap:12px;z-index:2}.mini-card{background:#132c2fd9;border:1px solid #b1a178a3;border-radius:10px;padding:10px;box-shadow:var(--shadow)}.mini-top{display:flex;justify-content:space-between;color:#d4c99f;font-size:9px;letter-spacing:.1em;font-weight:800;gap:7px}.mini-card canvas{display:block;margin:8px auto;border:1px solid #6b8a7a;border-radius:3px;width:160px;height:160px}.mini-legend{display:flex;justify-content:space-between;color:#bfd3c6;font-size:9px;gap:12px}.order-panel{background:#132c2fe6;border:1px solid #65887998;border-radius:10px;padding:10px;max-width:190px}.order-name{font-size:9px;letter-spacing:.07em;color:#a7c0b5}.order-name b{color:var(--gold)}.orders{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:9px}.orders button{min-height:34px;background:#2e494a;border:1px solid #5e7771;border-radius:5px;color:#d5e4dd;font-size:9px;padding:4px}.orders button.active{background:#aa976373;border-color:var(--gold);color:#fff1bd}.hud-bottom{position:absolute;bottom:max(14px,env(safe-area-inset-bottom));left:16px;right:16px;display:flex;align-items:end;justify-content:space-between;z-index:2;pointer-events:none}.joystick-wrap,.actions-wrap{pointer-events:auto}.joystick-wrap{display:flex;flex-direction:column;align-items:center;gap:7px}.joystick-wrap>span{font-size:9px;color:#e9ebd7;letter-spacing:.09em;text-shadow:0 2px 3px #071a1d}.joystick{width:122px;height:122px;border-radius:50%;border:2px solid #c7cb9a9d;background:radial-gradient(circle,#648b7d6b,#192d3188);position:relative;touch-action:none;box-shadow:inset 0 0 0 10px #072b2a37}.joystick:after{content:'';display:block;position:absolute;inset:23px;border:1px dashed #d5d9bc53;border-radius:50%;pointer-events:none}.stick{position:absolute;left:50%;top:50%;width:52px;height:52px;border-radius:50%;background:linear-gradient(145deg,#e9c987,#aa9772);border:3px solid #e5d8ad;box-shadow:0 4px 15px #020e10a3;transform:translate(-50%,-50%);pointer-events:none}.actions-wrap{display:flex;gap:11px;align-items:end}.action{position:relative;width:76px;height:76px;border-radius:50%;border:2px solid #e1c99199;background:linear-gradient(155deg,#263e41ec,#152a2dea);box-shadow:0 5px 15px #0007;color:#f6e8cb;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}.action span{font-size:29px;color:#efc988}.action small{font-size:9px;font-weight:800}.action kbd{position:absolute;top:-6px;right:-2px;border-radius:6px;padding:3px 6px;background:#3c5557;color:#e6e5c6;font-size:10px;border:1px solid #b8bfa3}.action.interact{width:68px;height:68px;border-color:#75bba7}.action.interact span{color:#98e2c7}.cd{position:absolute;inset:0;display:grid;place-items:center;background:#102526df;font-size:18px;border-radius:50%;pointer-events:none}.cd:empty{display:none}
+.modal-scrim{position:absolute;inset:0;z-index:12;background:#051719dd;backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;pointer-events:auto}.choice-modal,.info-modal{border:1px solid #bda874a6;background:linear-gradient(155deg,#183536,#0d2528);border-radius:15px;box-shadow:0 25px 90px #000b;padding:25px;width:min(780px,100%);max-height:calc(100dvh - 32px);overflow-y:auto}.choice-modal{text-align:center}.choice-modal h2,.info-modal h2{font:700 clamp(24px,3vw,40px)/1.1 Georgia,serif;margin:8px 0}.choice-modal p,.info-body p{color:#b8c9c0;font-size:13px;line-height:1.6}.choice-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:22px 0}.choice-card{min-height:205px;border:1px solid #788d797b;background:linear-gradient(165deg,#284947,#20383b);border-radius:10px;color:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:13px;padding:18px}.choice-card:hover{border-color:var(--gold);background:#3c5550}.choice-card>span{font-size:42px;color:var(--gold)}.choice-card b{font:700 18px Georgia,serif}.choice-card small{color:#c4d4c9;font-size:11px;line-height:1.4}.choice-card em{font-style:normal;color:var(--gold);font-size:10px;font-weight:800;letter-spacing:.1em;margin-top:auto}.floating-panel{position:absolute;inset:0;z-index:15;pointer-events:none}.floating-panel>*{pointer-events:auto}.info-modal{width:min(520px,100%)}.info-modal header{display:flex;justify-content:space-between;align-items:start;gap:15px;border-bottom:1px solid #66827880;padding-bottom:15px;margin-bottom:15px}.close-btn{border:1px solid #8ba39a;color:#e0e7d8;background:#37504e;border-radius:7px;min-height:36px;min-width:36px}.info-body{max-height:calc(100dvh - 200px);overflow-y:auto}.info-content{display:flex;flex-direction:column;gap:13px}.info-content p{margin:0}.setting-row{display:flex;justify-content:space-between;gap:20px;align-items:center;background:#2c444380;padding:12px;border-radius:9px}.setting-row select{border-radius:5px;background:#213a3c;color:#f2e9d1;border:1px solid #6f9281;padding:7px}.memorial-row{display:flex;align-items:center;gap:14px;background:#2740398a;border-bottom:1px solid #62786f66;padding:12px;margin:8px 0}.memorial-row>span{font-size:30px;color:#d6ab8e}.memorial-row b{display:block;font-family:Georgia}.memorial-row small{display:block;color:#bbcdc0;margin-top:4px}.soldier-detail{text-align:center}.soldier-detail-icon{font-size:54px;color:var(--gold)}.detail-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0}.detail-stats span{background:#29433d;padding:9px;display:flex;justify-content:space-between;font-size:12px}.detail-stats b{color:var(--gold)}.empty-state{padding:20px;text-align:center;font-size:12px;color:#bed1c4}
+.result-screen{background:#0b2424ed;display:flex;align-items:start;justify-content:center;padding:25px 20px;overflow-y:auto}.result-box{background:linear-gradient(150deg,#173335,#0c2124);border:1px solid #d7bc82a8;width:min(800px,100%);border-radius:13px;text-align:center;padding:23px 30px;margin:auto;box-shadow:var(--shadow)}.victory-symbol{font-size:55px;color:var(--gold);text-shadow:0 0 35px #e1c27955;margin:5px 0}.result-box h2{font:700 clamp(32px,4vw,52px) Georgia,serif;color:var(--gold);margin:0 0 8px}.result-box>p{color:#c3d3c4;font-size:12px}.stats-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin:20px 0}.stats-grid div{background:#26403bba;border:1px solid #667d6f88;padding:12px 7px;border-radius:7px}.stats-grid b{display:block;color:var(--gold);font:700 19px Georgia,serif}.stats-grid small{display:block;color:#b9ccba;font-size:9px;margin-top:7px}.result-recruits{text-align:left;margin-top:23px}.result-recruits h3{font:700 21px Georgia,serif;margin:0 0 8px}.result-recruits h3 small{font:400 11px system-ui;color:#b9cec0;display:block;margin-top:6px}.result-recruits>p{font-size:11px;color:#becdbf}.survivor-list{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;max-height:205px;overflow-y:auto;margin-bottom:15px}.survivor{display:grid;grid-template-columns:31px 1fr;gap:2px 9px;align-items:center;text-align:left;border:1px solid #698677;background:#21423e;color:#f0e8d7;border-radius:7px;padding:9px}.survivor>span{grid-row:1/4;font-size:23px;color:var(--gold)}.survivor b{font-size:12px}.survivor small{font-size:10px;color:#c1d0bd}.survivor strong{font-size:10px;color:var(--gold)}.survivor.kept{border-color:var(--gold)}
+#toast{position:absolute;top:90px;left:50%;transform:translateX(-50%) translateY(-12px);z-index:40;pointer-events:none;opacity:0;background:#0e2829ec;border:1px solid #deb9809c;color:#f5e2b7;box-shadow:var(--shadow);border-radius:7px;padding:11px 18px;text-align:center;font-size:12px;font-weight:700;max-width:min(580px,90vw);transition:opacity .18s,transform .18s}#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:1180px){.hub-columns{grid-template-columns:1fr 1.5fr}.upgrades-panel{grid-column:1/-1}.upgrade-list{display:grid;grid-template-columns:repeat(2,1fr)}.menu-side{right:3%}}
+@media(max-width:760px){.menu-screen{padding:25px;background:linear-gradient(90deg,#091f21ed,#193733ce)}.hero-area{width:100%;padding:0}.menu-screen h1{font-size:clamp(53px,12vw,90px)}.menu-side{display:none}.hub-columns{display:block}.panel{margin-bottom:13px}.hub-main{padding:15px 13px 45px}.hub-intro{align-items:start}.hub-totals>div{min-width:57px;padding:9px}.hub-totals b{font-size:17px}.hub-totals span{font-size:8px}.hub-intro p{display:none}.roster-grid{grid-template-columns:1fr 1fr}.topbar{padding:11px;font-size:12px}.brand-small{font-size:13px}.brand-small em{display:none}.resource small{display:none}.hud-top{padding:8px 9px;gap:6px;min-height:60px}.portrait{width:37px;height:37px;font-size:24px}.hud-leader{min-width:115px;gap:5px}.hud-leader b{font-size:11px}.hud-leader small{font-size:8px}.hpbar{width:110px;height:7px}.hud-objective strong{font-size:13px}.hud-objective .hud-eyebrow{display:none}.hud-objective small{font-size:9px;max-width:160px}.hud-resources{gap:6px}.hud-resources>span{font-size:14px}.hud-resources b{font-size:11px}.hud-pause{height:32px;width:30px;font-size:15px}.hud-left{top:73px;left:8px;gap:6px}.mini-card{padding:6px}.mini-card canvas{width:105px;height:105px}.mini-top{font-size:7px}.mini-legend{font-size:7px}.order-panel{max-width:153px;padding:6px}.orders button{font-size:8px;min-height:30px}.joystick{height:110px;width:110px}.hud-bottom{left:9px;right:9px}.actions-wrap{gap:6px}.action{height:60px;width:60px}.action.interact{height:53px;width:53px}.action span{font-size:22px}.action small{font-size:7px}.action kbd{display:none}.choice-list{gap:7px}.choice-card{padding:9px;min-height:157px}.choice-card>span{font-size:32px}.choice-card b{font-size:15px}.choice-card small{font-size:10px}.choice-modal{padding:14px}.stats-grid{grid-template-columns:repeat(3,1fr)}.result-box{padding:18px 12px}.survivor-list{grid-template-columns:1fr 1fr}}
+@media(max-height:570px){.hud-left{top:68px;display:flex;flex-direction:row;align-items:start}.mini-card canvas{width:98px;height:98px}.mini-legend{display:none}.order-panel{max-width:170px}.joystick{height:94px;width:94px}.stick{height:46px;width:46px}.hud-bottom{bottom:5px}.action{height:60px;width:60px}.menu-screen h1{font-size:min(12vh,86px)}.hero-area .seal{display:none}.menu-screen .hero-line{margin:14px 0}.menu-screen .menu-actions{gap:7px;margin-top:14px}.menu-actions .btn{min-height:42px}.version{margin-top:13px}.choice-modal{padding:10px 16px}.choice-list{margin:11px 0}.choice-card{min-height:136px}.result-screen{padding:8px}.result-box{padding:12px}.victory-symbol{font-size:31px}.result-box h2{font-size:29px}.stats-grid{margin:8px 0}.stats-grid div{padding:7px}.result-recruits{margin-top:9px}.survivor-list{max-height:125px}}
+@media(max-width:480px) and (orientation:portrait){.hud-objective small{display:none}.hud-resources>span{display:none}.mini-card{display:none}.hud-left{top:70px}.order-panel{max-width:155px}.hud-bottom{bottom:14px}.joystick{height:118px;width:118px}.action{width:57px;height:57px}.action.interact{height:52px;width:52px}.hub-intro{display:block}.hub-totals{margin-top:13px;width:max-content}.upgrade-list{grid-template-columns:1fr}.roster-grid{grid-template-columns:1fr}.brand-small{font-size:12px}.choice-list{grid-template-columns:1fr;max-height:52vh;overflow-y:auto}.choice-card{min-height:105px}.choice-card>span{font-size:28px}.choice-card b{font-size:17px}.result-box .survivor-list{grid-template-columns:1fr}.stats-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* Apenas os controles da HUD capturam os cliques; o cenário permanece selecionável. */
+#ui>.hud-screen{pointer-events:none}
+#ui>.hud-screen button,#ui>.hud-screen #joystick,#ui>.hud-screen .modal-scrim,#ui>.hud-screen .floating-panel{pointer-events:auto}
+</style>
+</head>
+<body>
+  <div id="game-shell">
+    <canvas id="scene" aria-label="Cenário tridimensional do jogo"></canvas>
+    <canvas id="overlay" aria-hidden="true"></canvas>
+    <div class="vignette" aria-hidden="true"></div>
+    <main id="ui"></main>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </div>
+  <script>"use strict";
+
+// src/core/random.js
+// PRNG simples reproduzível. Todo sorteio relevante passa pelo estado da expedição.
+function rng(seed=1){let s=(seed>>>0)||1;return {next(){s^=s<<13;s^=s>>>17;s^=s<<5;return (s>>>0)/4294967296;},int(a,b){return a+Math.floor(this.next()*(b-a+1));},pick(a){return a[this.int(0,a.length-1)];},get state(){return s>>>0;},set state(v){s=v>>>0||1;}};}
+function shuffle(array,r){const a=[...array];for(let i=a.length-1;i>0;i--){const j=r.int(0,i);[a[i],a[j]]=[a[j],a[i]];}return a;}
+const distance=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
+const clamp=(a,b,c)=>Math.max(b,Math.min(c,a));
+const round=(a)=>Math.round(a*10)/10;
+
+
+// src/game/data.js
+const VERSION=2;
+const CLASSES={
+  swordsman:{name:'Espadachim',icon:'⚔',hp:100,attack:15,defense:10,range:1.65,cooldown:1.1,speed:4.25,role:'front',color:'#e0c4a2'},
+  guardian:{name:'Guardião',icon:'⬡',hp:165,attack:9,defense:24,range:1.55,cooldown:1.4,speed:3.65,role:'front',color:'#9daec7'},
+  spearman:{name:'Lanceiro',icon:'↟',hp:110,attack:14,defense:11,range:2.65,cooldown:1.3,speed:4.1,role:'front',color:'#dec18a'},
+  archer:{name:'Arqueiro',icon:'➶',hp:72,attack:19,defense:4,range:10.5,cooldown:1.7,speed:4.35,role:'back',color:'#98cb8d'},
+  mystic:{name:'Místico',icon:'✦',hp:68,attack:24,defense:3,range:9,cooldown:2.2,speed:4.1,role:'back',color:'#c3a8e8'},
+  healer:{name:'Curandeiro',icon:'✚',hp:85,attack:5,defense:6,range:8.5,cooldown:2.6,speed:4.2,role:'back',color:'#f0e4ac'},
+};
+const TRAITS={sturdy:{name:'Resistente',desc:'+12% PV',hp:1.12},swift:{name:'Ágil',desc:'+10% velocidade',speed:1.1},precise:{name:'Preciso',desc:'+10% ataque',attack:1.1},careful:{name:'Prudente',desc:'-10 p.p. chance de morte',survive:0.1}};
+const GRADES=['recruit','veteran','elite','legendary'];
+const GRADE_NAME={recruit:'Recruta',veteran:'Veterano',elite:'Elite',legendary:'Lendário'};
+const GRADE_MIN={veteran:3,elite:6,legendary:9};
+const GRADE_COST={veteran:3,elite:7,legendary:13};
+const ENEMIES={
+  raider:{name:'Saqueador',hp:75,attack:11,defense:5,range:1.5,cooldown:1.45,speed:3.75,color:'#a94e4d',classId:'swordsman'},
+  brute:{name:'Brutamontes',hp:135,attack:13,defense:16,range:1.65,cooldown:1.85,speed:2.85,color:'#ad6a53',classId:'guardian'},
+  marksman:{name:'Atirador',hp:58,attack:12,defense:3,range:9.2,cooldown:2.05,speed:3.6,color:'#9c576c',classId:'archer'},
+  shaman:{name:'Xamã',hp:72,attack:18,defense:3,range:8,cooldown:2.35,speed:3.25,color:'#9d6ea5',classId:'mystic'},
+  warlord:{name:'Lorde da Cinza',hp:560,attack:24,defense:20,range:2.15,cooldown:1.6,speed:3.5,color:'#e17b55',classId:'guardian',boss:true}
+};
+const COMMANDERS={iron:{name:'Capitão de Ferro',subtitle:'Grito de guerra + Golpe heroico',color:'#dcb56e',a1:'Brado',a2:'Golpe'},valley:{name:'Estrategista do Vale',subtitle:'Proteção + Saraivada',color:'#74c7b9',a1:'Proteção',a2:'Saraivada'}};
+const PERKS=[
+ {id:'shield',name:'Escudos Reforçados',icon:'⬡',desc:'+15% defesa dos Guardiões'},
+ {id:'arrows',name:'Treino de Arco',icon:'➶',desc:'+12% ataque dos Arqueiros'},
+ {id:'march',name:'Marcha Rápida',icon:'↟',desc:'+8% velocidade de todos'},
+ {id:'healing',name:'Medicina de Campanha',icon:'✚',desc:'+15% cura dos Curandeiros'},
+ {id:'health',name:'Disciplina',icon:'♥',desc:'+10% vida máxima dos soldados'},
+ {id:'charge',name:'Investida Coordenada',icon:'⚔',desc:'+10% dano de todos'},
+ {id:'spears',name:'Lanças Longas',icon:'⌁',desc:'+15% alcance dos Lanceiros'},
+ {id:'magic',name:'Rituais Arcanos',icon:'✦',desc:'+15% ataque dos Místicos'},
+ {id:'fury',name:'Última Resistência',icon:'♨',desc:'+20% dano com menos de 40% PV'},
+ {id:'loot',name:'Bolsas de Saque',icon:'◈',desc:'+20% moedas de vitória'},
+ {id:'supplies',name:'Intendência',icon:'▣',desc:'+1 suprimento por baú'},
+ {id:'xp',name:'Veterania Acelerada',icon:'★',desc:'+20% experiência dos soldados'}
+];
+const UPGRADE_DATA={
+ infirmary:{name:'Enfermaria',icon:'✚',max:3,cost:[5,10,17],desc:l=>`Risco de morte: ${35-l*4}% (mais traços)`},
+ quarters:{name:'Alojamentos',icon:'⌂',max:2,cost:[7,15],desc:l=>`Capacidade permanente: ${12+l*4}`},
+ academy:{name:'Academia',icon:'★',max:3,cost:[5,9,15],desc:l=>`XP adicional: ${l*8}%`},
+ command:{name:'Mesa de Comando',icon:'⚑',max:2,cost:[6,13],desc:l=>`Vida do comandante: +${l*8}%`}
+};
+const FIRST_NAMES=['Aldren','Brina','Cael','Dora','Eron','Fara','Garen','Helia','Ivar','Jora','Kael','Lyra','Merek','Nara','Orin','Petra','Roder','Selia','Tarin','Vera','Yoren','Zara','Borin','Elric','Mira','Talia','Oren','Freya'];
+const LAST_NAMES=['Pedrafria','Valeverde','Ferroalto','de Arven','Carvalho','da Névoa','Corvoclaro','do Norte','Seta Ágil','do Prado','Luar','Mão Firme'];
+
+
+// src/game/units.js
+
+
+function generateSoldier(r,id,runId='fundacao'){
+  const classId=r.pick(Object.keys(CLASSES));const traitId=r.pick(Object.keys(TRAITS));
+  const soldier={id, name:`${r.pick(FIRST_NAMES)} ${r.pick(LAST_NAMES)}`,classId,traitId,level:1,xp:0,grade:'recruit',condition:'healthy',hp:0,appearanceSeed:r.int(1,999999),battles:0,kills:0,recruitmentRunId:runId,isPersistentVeteran:runId==='fundacao',recoveryRunsRemaining:0};
+  soldier.hp=statsFor(soldier).hp;return soldier;
+}
+function statsFor(soldier,perks=[],academy=0){
+  const base=CLASSES[soldier.classId];if(!base)return {hp:1,attack:1,defense:1,speed:1,range:1,cooldown:1};
+  const gradeIndex=GRADES.indexOf(soldier.grade),trait=TRAITS[soldier.traitId]||{};
+  const levelScale=1+(soldier.level-1)*0.075,gradeScale=1+gradeIndex*.095;
+  const mult=id=>1+perks.filter(p=>p===id).length*(id==='health'?.10:id==='march'?.08:id==='shield'?.15:id==='arrows'?.12:id==='spears'?.15:id==='magic'?.15:id==='charge'?.10:0);
+  return {
+    hp:Math.round(base.hp*levelScale*gradeScale*(trait.hp||1)*mult('health')),
+    attack:base.attack*levelScale*gradeScale*(trait.attack||1)*(soldier.classId==='archer'?mult('arrows'):soldier.classId==='mystic'?mult('magic'):1)*mult('charge'),
+    defense:base.defense*(1+(soldier.level-1)*.055)*(1+gradeIndex*.12)*(soldier.classId==='guardian'?mult('shield'):1),
+    speed:base.speed*(trait.speed||1)*mult('march'),
+    range:base.range*(soldier.classId==='spearman'?mult('spears'):1),
+    cooldown:base.cooldown
+  };
+}
+function awardXp(s,xp){if(s.condition==='dead')return false;const old=s.level;s.xp+=xp;while(s.level<10&&s.xp>=s.level*16){s.xp-=s.level*16;s.level++;}if(s.level===10)s.xp=Math.min(s.xp,160);const gained=s.level>old;if(gained)s.hp=Math.min(statsFor(s).hp,s.hp+(s.level-old)*14);return gained;}
+const xpToNext=s=>s.level>=10?0:s.level*16;
+function canPromote(s){const next=GRADES[GRADES.indexOf(s.grade)+1];return next&&s.level>=GRADE_MIN[next]?next:null;}
+function promote(s,legacy){const next=canPromote(s);if(!next||legacy<GRADE_COST[next]||s.condition==='dead')return {ok:false};const maxBefore=statsFor(s).hp;s.grade=next;s.hp=Math.min(statsFor(s).hp,s.hp+statsFor(s).hp-maxBefore);return {ok:true,cost:GRADE_COST[next],next};}
+function createEnemy(r,id,type,x,z,groupId){const def=ENEMIES[type];return {id,type,name:def.name,classId:def.classId,team:'enemy',x,z,hp:def.hp,maxHp:def.hp,attack:def.attack,defense:def.defense,range:def.range,cooldown:def.cooldown,speed:def.speed,attackClock:0,flash:0,anim:0,phase:r.next()*6.28,face:0,state:'active',groupId,boss:!!def.boss,kills:0,level:1,grade:def.boss?'legendary':'recruit'};}
+function maxRoster(upgrades){return 12+((upgrades?.quarters)||0)*4;}
+function resolveDowned(s,r,upgrades){if(s.condition!=='downed')return null;const surviveChance=clamp(.65+(upgrades.infirmary||0)*.04+(s.traitId==='careful'?.10:0),.3,.94);const survived=r.next()<surviveChance;s.condition=survived?'wounded':'dead';s.recoveryRunsRemaining=survived?r.int(1,2):0;s.hp=survived?Math.max(1,Math.floor(statsFor(s).hp*.22)):0;return survived?'wounded':'dead';}
+function healSoldier(s){s.condition='healthy';s.recoveryRunsRemaining=0;s.hp=statsFor(s).hp;}
+function makeInitialRoster(r){const seq=['guardian','swordsman','archer','spearman','healer','mystic'];return seq.map((classId,i)=>({...generateSoldier(r,`wl-${i+1}`),classId,hp:CLASSES[classId].hp}));}
+function gradeText(s){return GRADE_NAME[s.grade]||s.grade;}
+
+
+// src/game/world.js
+
+// Mapa determinístico sem obstáculos sólidos: nenhum ponto essencial pode ficar inacessível.
+function makeWorld(seed){
+  const r=rng(seed),sites=[];let id=0;
+  const add=(kind,x,z,name)=>sites.push({id:`site-${++id}`,kind,x:Math.round(x*10)/10,z:Math.round(z*10)/10,name,done:false,started:false,groupId:null});
+  add('home',0,0,'Acampamento da companhia');
+  const angles=shuffle([-.45,1.65,3.7],r);
+  angles.forEach((a,i)=>{const radius=27+r.int(-4,5);add('banner',Math.sin(a)*radius,Math.cos(a)*radius,['Posto do Corvo','Bastião Quebrado','Fortim das Brasas'][i]);});
+  add('boss',r.int(-5,5),-43,'Fortaleza do Lorde da Cinza');
+  for(let i=0;i<5;i++){
+    const a=(i+.35)*Math.PI*2/5,dist=12+r.int(2,18),p={x:Math.cos(a)*dist,z:Math.sin(a)*dist};
+    if(sites.some(s=>distance(p,s)<8))continue;add('patrol',p.x,p.z,`Patrulha ${i+1}`);
+  }
+  const others=[['recruit','Prisioneiros libertáveis'],['recruit','Mercenários errantes'],['recruit','Refugiados armados'],['rest','Fogueira segura'],['rest','Tenda de curandeiros'],['cache','Baú esquecido'],['cache','Carroça de suprimentos'],['shrine','Santuário antigo'],['shrine','Altar das escolhas']];
+  for(const [kind,name] of others){for(let k=0;k<100;k++){const x=r.int(-38,38),z=r.int(-36,36),p={x,z};if(distance(p,{x:0,z:0})<6||sites.some(s=>distance(p,s)<7.5))continue;add(kind,x,z,name);break;}}
+  const foliage=[];for(let i=0;i<215;i++){
+    const x=r.int(-49,49)+r.next(),z=r.int(-49,49)+r.next();
+    if(sites.some(s=>distance({x,z},s)<4.7)||Math.abs(x)<2&&Math.abs(z)<2)continue;
+    foliage.push({x,z,type:r.int(0,9)<6?'pine':r.int(0,1)?'rock':'bush',scale:.6+r.next()*.95,seed:r.int(0,99999)});
+  }
+  const patches=[];for(let i=0;i<115;i++)patches.push({x:r.int(-49,49),z:r.int(-49,49),s:1+r.next()*3,t:r.int(0,2)});
+  return {seed,sites,foliage,patches,size:104};
+}
+const nearestSite=(world,x,z,filter=s=>!s.done)=>world.sites.filter(filter).sort((a,b)=>Math.hypot(a.x-x,a.z-z)-Math.hypot(b.x-x,b.z-z))[0];
+
+
+// src/game/persistence.js
+
+
+
+const SAVE_KEY='warband-legacy-save-v2';
+function freshMeta(){const r=rng(31415926),roster=makeInitialRoster(r);return {version:VERSION,created:Date.now(),legacy:3,upgrades:{infirmary:0,quarters:0,academy:0,command:0},roster,selectedIds:roster.slice(0,5).map(s=>s.id),memorial:[],runNumber:0,wins:0,losses:0,commander:'iron',settings:{sound:true,quality:'medium'},activeRun:null,history:[],nextId:100,tutorialShown:false};}
+function loadMeta(storage=globalThis.localStorage){try{const raw=storage.getItem(SAVE_KEY);if(!raw)return freshMeta();const data=JSON.parse(raw);if(data?.version!==VERSION||!Array.isArray(data.roster)||!data.upgrades||!Array.isArray(data.selectedIds)||!Array.isArray(data.memorial))throw Error('incompatible');return data;}catch(e){console.warn('Save inválido; início seguro sem sobrescrever até novo save',e);return freshMeta();}}
+function saveMeta(meta,storage=globalThis.localStorage){try{storage.setItem(SAVE_KEY,JSON.stringify(meta));return true;}catch(e){console.warn('Não foi possível salvar',e);return false;}}
+function clearSave(storage=globalThis.localStorage){storage.removeItem(SAVE_KEY);}
+
+
+// src/game/simulation.js
+
+
+
+
+
+const FIXED=1/30;
+const alive=u=>u&&u.hp>0&&u.state!=='dead'&&u.condition!=='dead'&&u.condition!=='downed'&&u.condition!=='wounded';
+const pick3=(items,r)=>{let a=[...items],result=[];for(let i=0;i<3&&a.length;i++)result.push(a.splice(r.int(0,a.length-1),1)[0]);return result;};
+class Game {
+ constructor(){this.meta=loadMeta();this.run=this.meta.activeRun||null;this.listeners=new Set();this.input={x:0,z:0};this.frameAccumulator=0;this.saveAccumulator=0;this.lastNote='';this.now=0;this.r=this.run?rng(this.run.rngState):null;this.sfx=null;}
+ onChange(cb){this.listeners.add(cb);return ()=>this.listeners.delete(cb);}
+ notify(event='update',data={}){for(const fn of this.listeners)fn(event,data);}
+ persist(){if(this.run)this.run.rngState=this.r.state;this.meta.activeRun=this.run;saveMeta(this.meta);}
+ msg(text){this.lastNote=text;this.notify('toast',{text});}
+ selectSoldier(id){const s=this.meta.roster.find(s=>s.id===id);if(!s)return;const ids=this.meta.selectedIds; if(ids.includes(id)){if(ids.length>1)this.meta.selectedIds=ids.filter(x=>x!==id);}else if(ids.length<5&&s.condition==='healthy')ids.push(id);else{this.msg(s.condition!=='healthy'?'Soldado ferido: trate-o primeiro.':'Máximo de 5 soldados iniciais.');return;}this.persist();this.notify('barracks');}
+ changeCommander(id){if(!COMMANDERS[id])return;this.meta.commander=id;this.persist();this.notify('barracks');}
+ buyUpgrade(id){const d=UPGRADE_DATA[id],lvl=this.meta.upgrades[id];if(!d||lvl>=d.max||this.meta.legacy<d.cost[lvl]){this.msg('Insígnias insuficientes ou melhoria no máximo.');return;}this.meta.legacy-=d.cost[lvl];this.meta.upgrades[id]++;this.persist();this.notify('barracks');}
+ upgradeSoldier(id){const s=this.meta.roster.find(s=>s.id===id);if(!s)return;const next=canPromote(s);if(!next){this.msg('É preciso ganhar níveis antes de promover.');return;}const result=promote(s,this.meta.legacy);if(!result.ok){this.msg(`Promoção exige ${GRADE_COST[next]} insígnias.`);return;}this.meta.legacy-=result.cost;this.msg(`${s.name} foi promovido!`);this.persist();this.notify('barracks');}
+ recoverSoldier(id){const s=this.meta.roster.find(s=>s.id===id);if(!s||s.condition!=='wounded')return;if(this.meta.legacy<2){this.msg('A recuperação custa 2 insígnias.');return;}this.meta.legacy-=2;healSoldier(s);this.persist();this.notify('barracks');this.msg(`${s.name} recebeu alta.`);}
+ startRun(){if(this.run){this.msg('Você já tem uma expedição ativa.');return;}const chosen=this.meta.selectedIds.map(id=>this.meta.roster.find(s=>s.id===id)).filter(s=>s?.condition==='healthy').slice(0,5);if(!chosen.length){this.msg('Selecione ao menos um soldado saudável.');return;}
+  const number=++this.meta.runNumber,seed=(((Date.now()>>>0)^(number*1664525))>>>0)||42;this.r=rng(seed);
+  const world=makeWorld(seed),soldiers=chosen.map((s,i)=>({...structuredClone(s),x:(i%3-1)*1.7,z:1.8+Math.floor(i/3)*1.7,team:'ally',attackClock:.1*i,flash:0,anim:0,phase:i*.8,face:0,state:'active',isCore:true}));
+  const maxHP=Math.round(360*(1+this.meta.upgrades.command*.08));
+  this.run={id:`run-${number}`,number,seed,rngState:this.r.state,world,elapsed:0,banners:0,spawnCooldown:0,commanderId:this.meta.commander,commander:{id:'commander',name:COMMANDERS[this.meta.commander].name,team:'ally',x:0,z:0,hp:maxHP,maxHp:maxHP,attack:22,defense:14,range:2.1,cooldown:1.04,speed:4.6,attackClock:0,ability1:0,ability2:0,buff:0,shield:0,flash:0,anim:0,phase:0,face:0,condition:'healthy',state:'active',level:3,grade:'elite',classId:'swordsman'},soldiers,enemies:[],projectiles:[],fx:[],groupStats:{},order:'follow',formation:'balanced',focusId:null,perks:[],coins:16,supplies:2,revives:0,kills:0,encounters:0,wounded:0,dead:0,earnedLegacy:0,pending:null,finished:false,lastEnemyCount:0,log:[],runRecruits:[],victory:false};
+  this.meta.activeRun=this.run;this.persist();this.notify('runStarted');this.msg('Expedição iniciada. Capture os três estandartes!');}
+ get nearest(){return this.run?nearestSite(this.run.world,this.run.commander.x,this.run.commander.z,s=>!s.done):null;}
+ get nearby(){if(!this.run)return null;return this.run.world.sites.filter(s=>!s.done&&!s.started||s.kind==='home').filter(s=>distance(s,this.run.commander)<4.1).sort((a,b)=>distance(a,this.run.commander)-distance(b,this.run.commander))[0]||null;}
+ setOrder(order){if(!this.run)return;if(!['follow','defend','retreat','focus'].includes(order))return;this.run.order=order;this.run.defendAt=order==='defend'?{x:this.run.commander.x,z:this.run.commander.z}:null;this.msg({follow:'Tropas seguindo o comandante.',defend:'Tropas defendendo esta posição.',retreat:'Reagrupando: combatentes retornam.',focus:'Tropas concentradas no alvo mais próximo.'}[order]);this.persist();}
+ changeFormation(){if(!this.run)return;this.run.formation=this.run.formation==='balanced'?'defensive':'balanced';this.msg(this.run.formation==='defensive'?'Formação defensiva.':'Formação equilibrada.');this.persist();}
+ activateAbility(which){const run=this.run;if(!run||run.pending||run.finished)return;const c=run.commander;if(c.hp<=0)return;const key=which===1?'ability1':'ability2';if(c[key]>0)return;c[key]=which===1?19:13;c.anim=.7;
+  if(run.commanderId==='iron'){
+   if(which===1){c.buff=7;for(const s of run.soldiers){if(!alive(s)||distance(s,c)>15)continue;s.buff=7;}this.msg('Brado: +35% de dano por 7 segundos!');}
+   else{for(const e of run.enemies){if(alive(e)&&distance(c,e)<8)this.hurt(e,48,c);}run.fx.push({type:'burst',x:c.x,z:c.z,t:0,ttl:.6,range:8,color:'#ffd18d'});this.msg('Golpe heroico!');}
+  }else{
+   if(which===1){c.shield=8;for(const s of run.soldiers){if(alive(s)&&distance(s,c)<16)s.shield=8;}this.msg('Proteção: dano reduzido por 8 segundos.');}
+   else{const target=run.enemies.filter(alive).sort((a,b)=>distance(a,c)-distance(b,c))[0];if(!target||distance(target,c)>22){c[key]=0;this.msg('Nenhum inimigo próximo para a saraivada.');return;}for(const e of run.enemies){if(alive(e)&&distance(e,target)<5)this.hurt(e,50,c);}run.fx.push({type:'burst',x:target.x,z:target.z,t:0,ttl:.6,range:5,color:'#87d3cf'});this.msg('Saraivada arcana!');}
+  }this.notify('ability');this.persist();}
+ useInteract(){const run=this.run;if(!run||run.pending)return;const site=this.nearby;if(!site){this.msg('Aproxime-se de um marcador para interagir.');return;}
+  if(site.kind==='home'){if(run.banners===0){this.msg('Capture estandartes antes de retornar ao quartel.');return;}this.finish('retreat');return;}
+  if(site.kind==='boss'){this.msg(run.banners<3?`Faltam ${3-run.banners} estandartes.`:'Aproxime-se da fortaleza para desafiar o Lorde.');return;}
+  if(site.kind==='banner'||site.kind==='patrol'){this.msg('Derrote os inimigos da região para conquistar este posto.');return;}
+  if(site.kind==='cache'){site.done=true;run.coins+=12;run.supplies+=2+(run.perks.includes('supplies')?1:0);this.msg('+12 moedas e suprimentos encontrados!');this.notify('loot');}
+  if(site.kind==='rest'){if(run.supplies<1){this.msg('É necessário 1 suprimento para descansar.');return;}run.supplies--;run.commander.hp=Math.min(run.commander.maxHp,run.commander.hp+95);for(const s of run.soldiers){if(s.condition==='healthy')s.hp=Math.min(statsFor(s,run.perks).hp,s.hp+Math.round(statsFor(s).hp*.55));else if(s.condition==='wounded'){healSoldier(s);}}site.done=true;this.msg('A companhia descansou e os feridos receberam tratamento.');}
+  if(site.kind==='recruit'){run.pending={type:'recruit',siteId:site.id,cards:this.pickRecruits(),paid:false};this.notify('modal');return;}
+  if(site.kind==='shrine'){run.pending={type:'perk',siteId:site.id,cards:pick3(PERKS.filter(p=>run.perks.filter(x=>x===p.id).length<2),this.r)};this.notify('modal');return;}
+  this.persist();this.notify('state');
+ }
+ pickRecruits(){const classes=Object.keys(CLASSES);return [0,1,2].map((i)=>({classId:classes[this.r.int(0,classes.length-1)],count:i===2?1:2,cost:i===2?5:9}));}
+ chooseModal(index){const run=this.run;if(!run?.pending)return;const modal=run.pending,card=modal.cards[index];if(!card)return;
+  if(modal.type==='perk'){run.perks.push(card.id);const site=run.world.sites.find(s=>s.id===modal.siteId);if(site)site.done=true;this.msg(`${card.name} foi adicionada à expedição!`);}
+  else if(modal.type==='recruit'){if(run.coins<card.cost){this.msg('Moedas de campo insuficientes.');return;}const active=run.soldiers.filter(s=>s.condition==='healthy').length;if(active+card.count>40){this.msg('Limite de 40 soldados ativos.');return;}run.coins-=card.cost;
+    for(let i=0;i<card.count;i++){const id=`soldier-${this.meta.nextId++}`,s=generateSoldier(this.r,id,run.id);s.classId=card.classId;s.hp=statsFor(s).hp;Object.assign(s,{x:run.commander.x+this.r.next()*3-1.5,z:run.commander.z+this.r.next()*3-1.5,team:'ally',attackClock:0,flash:0,anim:0,phase:this.r.next()*6,face:0,state:'active',isCore:false});run.soldiers.push(s);run.runRecruits.push(s.id);}
+    const site=run.world.sites.find(s=>s.id===modal.siteId);if(site)site.done=true;this.msg(`${card.count} ${CLASSES[card.classId].name}(s) se juntaram à companhia!`);
+  }
+  run.pending=null;this.persist();this.notify('modalClosed');}
+ getStats(s){return statsFor(s,this.run?.perks||[],this.meta.upgrades.academy);}
+ getAttack(u){if(u.team==='enemy')return u.attack;const base=u.id==='commander'?u.attack:this.getStats(u).attack;let mul=1;if(u.buff>0)mul*=1.35;if(this.run?.perks.includes('fury')&&u.hp<(u.maxHp||this.getStats(u).hp)*.4)mul*=1.2;return base*mul;}
+ hurt(target,raw,source){if(!alive(target))return;const armor=target.team==='enemy'?target.defense:target.id==='commander'?target.defense:this.getStats(target).defense;const buff=target.shield>0?.7:1;const damage=Math.max(1,Math.round(raw*(.91+this.r.next()*.18)*100/(100+armor)*buff));target.hp=Math.max(0,target.hp-damage);target.flash=.13;if(this.sfx&&this.now-(this._lastHit||-1)>.27){this.sfx.play('hit');this._lastHit=this.now;}this.run.fx.push({type:'number',x:target.x,z:target.z,t:0,ttl:.6,amount:damage,color:target.team==='ally'?'#ffac9d':'#fff1c4'});if(target.hp<=0){if(target.id==='commander'){target.state='dead';this.finish('defeat');return;}if(target.team==='ally'){target.condition='downed';target.state='downed';target.anim=1;}else{target.state='dead';target.anim=1;this.run.kills++;if(source?.id&&source.id!=='commander'&&source.team==='ally'){const owner=this.run.soldiers.find(s=>s.id===source.id);if(owner)owner.kills++;}}}}
+ launchProjectile(source,target,amount,healing=false){const r=this.run;if(!r)return;r.projectiles.push({x:source.x,z:source.z,y:healing?1.3:1.6,targetId:target.id,sourceId:source.id,amount,healing,speed:healing?15:21,ttl:2.4,color:healing?'#91efd3':source.classId==='mystic'?'#caa4ff':source.team==='enemy'?'#e7a19a':'#f7d89d'});}
+ resolveGroup(groupId){const run=this.run;const group=run.groupStats[groupId];if(!group||group.completed)return;group.completed=true;const site=run.world.sites.find(s=>s.id===groupId);if(!site)return;site.done=true;run.encounters++;
+  if(site.kind==='banner'){run.banners++;run.earnedLegacy+=2;this.msg(`Estandarte conquistado! ${run.banners}/3. +2 insígnias.`);}
+  else if(site.kind==='boss'){run.earnedLegacy+=7;this.finish('victory');return;}
+  else this.msg(`Patrulha derrotada! ${run.encounters} vitórias de encontro.`);
+  const reward=Math.round((site.kind==='banner'?15:9)*(run.perks.includes('loot')?1.2:1));run.coins+=reward;
+  for(const s of run.soldiers){if(s.condition==='healthy'&&distance(s,site)<27){s.battles++;awardXp(s,10+(run.perks.includes('xp')?3:0)+this.meta.upgrades.academy*1);}}
+  for(const s of run.soldiers){const result=resolveDowned(s,this.r,this.meta.upgrades);if(result){run[result]++;if(result==='dead')this.msg(`${s.name} tombou em batalha. Seu legado será lembrado.`);else this.msg(`${s.name} sobreviveu, mas está ferido.`);}}
+  if(run.encounters%2===0&&site.kind!=='boss'){run.pending={type:'perk',siteId:null,cards:pick3(PERKS.filter(p=>run.perks.filter(x=>x===p.id).length<2),this.r)};this.notify('modal');}
+  this.persist();this.notify('encounter');}
+ spawnGroup(site){if(site.started||site.done)return;const run=this.run;if(site.kind==='boss'&&run.banners<3)return;site.started=true;site.groupId=site.id;run.groupStats[site.id]={completed:false};const count=site.kind==='boss'?9:site.kind==='banner'?5+run.number%2:3;
+  let types=['raider','raider','marksman','brute','shaman'];if(site.kind==='boss')types=['brute','raider','marksman','shaman','brute','marksman','raider','shaman','warlord'];
+  for(let i=0;i<count;i++){const type=site.kind==='boss'?types[i]:types[this.r.int(0,types.length-1)];const offset=(i/count)*Math.PI*2,rad=1.4+(i%3)*.8;const e=ENEMIES[type];run.enemies.push({...{name:e.name},...importedEnemy(this.r,`enemy-${this.meta.nextId++}`,type,site.x+Math.cos(offset)*rad,site.z+Math.sin(offset)*rad,site.id)});}
+  this.notify('encounterStarted');this.msg(site.kind==='boss'?'O Lorde da Cinza surgiu!':'Inimigos à frente!');}
+ update(delta){const r=this.run;if(!r||r.finished||r.pending)return;this.frameAccumulator=Math.min(this.frameAccumulator+Math.min(delta,.12),.27);while(this.frameAccumulator>=FIXED){this.tick(FIXED);this.frameAccumulator-=FIXED;if(!this.run||this.run.finished)break;}
+  this.saveAccumulator+=delta;if(this.saveAccumulator>4){this.saveAccumulator=0;this.persist();}}
+ tick(dt){const run=this.run;if(!run)return;const rr=this.r;run.elapsed+=dt;this.now=run.elapsed;const commander=run.commander;
+  commander.ability1=Math.max(0,commander.ability1-dt);commander.ability2=Math.max(0,commander.ability2-dt);
+  for(const a of [commander,...run.soldiers,...run.enemies]){a.attackClock=Math.max(0,(a.attackClock||0)-dt);a.flash=Math.max(0,(a.flash||0)-dt);a.anim=Math.max(0,(a.anim||0)-dt);a.buff=Math.max(0,(a.buff||0)-dt);a.shield=Math.max(0,(a.shield||0)-dt);a.phase=(a.phase||0)+dt*6;}
+  const sx=this.input.x,sz=this.input.z;const mx=(sx+sz)*Math.SQRT1_2,mz=(sz-sx)*Math.SQRT1_2,n=Math.hypot(mx,mz);if(n>.02){const vx=mx/n,vz=mz/n;commander.x=clamp(commander.x+vx*commander.speed*dt,-49,49);commander.z=clamp(commander.z+vz*commander.speed*dt,-49,49);commander.face=Math.atan2(vx,vz);commander.walk=true;}else commander.walk=false;
+  run.spawnCooldown=Math.max(0,(run.spawnCooldown||0)-dt);if(run.spawnCooldown===0&&!run.enemies.some(e=>alive(e)&&distance(e,commander)<18)&&run.enemies.filter(alive).length<24){const ready=run.world.sites.filter(site=>!site.done&&!site.started&&['banner','patrol','boss'].includes(site.kind)&&distance(commander,site)<10.5).sort((a,b)=>distance(commander,a)-distance(commander,b))[0];if(ready){this.spawnGroup(ready);run.spawnCooldown=4;}}
+  for(let i=0;i<run.soldiers.length;i++){const s=run.soldiers[i];if(!alive(s))continue;const st=this.getStats(s),targets=run.enemies.filter(e=>alive(e)&&distance(s,e)<(run.order==='retreat'?8:15));const target=targets.sort((a,b)=>{if(run.order==='focus'&&run.focusId){if(a.id===run.focusId)return -1;if(b.id===run.focusId)return 1;}return distance(a,s)-distance(b,s);})[0];const anchor=run.order==='defend'&&run.defendAt?run.defendAt:commander;
+   const slot=formationSlot(run.soldiers,s,run.formation,commander.face);let desired={x:anchor.x+slot.x,z:anchor.z+slot.z};let d=distance(s,desired),attackTarget=null;
+   if(run.order!=='retreat'&&target&&(run.order!=='defend'||distance(target,anchor)<13)){attackTarget=target;const reach=st.range;const td=distance(s,target);if(td>Math.min(reach*.86,reach-0.3))desired={x:target.x+(s.x-target.x)/(td||1)*Math.max(.8,reach*.72),z:target.z+(s.z-target.z)/(td||1)*Math.max(.8,reach*.72)};else desired={x:s.x,z:s.z};}
+   const catchup=distance(s,desired)>5?1.4:1;const step=moveUnit(s,desired.x,desired.z,st.speed*catchup,dt,commander,run.enemies);s.walk=step;
+   if(s.classId==='healer'&&s.attackClock<=0){const nearby=[run.commander,...run.soldiers].filter(u=>alive(u)&&distance(u,s)<st.range);const wounded=nearby.filter(u=>u.hp<(u.id==='commander'?u.maxHp:this.getStats(u).hp)*.84).sort((a,b)=>a.hp/(a.id==='commander'?a.maxHp:this.getStats(a).hp)-b.hp/(b.id==='commander'?b.maxHp:this.getStats(b).hp))[0];if(wounded){s.attackClock=st.cooldown;s.anim=.5;this.launchProjectile(s,wounded,Math.round(18*(run.perks.includes('healing')?1.15:1)),true);}}
+   if(attackTarget&&distance(s,attackTarget)<st.range+.25&&s.attackClock<=0){s.attackClock=st.cooldown;s.anim=.38;if(st.range>3){this.launchProjectile(s,attackTarget,this.getAttack(s));}else{this.hurt(attackTarget,this.getAttack(s),s);} }
+  }
+  for(const e of run.enemies){if(!alive(e))continue;const target=[...run.soldiers,commander].filter(alive).filter(u=>distance(e,u)<22).sort((a,b)=>{const priority=u=>u.id==='commander'?1.6:u.classId==='guardian'?.65:u.classId==='spearman'?.85:['archer','mystic','healer'].includes(u.classId)?1.25:1;return distance(a,e)*priority(a)-distance(b,e)*priority(b);})[0];if(!target){e.walk=false;continue;}const d=distance(e,target);if(d>e.range*.83){e.walk=moveUnit(e,target.x,target.z,e.speed,dt,commander,run.soldiers);}else e.walk=false;
+   if(distance(e,target)<e.range+.2&&e.attackClock<=0){e.attackClock=e.cooldown;e.anim=.42;if(e.range>3)this.launchProjectile(e,target,e.attack);else this.hurt(target,e.boss&&e.hp<e.maxHp*.4?e.attack*1.4:e.attack,e);}
+   if(e.boss){if(e.hp<e.maxHp*.45&&!e.phaseTwo){e.phaseTwo=true;this.msg('O Lorde da Cinza entrou em fúria!');}e.special=(e.special??5.5)-dt;if(e.special<=0){e.special=7;if(distance(commander,e)<12){e.telegraph=1.25;this.msg('Alerta: golpe devastador! Afaste-se do Lorde!');}}if(e.telegraph>0){e.telegraph-=dt;if(e.telegraph<=0){for(const ally of [commander,...run.soldiers])if(alive(ally)&&distance(e,ally)<6)this.hurt(ally,30,e);run.fx.push({type:'burst',x:e.x,z:e.z,t:0,ttl:.65,range:6,color:'#e58469'});}}}
+  }
+  if(commander.attackClock<=0){const t=run.enemies.filter(alive).sort((a,b)=>distance(a,commander)-distance(b,commander))[0];if(t&&distance(commander,t)<commander.range+.3){commander.attackClock=commander.cooldown;commander.anim=.37;this.hurt(t,this.getAttack(commander),commander);}}
+  for(let i=run.projectiles.length-1;i>=0;i--){const p=run.projectiles[i],target=[commander,...run.soldiers,...run.enemies].find(u=>u.id===p.targetId);p.ttl-=dt;if(!target||p.ttl<=0){run.projectiles.splice(i,1);continue;}let d=distance(p,target);const step=p.speed*dt;if(d<=step){if(p.healing){if(alive(target)){const max=target.id==='commander'?target.maxHp:this.getStats(target).hp;target.hp=Math.min(max,target.hp+p.amount);run.fx.push({type:'heal',x:target.x,z:target.z,t:0,ttl:.55,range:1.4,color:'#90edd6'});}}else this.hurt(target,p.amount,[commander,...run.soldiers,...run.enemies].find(u=>u.id===p.sourceId));run.projectiles.splice(i,1);}else{p.x+=(target.x-p.x)/d*step;p.z+=(target.z-p.z)/d*step;}}
+  run.fx=run.fx.filter(f=>(f.t+=dt)<f.ttl);run.enemies=run.enemies.filter(e=>e.state!=='dead'||e.anim>0);
+  for(const site of run.world.sites){if(!site.started||site.done||!site.groupId)continue;const group=run.groupStats[site.id];if(group&&!group.completed&&run.enemies.every(e=>e.groupId!==site.id||e.hp<=0))this.resolveGroup(site.id);}
+  if(commander.hp<=0&&!run.finished)this.finish('defeat');
+ }
+ finish(result){const run=this.run;if(!run||run.finished)return;run.finished=true;run.victory=result==='victory';if(result==='defeat')this.meta.losses++;if(result==='victory')this.meta.wins++;
+  for(const s of run.soldiers){if(s.condition==='downed'){const rr=resolveDowned(s,this.r,this.meta.upgrades);if(rr)run[rr]++;}}
+  const priorWounded=new Set(this.meta.roster.filter(s=>s.condition==='wounded').map(s=>s.id));const coreIds=new Set(this.meta.roster.map(s=>s.id));const survivors=[];for(const s of run.soldiers){if(s.condition==='dead'){this.meta.memorial.unshift({id:s.id,name:s.name,classId:s.classId,grade:s.grade,level:s.level,battles:s.battles,kills:s.kills,run:run.number});continue;}const clean=stripRuntime(s);if(coreIds.has(s.id)){const index=this.meta.roster.findIndex(m=>m.id===s.id);this.meta.roster[index]=clean;}else survivors.push(clean);}
+  this.meta.roster=this.meta.roster.filter(s=>!this.meta.memorial.some(d=>d.id===s.id));
+  for(const s of this.meta.roster)if(priorWounded.has(s.id)&&s.condition==='wounded'&&s.recoveryRunsRemaining>0){s.recoveryRunsRemaining--;if(s.recoveryRunsRemaining===0)healSoldier(s);}
+  const legacy=run.earnedLegacy+(result==='victory'?10:result==='retreat'?3:1)+Math.floor(run.encounters/2);this.meta.legacy+=legacy;run.finalResult={type:result,legacy,returnables:survivors,chosenIds:[],kills:run.kills,elapsed:run.elapsed,banners:run.banners,dead:run.dead,wounded:run.wounded};
+  this.meta.history.unshift({run:run.number,type:result,kills:run.kills,legacy,elapsed:Math.round(run.elapsed)});this.meta.history=this.meta.history.slice(0,20);this.persist();this.notify('finished');}
+ keepRecruit(id){const r=this.run;if(!r?.finished)return;const record=r.finalResult;const s=record.returnables.find(s=>s.id===id);if(!s||record.chosenIds.includes(id))return;if(record.chosenIds.length>=2){this.msg('Só é possível guardar 2 novos recrutas por expedição.');return;}if(this.meta.roster.length>=maxRoster(this.meta.upgrades)){this.msg('Alojamentos lotados.');return;}record.chosenIds.push(id);s.isPersistentVeteran=true;this.meta.roster.push(s);this.persist();this.notify('finished');}
+ returnBarracks(){if(!this.run?.finished)return;this.run=null;this.meta.activeRun=null;
+  if(!this.meta.roster.some(s=>s.condition==='healthy')){const available=maxRoster(this.meta.upgrades)-this.meta.roster.length;if(available>0){const r=rng((this.meta.runNumber*101+87271)>>>0);for(let i=0;i<Math.min(2,available);i++){const soldier=generateSoldier(r,`soldier-${this.meta.nextId++}`,'voluntarios');if(i===0)soldier.classId='swordsman';soldier.hp=statsFor(soldier).hp;this.meta.roster.push(soldier);}this.msg('Novos voluntários chegaram para reerguer a companhia.');}else if(this.meta.roster.length){healSoldier(this.meta.roster[0]);this.msg('Uma recuperação emergencial salvou a companhia.');}}
+  this.meta.selectedIds=this.meta.selectedIds.filter(id=>this.meta.roster.some(s=>s.id===id&&s.condition==='healthy'));if(!this.meta.selectedIds.length)this.meta.selectedIds=this.meta.roster.filter(s=>s.condition==='healthy').slice(0,5).map(s=>s.id);this.persist();this.notify('barracks');}
+ reset(){clearSave();this.meta=freshMeta();this.run=null;this.r=null;this.persist();this.notify('reset');}
+}
+function stripRuntime(s){const t=structuredClone(s);for(const k of ['x','z','team','attackClock','flash','anim','phase','face','state','isCore','buff','shield','walk'])delete t[k];return t;}
+function importedEnemy(r,id,type,x,z,groupId){const d=ENEMIES[type];return {id,type,name:d.name,classId:d.classId,team:'enemy',x,z,hp:d.hp,maxHp:d.hp,attack:d.attack,defense:d.defense,range:d.range,cooldown:d.cooldown,speed:d.speed,attackClock:r.next()*.5,flash:0,anim:0,phase:r.next()*6,face:0,state:'active',groupId,boss:!!d.boss,grade:d.boss?'legendary':'recruit',level:1};}
+function moveUnit(s,x,z,speed,dt,leader,others){const dx=x-s.x,dz=z-s.z,dist=Math.hypot(dx,dz);if(dist<.25)return false;let vx=dx/dist,vz=dz/dist;for(const other of others){if(other===s||!alive(other))continue;const d=distance(s,other);if(d<1.1&&d>.001){vx+=(s.x-other.x)/d*.30;vz+=(s.z-other.z)/d*.30;}}
+ const mag=Math.hypot(vx,vz)||1;const step=Math.min(dist,speed*dt);s.x=clamp(s.x+vx/mag*step,-49,49);s.z=clamp(s.z+vz/mag*step,-49,49);s.face=Math.atan2(vx,vz);return true;}
+function formationSlot(roster,soldier,style,face){
+ const support=u=>['archer','mystic','healer'].includes(u.classId);
+ const back=support(soldier);const peers=roster.filter(u=>alive(u)&&support(u)===back);
+ const i=Math.max(0,peers.findIndex(u=>u.id===soldier.id));const row=Math.floor(i/6),rowSize=Math.min(6,peers.length-row*6),col=i%6-(rowSize-1)/2;
+ const spacing=style==='defensive'?1.2:1.7;
+ const x=col*spacing,z=back?(-2.8-row*1.4):(2.5-row*1.3);
+ const cos=Math.cos(face),sin=Math.sin(face);return {x:x*cos+z*sin,z:-x*sin+z*cos};
+}
+
+
+// src/render/geometry.js
+// Pequeno sistema de malhas triangulares 3D originais, sem texturas ou arquivos externos.
+const cube=[];function quad(a,b,c,d,n){for(const v of [a,b,c,a,c,d])cube.push(...v,...n);}
+quad([-.5,-.5,.5],[.5,-.5,.5],[.5,.5,.5],[-.5,.5,.5],[0,0,1]);
+quad([.5,-.5,-.5],[-.5,-.5,-.5],[-.5,.5,-.5],[.5,.5,-.5],[0,0,-1]);
+quad([.5,-.5,.5],[.5,-.5,-.5],[.5,.5,-.5],[.5,.5,.5],[1,0,0]);
+quad([-.5,-.5,-.5],[-.5,-.5,.5],[-.5,.5,.5],[-.5,.5,-.5],[-1,0,0]);
+quad([-.5,.5,.5],[.5,.5,.5],[.5,.5,-.5],[-.5,.5,-.5],[0,1,0]);
+quad([-.5,-.5,-.5],[.5,-.5,-.5],[.5,-.5,.5],[-.5,-.5,.5],[0,-1,0]);
+function cylinder(sides,topRadius=.5,bottomRadius=.5){const result=[];for(let i=0;i<sides;i++){
+ const a=i*Math.PI*2/sides,b=(i+1)*Math.PI*2/sides,ca=Math.cos(a),sa=Math.sin(a),cb=Math.cos(b),sb=Math.sin(b);let n=[Math.cos((a+b)/2),0,Math.sin((a+b)/2)];
+ const v1=[ca*bottomRadius,-.5,sa*bottomRadius],v2=[cb*bottomRadius,-.5,sb*bottomRadius],v3=[cb*topRadius,.5,sb*topRadius],v4=[ca*topRadius,.5,sa*topRadius];
+ for(const v of [v1,v2,v3,v1,v3,v4])result.push(...v,...n);
+ if(topRadius>0)for(const v of [[0,.5,0],v4,v3])result.push(...v,0,1,0);
+ for(const v of [[0,-.5,0],v2,v1])result.push(...v,0,-1,0);
+ }return result;}
+function sphere(){const result=[];const lat=5,lon=8;for(let i=0;i<lat;i++){
+ const y1=Math.cos(i/lat*Math.PI)*.5,y2=Math.cos((i+1)/lat*Math.PI)*.5;
+ const r1=Math.sin(i/lat*Math.PI)*.5,r2=Math.sin((i+1)/lat*Math.PI)*.5;
+ for(let j=0;j<lon;j++){
+ const a=j/lon*Math.PI*2,b=(j+1)/lon*Math.PI*2;
+ const p1=[r1*Math.cos(a),y1,r1*Math.sin(a)],p2=[r2*Math.cos(a),y2,r2*Math.sin(a)],p3=[r2*Math.cos(b),y2,r2*Math.sin(b)],p4=[r1*Math.cos(b),y1,r1*Math.sin(b)];
+ for(const v of [p1,p2,p3,p1,p3,p4]){const d=Math.hypot(...v)||1;result.push(...v,v[0]/d,v[1]/d,v[2]/d);}
+ }
+ }return result;}
+const SHAPES={box:cube,cylinder:cylinder(7),cone:cylinder(7,0,.5),pyramid:cylinder(4,0,.5),sphere:sphere(),disc:cylinder(18,.5,.5),pole:cylinder(5)};
+const parseColor=color=>{if(Array.isArray(color))return color;const n=parseInt(color.replace('#',''),16);return [(n>>16&255)/255,(n>>8&255)/255,(n&255)/255];};
+const colorCache=new Map();const rgb=c=>{if(!colorCache.has(c))colorCache.set(c,parseColor(c));return colorCache.get(c);};
+function addMesh(out,shape,x,y,z,sx,sy,sz,color,opts={}){
+ const mesh=SHAPES[shape]||SHAPES.box;const c=rgb(color), yaw=opts.yaw||0,rx=opts.rx||0,rz=opts.rz||0;
+ const cy=Math.cos(yaw),ny=Math.sin(yaw),cx=Math.cos(rx),nx=Math.sin(rx),cz=Math.cos(rz),nz=Math.sin(rz);
+ for(let i=0;i<mesh.length;i+=6){
+  let px=mesh[i]*sx,py=mesh[i+1]*sy,pz=mesh[i+2]*sz;
+  let v=py*cx-pz*nx,p=py*nx+pz*cx;py=v;pz=p;
+  v=px*cz-py*nz;p=px*nz+py*cz;px=v;py=p;
+  v=px*cy+pz*ny;p=-px*ny+pz*cy;px=v;pz=p;
+  let vx=mesh[i+3],vy=mesh[i+4],vz=mesh[i+5];
+  let vn=vy*cx-vz*nx,nn=vy*nx+vz*cx;vy=vn;vz=nn;
+  vn=vx*cz-vy*nz;nn=vx*nz+vy*cz;vx=vn;vy=nn;
+  vn=vx*cy+vz*ny;nn=-vx*ny+vz*cy;vx=vn;vz=nn;
+  out.push(x+px,y+py,z+pz,vx,vy,vz,c[0],c[1],c[2]);
+ }
+}
+function addActor(out,u,time=0){
+ const x=u.x,z=u.z,face=u.face||0, isEnemy=u.team==='enemy',commander=u.id==='commander', boss=u.boss;
+ const grade=u.grade||'recruit';const gold=grade==='legendary',elite=['elite','legendary'].includes(grade);
+ const scale=boss?1.5:commander?1.22:1;const flash=u.flash>0;
+ const bodyColor=flash?'#ffffff':isEnemy?'#873e49':commander?'#384956':u.classId==='healer'?'#d4c899':u.classId==='mystic'?'#6f6097':u.classId==='guardian'?'#718c9e':u.classId==='archer'?'#517b64':'#697f82';
+ const accent=flash?'#ffffff':isEnemy?'#d77d6c':commander?'#e2b86d':gold?'#e7c879':elite?'#d2b682':'#7bd0c4';
+ const skin=flash?'#ffffff':isEnemy?'#cda68d':'#ddb99b', metal=elite?'#e2cfab':'#b5b6ad';
+ const walk=u.walk?Math.sin(u.phase||0)*.24:0,attack=u.anim>0?Math.sin((1-u.anim/.5)*Math.PI)*.75:0;
+ const standing=u.condition!=='downed'&&u.state!=='downed'&&u.state!=='dead';
+ function p(shape,dx,dy,dz,sx,sy,sz,col,extra={}){
+  const ly=standing?dy*scale:dy*.27*scale;
+  const lx=standing?dx*scale:dx*scale+.32;
+  const lz=standing?dz*scale:dz*scale;
+  const xx=lx*Math.cos(face)+lz*Math.sin(face),zz=-lx*Math.sin(face)+lz*Math.cos(face);
+  addMesh(out,shape,x+xx,ly,z+zz,sx*scale,sy*scale,sz*scale,col,{yaw:face+(extra.yaw||0),rx:extra.rx||0,rz:extra.rz||0});
+ }
+ const ground=commander?'#d6bf6a':isEnemy?'#c75b62':'#5dc9ba';
+ addMesh(out,'disc',x,.015,z,.85,.025,.85,ground);
+ if(!standing){p('box',0,.13,0,.65,.18,.6,bodyColor);p('sphere',.3,.2,.1,.34,.32,.32,skin);return;}
+ // Pés, pernas e tronco. A silhueta é composta por partes animáveis, não caixas únicas.
+ p('box',-.22,.40,0,.27,.80,.33,'#344b55',{rz:walk*.9});p('box',.22,.40,0,.27,.80,.33,'#344b55',{rz:-walk*.9});
+ p('box',-.22,.08,-.12,.33,.19,.51,'#303c44');p('box',.22,.08,-.12,.33,.19,.51,'#303c44');
+ p('box',0,1.10,0,.83,.94,.54,bodyColor);p('box',0,1.20,-.31,.65,.62,.12,accent);
+ p('box',0,1.54,0,.2,.2,.22,skin);p('sphere',0,1.88,0,.56,.58,.52,skin);
+ p('box',0,1.99,-.285,.09,.06,.045,'#473c3f');
+ p('box',-.15,1.92,-.31,.052,.052,.045,'#262c38');p('box',.15,1.92,-.31,.052,.052,.045,'#262c38');
+ if(elite||commander||u.classId==='guardian'){
+  p('cylinder',0,2.20,0,.57,.34,.57,metal);p('box',0,2.28,-.3,.17,.32,.17,accent);
+ }else p('sphere',0,2.16,.03,.52,.20,.48,isEnemy?'#60414c':'#5d5b4d');
+ if(gold){p('cone',0,2.55,0,.2,.60,.2,accent);p('box',0,1.18,-.39,.48,.44,.08,metal);}
+ if(u.classId==='healer'||u.classId==='mystic'){p('cone',0,.65,0,.95,.82,.85,bodyColor);}
+ if(commander){p('box',0,1.10,.40,.84,1.15,.11,'#b84c4f');p('box',0,1.40,.47,.72,.12,.08,accent);}
+ const armSwing=attack*1.65;
+ p('box',-.58,1.12,0,.30,.84,.33,skin,{rz:-walk*.43-.12});p('box',.58,1.12,0,.30,.84,.33,skin,{rz:walk*.43+armSwing});
+ p('box',-.59,1.48,0,.43,.35,.43,metal);p('box',.59,1.48,0,.43,.35,.43,metal);
+ const classId=u.classId;
+ if(['swordsman','guardian'].includes(classId)||commander){
+  p('box',.63,.70,-.34,.13,.84,.14,metal,{rz:-.2-attack});p('box',.63,1.07,-.34,.29,.14,.14,accent);
+  p('box',-.75,1.12,-.30,classId==='guardian'?.78:.57,classId==='guardian'?1.05:.7,.17,metal);p('box',-.75,1.16,-.4,.36,.16,.06,accent);
+ }else if(classId==='spearman'){
+  p('cylinder',.67,1.35,-.5,.12,2.6,.12,'#b68e62',{rz:attack*.35});p('cone',.67,2.78,-.5,.25,.55,.25,metal);
+ }else if(classId==='archer'){
+  p('box',-.49,1.25,.36,.35,.66,.17,'#72543d');p('box',.72,1.24,-.40,.12,1.02,.12,'#b48962');p('box',.72,1.7,-.42,.13,.17,.13,accent);p('box',.72,.8,-.42,.13,.17,.13,accent);
+ }else{
+  const staffColor=classId==='healer'?'#8ddcc1':'#bd9bed';p('cylinder',.68,1.12,-.48,.115,2.1,.115,'#896f5d');p('sphere',.68,2.21,-.48,.35,.35,.35,staffColor);
+ }
+ if(u.buff>0)p('cone',0,2.73,0,.20,.34,.2,'#ffd478');
+ if(u.shield>0)p('disc',0,.055,0,1.75,.02,1.75,'#73d8e0');
+}
+function addTree(out,x,z,scale=1,variant=0){addMesh(out,'cylinder',x,.52*scale,z,.31*scale,1.05*scale,.31*scale,'#80654c');
+ if(variant){addMesh(out,'sphere',x,1.8*scale,z,1.55*scale,1.8*scale,1.55*scale,'#527b54');addMesh(out,'sphere',x-.45*scale,1.32*scale,z+.1*scale,1.05*scale,1.1*scale,1.05*scale,'#638d60');}
+ else{addMesh(out,'cone',x,1.55*scale,z,1.8*scale,2.35*scale,1.8*scale,'#4e7864');addMesh(out,'cone',x,2.55*scale,z,1.5*scale,2*scale,1.5*scale,'#628e6e');}}
+function addSite(out,s,elapsed=0){const {x,z,kind}=s;const y=.08;
+ const color=s.done?'#7f9375':kind==='banner'?'#d59b6e':kind==='boss'?'#ac6765':kind==='recruit'?'#6dd2af':kind==='shrine'?'#bc9ce7':'#e7ce8d';
+ if(kind==='home'){
+  addMesh(out,'disc',x,.018,z,5.3,.03,5.3,'#a1946c');
+  addMesh(out,'cylinder',x,0.55,z-1.8,.9,1.1,.9,'#9c785a');addMesh(out,'cone',x,1.63,z-1.8,2.6,1.5,2.6,'#597c7b');
+  addMesh(out,'box',x+2,.3,z+1.1,2.1,.6,1.7,'#8c6a48');addMesh(out,'cone',x+2,1.1,z+1.1,2.7,1.2,2.3,'#7b5a49');
+  addMesh(out,'cylinder',x-2.5,1.2,z, .14,2.4,.14,'#957255');addMesh(out,'box',x-2.5,2,z,.93,.63,.11,'#69c4b9');
+  addMesh(out,'cone',x-1,.24,z+2,.6,.55,.6,'#ffca77');return;
+ }
+ if(kind==='banner'||kind==='patrol'){
+  addMesh(out,'disc',x,.02,z,3.5,.05,3.5,s.done?'#789575':'#8a7663');
+  for(let i=0;i<3;i++){const a=i*2.1;addMesh(out,'cylinder',x+Math.cos(a)*2.6,.7,z+Math.sin(a)*2.6,.3,1.4,.3,'#71594e');}
+  addMesh(out,'cylinder',x,1.5,z,.17,3,.17,'#91715b');addMesh(out,'box',x+.46,2.38,z,.91,1.14,.13,color);
+  addMesh(out,'box',x,0.27,z,1.8,.54,1.6,'#8b6e55');return;
+ }
+ if(kind==='boss'){
+  addMesh(out,'disc',x,.03,z,6.2,.06,6.2,'#7d6e68');
+  addMesh(out,'box',x,1.35,z,5.8,2.7,5.4,'#797b7f');addMesh(out,'box',x,3.6,z,4.3,1.2,4.4,'#666e74');
+  for(let dx of [-3.1,3.1])for(let dz of [-2.8,2.8]){
+   addMesh(out,'box',x+dx,2.25,z+dz,1.35,4.5,1.35,'#737b80');addMesh(out,'pyramid',x+dx,4.8,z+dz,1.9,1.6,1.9,'#a65f57');}
+  addMesh(out,'box',x,1.0,z-2.75,1.8,2.0,.16,'#3d3335');return;
+ }
+ if(kind==='shrine'){
+  addMesh(out,'cylinder',x,.3,z,2.8,.6,2.8,'#8f819b');for(let i=0;i<4;i++){const a=i*Math.PI/2;addMesh(out,'cylinder',x+Math.cos(a)*1.4,1,z+Math.sin(a)*1.4,.5,2,.5,'#b4a5bf');}
+  addMesh(out,'sphere',x,1.6,z,.65,.75,.65,color);return;
+ }
+ if(kind==='recruit'){
+  addMesh(out,'cylinder',x,.48,z,2.5,.96,2.5,'#8e7f6a');addMesh(out,'cone',x,1.38,z,3.1,1.36,3.1,'#7b9c82');addMesh(out,'box',x,1.02,z-1.02,.92,.9,.3,'#594b43');return;
+ }
+ if(kind==='cache'){addMesh(out,'box',x,.4,z,1.45,.8,1,'#b17b4e');addMesh(out,'box',x,.71,z,1.5,.22,1.03,'#dec083');return;}
+ if(kind==='rest'){addMesh(out,'disc',x,.035,z,2.7,.07,2.7,'#b19b76');addMesh(out,'cone',x,.37,z,.9,.75,.9,'#df9561');addMesh(out,'cone',x,.63,z,.54,.88,.54,'#ffd58e');for(let i=0;i<3;i++){const a=i*2*Math.PI/3;addMesh(out,'box',x+Math.cos(a)*1.1,.18,z+Math.sin(a)*1.1,1,.28,.3,'#88654b',{yaw:a});}return;}
+}
+
+
+// src/render/renderer.js
+
+
+
+
+const vs=`#version 300 es
+precision highp float;
+layout(location=0) in vec3 aPos; layout(location=1) in vec3 aNormal; layout(location=2) in vec3 aColor;
+uniform mat4 uVP;uniform vec3 uEye;
+out vec3 vColor; out float vFog;
+void main(){gl_Position=uVP*vec4(aPos,1.0);float lit=max(dot(normalize(aNormal),normalize(vec3(-0.45,0.85,0.5))),0.0);float soft=0.58+0.42*lit;vColor=aColor*soft;vFog=clamp((distance(aPos,uEye)-30.0)/105.0,0.0,0.55);}
+`;
+const fs=`#version 300 es
+precision highp float;
+in vec3 vColor;in float vFog;out vec4 frag;
+void main(){vec3 c=mix(vColor,vec3(0.59,0.70,0.68),vFog);frag=vec4(pow(c,vec3(0.95)),1.0);}
+`;
+function compile(gl,type,text){const sh=gl.createShader(type);gl.shaderSource(sh,text);gl.compileShader(sh);if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(sh));return sh;}
+function classHealth(u){return statsFor(u).hp;}
+function norm(v){const n=Math.hypot(...v)||1;return v.map(x=>x/n);}
+function cross(a,b){return [a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];}
+function dot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];}
+function lookAt(eye,target){const z=norm(eye.map((e,i)=>e-target[i])),x=norm(cross([0,1,0],z)),y=cross(z,x);return [x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-dot(x,eye),-dot(y,eye),-dot(z,eye),1];}
+function ortho(l,r,b,t,n,f){return [2/(r-l),0,0,0,0,2/(t-b),0,0,0,0,-2/(f-n),0,-(r+l)/(r-l),-(t+b)/(t-b),-(f+n)/(f-n),1];}
+function multiply(a,b){const out=new Array(16);for(let col=0;col<4;col++)for(let row=0;row<4;row++){out[col*4+row]=a[row]*b[col*4]+a[4+row]*b[col*4+1]+a[8+row]*b[col*4+2]+a[12+row]*b[col*4+3];}return out;}
+class Renderer {
+ constructor(canvas,over){this.canvas=canvas;this.overlay=over;this.ctx=over.getContext('2d');this.gl=canvas.getContext('webgl2',{antialias:true,alpha:false,powerPreference:'high-performance'});if(!this.gl)throw Error('WebGL2 não está disponível neste navegador.');
+  const gl=this.gl,program=gl.createProgram();gl.attachShader(program,compile(gl,gl.VERTEX_SHADER,vs));gl.attachShader(program,compile(gl,gl.FRAGMENT_SHADER,fs));gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(program));gl.useProgram(program);this.program=program;this.uVP=gl.getUniformLocation(program,'uVP');this.uEye=gl.getUniformLocation(program,'uEye');this.vbo=gl.createBuffer();this.staticVbo=gl.createBuffer();this.staticCount=0;this.dynamicCapacity=0;this.world=null;this.camera={x:0,z:0};this.zoom=24;this.settings={quality:'medium'};this.vp=null;this.preview=makeWorld(2026);this.setWorld(this.preview);this.resize();window.addEventListener('resize',()=>this.resize());}
+ prepareBuffer(buffer){const gl=this.gl;gl.bindBuffer(gl.ARRAY_BUFFER,buffer);const stride=9*4;for(const [index,offset] of [[0,0],[1,3],[2,6]]){gl.enableVertexAttribArray(index);gl.vertexAttribPointer(index,3,gl.FLOAT,false,stride,offset*4);}}
+ setQuality(q){this.settings.quality=q;this.resize();}
+ resize(){const quality=this.settings.quality;const dpr=Math.min(devicePixelRatio||1,quality==='low'?1:quality==='high'?2:1.35);const w=Math.max(1,Math.floor(this.canvas.clientWidth*dpr)),h=Math.max(1,Math.floor(this.canvas.clientHeight*dpr));if(w!==this.canvas.width||h!==this.canvas.height){this.canvas.width=w;this.canvas.height=h;}this.overlay.width=Math.round(this.overlay.clientWidth*dpr);this.overlay.height=Math.round(this.overlay.clientHeight*dpr);this.ctx.setTransform(dpr,0,0,dpr,0,0);}
+ setWorld(world){this.world=world;const out=[];
+  addMesh(out,'box',0,-.33,0,106,.64,106,'#769b75');
+  for(let i=-49;i<=49;i+=7)for(let j=-49;j<=49;j+=7){const index=Math.abs((i*43+j*97+world.seed)|0)%5;addMesh(out,'box',i,.001,j,6.93,.015,6.93,['#7aa378','#779f72','#7c9d76','#77a07c','#749c73'][index]);}
+  for(const p of world.patches){addMesh(out,'disc',p.x,.013,p.z,p.s,.011,p.s,['#74916b','#88a77b','#7c9c6e'][p.t]);}
+  for(const tree of world.foliage){const {x,z,scale,type,seed}=tree;
+   if(type==='pine')addTree(out,x,z,scale,seed%3===0?1:0);
+   else if(type==='rock')addMesh(out,'sphere',x,.27*scale,z,1.25*scale,.7*scale,1.1*scale,seed%3===0?'#8e9290':'#94998b');
+   else{addMesh(out,'sphere',x,.27,z,1.3*scale,.73*scale,1.2*scale,'#4c8464');addMesh(out,'sphere',x+.35,.38,z-.23,.8*scale,.71*scale,.85*scale,'#61936b');}
+  }
+  const float=new Float32Array(out);const gl=this.gl;gl.bindBuffer(gl.ARRAY_BUFFER,this.staticVbo);gl.bufferData(gl.ARRAY_BUFFER,float,gl.STATIC_DRAW);this.staticCount=float.length/9;}
+ project(x,y,z){if(!this.vp)return null;const m=this.vp,w=m[3]*x+m[7]*y+m[11]*z+m[15],px=(m[0]*x+m[4]*y+m[8]*z+m[12])/w,py=(m[1]*x+m[5]*y+m[9]*z+m[13])/w;return {x:(px*.5+.5)*this.canvas.clientWidth,y:(1-(py*.5+.5))*this.canvas.clientHeight,visible:w>0&&Math.abs(px)<1.2&&Math.abs(py)<1.2};}
+ screenTarget(x,y,run){if(!run)return null;const targets=run.enemies.filter(e=>e.hp>0);const closest=targets.map(e=>({e,p:this.project(e.x,1.4,e.z)})).filter(a=>a.p?.visible).sort((a,b)=>Math.hypot(a.p.x-x,a.p.y-y)-Math.hypot(b.p.x-x,b.p.y-y))[0];return closest&&Math.hypot(closest.p.x-x,closest.p.y-y)<42?closest.e:null;}
+ render(run,time=0){this.resize();const gl=this.gl,w=this.canvas.width,h=this.canvas.height;gl.viewport(0,0,w,h);gl.clearColor(.66,.79,.75,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.disable(gl.CULL_FACE);
+  if(run&&run.world!==this.world)this.setWorld(run.world);else if(!run&&this.world!==this.preview)this.setWorld(this.preview);
+  const center=run?.commander||{x:0,z:0};let s=Math.min(1,(1/60)*Math.max(1,time?2:1));this.camera.x+=(center.x-this.camera.x)*s;this.camera.z+=(center.z-this.camera.z)*s;
+  const eye=[this.camera.x+29,35,this.camera.z+29],target=[this.camera.x,0,this.camera.z];const aspect=w/h;this.vp=multiply(ortho(-this.zoom*aspect,this.zoom*aspect,-this.zoom,this.zoom,.1,170),lookAt(eye,target));gl.useProgram(this.program);gl.uniformMatrix4fv(this.uVP,false,new Float32Array(this.vp));gl.uniform3fv(this.uEye,new Float32Array(eye));this.prepareBuffer(this.staticVbo);gl.drawArrays(gl.TRIANGLES,0,this.staticCount);
+  const arr=[];const world=run?.world||this.preview;
+  for(const site of world.sites){if(site.done&&site.kind!=='home'&&site.kind!=='banner')continue;addSite(arr,site,time);if(!site.done&&site.kind!=='home'){
+   const c=site.kind==='banner'?'#f3d598':site.kind==='boss'?'#ff9a8c':site.kind==='recruit'?'#7beac3':site.kind==='shrine'?'#d6b0f8':'#ffe0a6';
+   const bob=.25+Math.sin(time*2+site.x)*.17;addMesh(arr,'sphere',site.x,3.1+bob,site.z,.37,.47,.37,c);
+  }}
+  if(run){for(const u of run.soldiers){if(distance(u,run.commander)<37&&(u.condition==='healthy'||u.condition==='downed'))addActor(arr,u,time);}
+   for(const e of run.enemies){if(distance(e,run.commander)<39)addActor(arr,e,time);}
+   addActor(arr,run.commander,time);
+   for(const p of run.projectiles)addMesh(arr,'sphere',p.x,1.25+Math.sin(time*10)*.15,p.z,.27,.26,.27,p.color);
+   for(const fx of run.fx){if(fx.type==='burst'){let k=.15+fx.t/fx.ttl*fx.range;addMesh(arr,'disc',fx.x,.047,fx.z,k,.035,k,fx.color);}else if(fx.type==='heal'){addMesh(arr,'sphere',fx.x,1.5+fx.t*2,fx.z,.2+fx.t*.25,.2+fx.t*.25,.2+fx.t*.25,fx.color);}}
+   const boss=run.enemies.find(e=>e.boss&&e.hp>0);if(boss?.telegraph>0)addMesh(arr,'disc',boss.x,.04,boss.z,12,.033,12,'#cf785e');
+  }
+  const flat=new Float32Array(arr);gl.bindBuffer(gl.ARRAY_BUFFER,this.vbo);gl.bufferData(gl.ARRAY_BUFFER,flat,gl.DYNAMIC_DRAW);this.prepareBuffer(this.vbo);gl.drawArrays(gl.TRIANGLES,0,flat.length/9);
+  this.renderOverlay(run,time);
+ }
+ renderOverlay(run,time){const ctx=this.ctx,w=this.overlay.clientWidth,h=this.overlay.clientHeight;ctx.clearRect(0,0,w,h);if(!run)return;
+  const drawBar=(u,color='#76d2af')=>{const p=this.project(u.x,(u.boss?4.1:2.8),u.z);if(!p||!p.visible||p.x<-40||p.x>w+40||p.y<-10||p.y>h+30)return;const max=u.maxHp||u.hp;const hp=clamp(u.hp/max,0,1);ctx.fillStyle='#192b32dd';ctx.fillRect(p.x-19,p.y-3,38,5);ctx.fillStyle=color;ctx.fillRect(p.x-18,p.y-2,36*hp,3);};
+  for(const u of run.soldiers){const maximum=classHealth(u);if(u.hp>0&&distance(u,run.commander)<23&&(u.hp<maximum*.9||u.flash>0))drawBar({...u,maxHp:maximum},'#74d4bf');}
+  for(const e of run.enemies)if(e.hp>0&&distance(e,run.commander)<35)drawBar(e,e.boss?'#ffca82':'#d77569');
+  for(const fx of run.fx){if(fx.type!=='number')continue;const p=this.project(fx.x,2.4+fx.t*1.35,fx.z);if(!p?.visible)continue;ctx.font='700 14px system-ui';ctx.textAlign='center';ctx.strokeStyle='#263039';ctx.lineWidth=3;ctx.strokeText(String(fx.amount),p.x,p.y);ctx.fillStyle=fx.color;ctx.fillText(String(fx.amount),p.x,p.y);}
+  const site=run.world.sites.filter(s=>!s.done&&distance(run.commander,s)<15).sort((a,b)=>distance(run.commander,a)-distance(run.commander,b))[0];if(site){const p=this.project(site.x,4.1,site.z);if(p?.visible){ctx.textAlign='center';ctx.font='700 12px system-ui';ctx.fillStyle='#fcf3d8';ctx.strokeStyle='#1c3333';ctx.lineWidth=4;ctx.strokeText(site.name,p.x,p.y);ctx.fillText(site.name,p.x,p.y);}}
+ }
+}
+
+
+// src/audio/sound.js
+// Pequenos efeitos sintéticos originais: sem arquivos externos e sem autoplay.
+class Sound {
+ constructor(){this.ctx=null;this.enabled=true;this.last=0;}
+ play(type='tap'){if(!this.enabled)return;try{this.ctx||=new (window.AudioContext||window.webkitAudioContext)();if(this.ctx.state==='suspended')this.ctx.resume();const ctx=this.ctx,osc=ctx.createOscillator(),amp=ctx.createGain(),start=ctx.currentTime;osc.type=type==='skill'?'sawtooth':'sine';const freq=type==='skill'?270:type==='victory'?520:type==='hit'?130:370;osc.frequency.setValueAtTime(freq,start);osc.frequency.exponentialRampToValueAtTime(type==='skill'?110:freq*1.35,start+.09);amp.gain.setValueAtTime(.0001,start);amp.gain.exponentialRampToValueAtTime(type==='skill'?.065:.027,start+.015);amp.gain.exponentialRampToValueAtTime(.0001,start+.14);osc.connect(amp);amp.connect(ctx.destination);osc.start(start);osc.stop(start+.16);}catch{}}
+}
+
+
+// src/ui/interface.js
+
+
+
+const fmtTime=sec=>`${String(Math.floor(sec/60)).padStart(2,'0')}:${String(Math.floor(sec%60)).padStart(2,'0')}`;
+const gradeColor={recruit:'rank-recruit',veteran:'rank-veteran',elite:'rank-elite',legendary:'rank-legendary'};
+const conditions={healthy:'Pronto',wounded:'Ferido',downed:'Caído',dead:'Morto'};
+function iconButton(label,action,extra='',css=''){return `<button type="button" class="${css||'btn btn-ghost'}" data-action="${action}" ${extra}>${label}</button>`;}
+class Interface {
+ constructor(game,renderer){this.game=game;this.renderer=renderer;this.root=document.querySelector('#ui');this.toast=document.querySelector('#toast');this.screen='menu';this.infoId=null;this.modal='';this.lastUI=0;this.hudMinimap=null;this.keys=new Set();this.joystick={active:false,x:0,z:0};this.pendingToast=null;this.sound=null;this.attachEvents();game.onChange((event,data)=>this.onEvent(event,data));renderer.setQuality(game.meta.settings.quality);this.draw();if(game.run){this.screen=game.run.finished?'results':'play';this.draw();}}
+ onEvent(event,data){if(event==='toast'){this.showToast(data.text);return;}if(event==='runStarted'){this.screen='play';this.draw();return;}if(event==='finished'){this.screen='results';this.draw();return;}if(event==='barracks'||event==='reset'){this.screen=event==='reset'?'menu':'barracks';this.draw();return;}if(['modal','modalClosed','encounter','loot','ability','state'].includes(event))this.draw();}
+ showToast(message){this.toast.textContent=message;this.toast.classList.add('show');clearTimeout(this.pendingToast);this.pendingToast=setTimeout(()=>this.toast.classList.remove('show'),3100);}
+ draw(){const run=this.game.run;if(this.screen==='menu')this.root.innerHTML=this.mainMenu();else if(this.screen==='barracks')this.root.innerHTML=this.barracks();else if(this.screen==='results')this.root.innerHTML=this.results();else if(this.screen==='play')this.root.innerHTML=this.hud();if(this.screen==='play'&&run?.pending)this.showModal(run.pending);this.hudMinimap=this.root.querySelector('#minimap');this.drawMinimap();}
+ mainMenu(){const resume=!!this.game.run&&!this.game.run.finished;return `<div class="screen menu-screen"><div class="hero-area"><div class="seal">⚔</div><div class="eyebrow">UM ROGUELITE DE EXÉRCITOS</div><h1>WARBAND<br><span>LEGACY</span></h1><p class="tagline">Every soldier has a story.</p><div class="hero-line"></div><p class="menu-description">Recrute. Lute. Sobreviva.<br>Suas vitórias são lembradas. Suas perdas também.</p><div class="menu-actions">${resume?iconButton('▶ Continuar expedição','continue','','btn btn-primary'):''}${iconButton('⚑ Entrar no quartel','barracks','','btn btn-primary')}${iconButton('⚙ Configurações','settings','','btn btn-muted')}</div><div class="version">VERSÃO JOGÁVEL 0.1.0 · OFFLINE · SEM ANÚNCIOS</div></div><div class="menu-side"><div class="menu-side-badge"><span>✧</span><strong>Seu exército.<br>Seu legado.</strong><small>Comandante • Tropas • Estratégia</small></div></div></div>`;}
+ barracks(){const m=this.game.meta,healthy=m.roster.filter(s=>s.condition==='healthy'),selected=new Set(m.selectedIds),roster=m.roster;const canLaunch=m.selectedIds.some(id=>healthy.some(s=>s.id===id));return `<div class="screen hub-screen"><header class="topbar"><div class="brand-small"><span>⚔</span> WARBAND <b>LEGACY</b><em> / QUARTEL</em></div><div class="topbar-items"><div class="resource">◈ <strong>${m.legacy}</strong> <small>insígnias</small></div>${iconButton('☰ Menu','menu','','btn btn-tiny')}</div></header><div class="hub-main"><div class="hub-intro"><div><div class="eyebrow">REFÚGIO DA COMPANHIA</div><h2>Seu quartel</h2><p>Prepare sua próxima expedição. Cada nome aqui representa uma história que ainda pode ser escrita.</p></div><div class="hub-totals"><div><b>${m.roster.length}<small>/${maxRoster(m.upgrades)}</small></b><span>soldados</span></div><div><b>${m.wins}</b><span>vitórias</span></div><div><b>${m.memorial.length}</b><span>memorial</span></div></div></div><div class="hub-columns"><section class="panel start-panel"><div class="panel-heading"><span class="panel-icon">♛</span><div><h3>Seu comandante</h3><p>Escolha uma liderança para a próxima missão</p></div></div><div class="commander-options">${Object.entries(COMMANDERS).map(([id,c])=>`<button class="commander-card ${m.commander===id?'active':''}" data-action="commander" data-id="${id}"><span class="commander-medallion">${id==='iron'?'⚔':'✦'}</span><span><b>${c.name}</b><small>${c.subtitle}</small></span><span class="check">${m.commander===id?'✓':''}</span></button>`).join('')}</div><div class="start-box"><div><strong>Esquadrão inicial</strong><small>${m.selectedIds.length}/5 soldados selecionados</small></div>${iconButton('⚔ INICIAR EXPEDIÇÃO','start',canLaunch?'':'disabled','btn btn-primary btn-start')}<small>Expedição procedural • 3 estandartes • 1 chefe</small></div></section><section class="panel roster-panel"><div class="panel-heading"><span class="panel-icon">♜</span><div><h3>Veteranos e recrutas</h3><p>Selecione até cinco combatentes saudáveis</p></div></div><div class="roster-grid">${roster.map(s=>this.soldierCard(s,selected.has(s.id))).join('')}</div><div class="roster-foot">${iconButton('✚ Memorial dos tombados','memorial','','btn btn-muted')}${iconButton('ℹ Como jogar','help','','btn btn-muted')}</div></section><section class="panel upgrades-panel"><div class="panel-heading"><span class="panel-icon">✧</span><div><h3>Melhorias permanentes</h3><p>Invista as insígnias conquistadas</p></div></div><div class="upgrade-list">${Object.entries(UPGRADE_DATA).map(([id,d])=>{const lvl=m.upgrades[id],max=lvl===d.max,cost=d.cost[lvl];return `<div class="upgrade"><div class="upgrade-symbol">${d.icon}</div><div class="upgrade-body"><b>${d.name}</b><small>${d.desc(lvl)}</small><div class="upgrade-level">${Array.from({length:d.max},(_,i)=>`<span class="${i<lvl?'filled':''}"></span>`).join('')}</div></div>${iconButton(max?'MAX':`◈ ${cost}`,'upgrade',`data-id="${id}" ${max||cost>m.legacy?'disabled':''}`,'btn btn-mini btn-gold')}</div>`;}).join('')}</div></section></div></div></div>`;}
+ soldierCard(s,selected=false){const stats=statsFor(s),percent=100*Math.min(1,s.xp/(xpToNext(s)||1));const promoteGrade=canPromote(s);return `<div class="soldier-card ${selected?'picked':''} ${s.condition!=='healthy'?'injured':''}"><button class="soldier-select" data-action="select" data-id="${s.id}" ${s.condition==='healthy'?'':'disabled'}><div class="soldier-avatar class-${s.classId}"><span>${CLASSES[s.classId]?.icon||'⚔'}</span></div><div class="soldier-details"><b>${s.name}</b><small>${CLASSES[s.classId]?.name||s.classId} · Nív. ${s.level}</small><span class="rank ${gradeColor[s.grade]}">${GRADE_NAME[s.grade]}</span></div><span class="soldier-check">${selected?'✓':s.condition==='wounded'?'✚':'+'}</span></button><div class="xp-track"><div style="width:${percent}%"></div></div><div class="soldier-actions"><span class="condition ${s.condition}">${conditions[s.condition]}</span>${iconButton('Detalhes','inspect',`data-id="${s.id}"`,'tiny-link')}${promoteGrade?iconButton('Promover','promote',`data-id="${s.id}"`,'tiny-link'):''}${s.condition==='wounded'?iconButton('Tratar ◈2','recover',`data-id="${s.id}"`,'tiny-link'):''}</div></div>`;}
+ hud(){const r=this.game.run;if(!r)return '';const c=r.commander,co=COMMANDERS[r.commanderId];return `<div class="hud-screen"><header class="hud-top"><div class="hud-leader"><span class="portrait">♛</span><div><b>${co.name}</b><div class="hpbar"><span id="leader-hp-fill" style="width:${Math.max(0,c.hp/c.maxHp*100)}%"></span></div><small id="leader-hp">${Math.ceil(c.hp)} / ${c.maxHp} PV</small></div></div><div class="hud-objective"><span class="hud-eyebrow">OBJETIVO DA EXPEDIÇÃO</span><strong id="objective">⚑ Estandartes: ${r.banners}/3</strong><small id="direction">Capture os postos inimigos</small></div><div class="hud-resources"><span title="Moedas de campo">◈ <b id="coins">${r.coins}</b></span><span title="Suprimentos">▣ <b id="supplies">${r.supplies}</b></span><span title="Tropas saudáveis">♟ <b id="troopcount">${r.soldiers.filter(s=>s.condition==='healthy').length}</b></span><button data-action="pause" class="hud-pause" aria-label="Pausar">Ⅱ</button></div></header><div class="hud-left"><div class="mini-card"><div class="mini-top"><span>MAPA DA EXPEDIÇÃO</span><span id="clock">00:00</span></div><canvas id="minimap" width="160" height="160"></canvas><div class="mini-legend"><span>● Você</span><span>◆ Objetivos</span></div></div><div class="order-panel"><div class="order-name">FORMAÇÃO: <b id="formation-name">${r.formation==='balanced'?'Equilibrada':'Defensiva'}</b></div><div class="orders"><button data-action="order" data-id="follow" class="${r.order==='follow'?'active':''}">Seguir</button><button data-action="order" data-id="defend" class="${r.order==='defend'?'active':''}">Defender</button><button data-action="order" data-id="retreat" class="${r.order==='retreat'?'active':''}">Recuar</button><button data-action="formation">↻ Formação</button></div></div></div><div class="hud-bottom"><div class="joystick-wrap"><div id="joystick" class="joystick"><div id="stick" class="stick"></div></div><span>WASD / JOYSTICK</span></div><div class="actions-wrap"><button id="interact-btn" class="action interact" data-action="interact"><span>✧</span><small id="interact-label">INTERAGIR</small><kbd>E</kbd></button><button class="action skill" data-action="ability1"><span>${r.commanderId==='iron'?'♛':'⬡'}</span><small>${co.a1}</small><kbd>1</kbd><b class="cd" id="cd1"></b></button><button class="action skill" data-action="ability2"><span>${r.commanderId==='iron'?'⚔':'➶'}</span><small>${co.a2}</small><kbd>2</kbd><b class="cd" id="cd2"></b></button></div></div><div id="overlay-ui"></div></div>`;}
+ results(){const r=this.game.run,rec=r?.finalResult;if(!rec)return '';const title={victory:'VITÓRIA!',retreat:'RETIRADA SEGURA',defeat:'EXPEDIÇÃO PERDIDA'}[rec.type];const retained=rec.returnables||[];const m=this.game.meta;return `<div class="screen result-screen"><div class="result-box"><div class="eyebrow">RELATÓRIO DA EXPEDIÇÃO Nº ${r.number}</div><div class="victory-symbol">${rec.type==='victory'?'♛':rec.type==='retreat'?'⚑':'⚔'}</div><h2>${title}</h2><p>O destino da companhia foi decidido. Os sobreviventes carregam a história adiante.</p><div class="stats-grid"><div><b>${rec.banners}/3</b><small>Estandartes</small></div><div><b>${rec.kills}</b><small>Inimigos abatidos</small></div><div><b>${fmtTime(rec.elapsed)}</b><small>Duração</small></div><div><b>+${rec.legacy} ◈</b><small>Insígnias</small></div><div><b>${rec.wounded}</b><small>Feridos</small></div><div><b>${rec.dead}</b><small>Mortos</small></div></div><div class="result-recruits"><h3>Novos soldados para o quartel <small>${rec.chosenIds.length}/2 escolhidos · vagas ${m.roster.length}/${maxRoster(m.upgrades)}</small></h3><p>Selecione até dois sobreviventes recrutados durante a expedição. Os demais serão desmobilizados.</p><div class="survivor-list">${retained.length?retained.map(s=>`<button class="survivor ${rec.chosenIds.includes(s.id)?'kept':''}" data-action="keep" data-id="${s.id}" ${rec.chosenIds.includes(s.id)?'disabled':''}><span>${CLASSES[s.classId]?.icon||'⚔'}</span><b>${s.name}</b><small>${CLASSES[s.classId]?.name} · Nv ${s.level} · ${conditions[s.condition]}</small><strong>${rec.chosenIds.includes(s.id)?'✓ Salvo':'+ Guardar'}</strong></button>`).join(''):'<div class="empty-state">Nenhum novo recruta sobreviveu a esta expedição.</div>'}</div></div>${iconButton('⚑ Voltar ao quartel','return','','btn btn-primary btn-wide')}</div></div>`;}
+ showModal(data){const wrap=this.root.querySelector('#overlay-ui');if(!wrap)return;const cards=data.cards.map((c,i)=>data.type==='perk'?`<button class="choice-card" data-action="choose" data-index="${i}"><span>${c.icon}</span><b>${c.name}</b><small>${c.desc}</small><em>ESCOLHER MELHORIA</em></button>`:`<button class="choice-card" data-action="choose" data-index="${i}"><span>${CLASSES[c.classId].icon}</span><b>${c.count} ${CLASSES[c.classId].name}(s)</b><small>+${c.count} unidades para esta expedição</small><em>◈ ${c.cost} MOEDAS</em></button>`).join('');wrap.innerHTML=`<div class="modal-scrim"><div class="choice-modal"><div class="eyebrow">${data.type==='perk'?'BENÇÃO DA JORNADA':'REFORÇOS DISPONÍVEIS'}</div><h2>${data.type==='perk'?'Escolha seu destino':'Recrute para sua companhia'}</h2><p>${data.type==='perk'?'Escolha uma vantagem que permanecerá nesta expedição.':'Todos os soldados são personagens individuais. Podem evoluir, se ferir ou morrer.'}</p><div class="choice-list">${cards}</div>${data.type==='recruit'?iconButton('Agora não','skip','','btn btn-muted'):''}</div></div>`;}
+ openPanel(type){this.modal=type;const existing=document.querySelector('.floating-panel');if(existing)existing.remove();const wrapper=document.createElement('div');wrapper.className='floating-panel';let title='',content='';const m=this.game.meta;
+  if(type==='memorial'){title='Memorial dos Tombados';content=m.memorial.length?m.memorial.map(s=>`<div class="memorial-row"><span>⚔</span><div><b>${s.name}</b><small>${CLASSES[s.classId]?.name} · ${GRADE_NAME[s.grade]} · Nível ${s.level}</small><small>${s.battles} batalhas · ${s.kills} abates · Expedição ${s.run}</small></div></div>`).join(''):'<p class="empty-state">Nenhum nome gravado na pedra. Que assim permaneça.</p>';}
+  if(type==='help'){title='Como jogar';content=`<div class="info-content"><p><b>OBJETIVO:</b> conquiste três estandartes inimigos e derrote o Lorde da Cinza na fortaleza. Aproxime-se de prisioneiros, baús, fogueiras e santuários para interagir.</p><p><b>PC:</b> WASD ou setas para andar, E para interagir, 1 e 2 para habilidades, Q para alternar ordem, F para mudar formação, ESC para pausar.</p><p><b>CELULAR:</b> joystick virtual à esquerda e botões de ação à direita. Paisagem é recomendado.</p><p><b>TROPAS:</b> atacam automaticamente, ganham experiência e podem morrer permanentemente. Feridos são recuperados no quartel ou em uma fogueira.</p><p><b>ROGUELITE:</b> melhorias temporárias reiniciam a cada partida; veteranos sobreviventes e instalações do quartel persistem.</p></div>`;}
+  if(type==='settings'||type==='pause'){title=type==='pause'?'Jogo pausado':'Configurações';content=`<div class="info-content"><label class="setting-row">Som <input type="checkbox" id="sound-setting" ${m.settings.sound?'checked':''}></label><label class="setting-row">Qualidade gráfica <select id="quality-setting"><option value="low" ${m.settings.quality==='low'?'selected':''}>Baixa</option><option value="medium" ${m.settings.quality==='medium'?'selected':''}>Média</option><option value="high" ${m.settings.quality==='high'?'selected':''}>Alta</option></select></label><p>Gráficos WebGL2 procedurais e progresso salvo localmente no navegador, sem conexão com servidor.</p>${type==='pause'?'<button class="btn btn-muted btn-wide" data-action="leave">Voltar ao menu (expedição salva)</button>':''}<button class="btn btn-danger btn-wide" data-action="resetConfirm">Apagar todos os dados</button></div>`;}
+  if(type==='soldier'){const s=m.roster.find(a=>a.id===this.infoId);if(!s)return;const st=statsFor(s);title=s.name;content=`<div class="soldier-detail"><span class="soldier-detail-icon">${CLASSES[s.classId].icon}</span><p><b>${CLASSES[s.classId].name}</b> · ${GRADE_NAME[s.grade]} · Nível ${s.level} · ${conditions[s.condition]}</p><p>Traço: <b>${({sturdy:'Resistente',swift:'Ágil',precise:'Preciso',careful:'Prudente'})[s.traitId]}</b></p><div class="detail-stats"><span>♥ Vida <b>${Math.ceil(s.hp)}/${st.hp}</b></span><span>⚔ Ataque <b>${Math.round(st.attack)}</b></span><span>⬡ Defesa <b>${Math.round(st.defense)}</b></span><span>↗ Velocidade <b>${st.speed.toFixed(1)}</b></span><span>★ XP <b>${s.xp}/${xpToNext(s)||'MAX'}</b></span><span>♟ Batalhas <b>${s.battles}</b></span><span>⚔ Abates <b>${s.kills}</b></span></div>${canPromote(s)?`<button class="btn btn-primary btn-wide" data-action="promote" data-id="${s.id}">Promover por ◈ ${GRADE_COST[canPromote(s)]}</button>`:''}${s.condition==='wounded'?`<button class="btn btn-muted btn-wide" data-action="recover" data-id="${s.id}">Recuperar por ◈ 2</button>`:''}</div>`;}
+  wrapper.innerHTML=`<div class="modal-scrim"><div class="info-modal"><header><div><div class="eyebrow">WARBAND LEGACY</div><h2>${title}</h2></div><button data-action="closePanel" class="close-btn">✕</button></header><div class="info-body">${content}</div></div></div>`;
+  this.root.append(wrapper);const sound=wrapper.querySelector('#sound-setting'),quality=wrapper.querySelector('#quality-setting');if(sound)sound.onchange=e=>{m.settings.sound=e.target.checked;if(this.sound)this.sound.enabled=e.target.checked;this.game.persist();};if(quality)quality.onchange=e=>{m.settings.quality=e.target.value;this.renderer.setQuality(e.target.value);this.game.persist();};}
+ attachEvents(){this.root.addEventListener('click',event=>{const b=event.target.closest('[data-action]');if(!b)return;const action=b.dataset.action,id=b.dataset.id;const g=this.game;this.sound?.play('tap');
+ switch(action){case 'menu':this.screen='menu';this.draw();break;case 'continue':this.screen='play';this.draw();break;case 'barracks':this.screen='barracks';this.draw();break;case 'commander':g.changeCommander(id);break;case 'select':g.selectSoldier(id);break;case 'upgrade':g.buyUpgrade(id);break;case 'promote':g.upgradeSoldier(id);this.refreshPanel();break;case 'recover':g.recoverSoldier(id);this.refreshPanel();break;case 'start':g.startRun();break;case 'inspect':this.infoId=id;this.openPanel('soldier');break;case 'memorial':case 'help':case 'settings':this.openPanel(action);break;case 'pause':this.openPanel('pause');break;case 'closePanel':this.closePanel();break;case 'return':g.returnBarracks();break;case 'keep':g.keepRecruit(id);break;case 'choose':g.chooseModal(Number(b.dataset.index));break;case 'skip':if(g.run?.pending?.type==='recruit'){const s=g.run.world.sites.find(s=>s.id===g.run.pending.siteId);if(s)s.done=true;g.run.pending=null;g.persist();g.notify('modalClosed');}break;case 'order':g.setOrder(id);this.draw();break;case 'formation':g.changeFormation();this.draw();break;case 'interact':g.useInteract();break;case 'ability1':g.activateAbility(1);this.sound?.play('skill');break;case 'ability2':g.activateAbility(2);this.sound?.play('skill');break;case 'resetConfirm':if(confirm('Apagar TODAS as conquistas, soldados e o memorial?')){this.closePanel();g.reset();}break;case 'leave':g.persist();this.closePanel();this.screen='menu';this.draw();break;default:break;}
+ });
+ document.addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(event.key))event.preventDefault();this.keys.add(event.key.toLowerCase());if(event.repeat)return;if(this.root.querySelector('.info-modal')){if(event.key==='Escape')this.closePanel();return;}if(this.screen!=='play')return;switch(event.key.toLowerCase()){case 'e':case ' ':this.game.useInteract();break;case '1':this.game.activateAbility(1);this.sound?.play('skill');break;case '2':this.game.activateAbility(2);this.sound?.play('skill');break;case 'q':this.game.setOrder(this.game.run.order==='follow'?'defend':'follow');this.draw();break;case 'f':this.game.changeFormation();this.draw();break;case 'escape':this.openPanel('pause');break;}});
+ document.addEventListener('keyup',event=>this.keys.delete(event.key.toLowerCase()));window.addEventListener('blur',()=>{this.keys.clear();if(this.game.run&&!this.game.run.finished)this.game.persist();});document.addEventListener('visibilitychange',()=>{if(document.hidden&&this.game.run)this.game.persist();});
+ this.root.addEventListener('pointerdown',event=>{const area=event.target.closest('#joystick');if(!area||this.game.run?.pending)return;event.preventDefault();this.joystick.active=true;this.joystick.pointer=event.pointerId;area.setPointerCapture(event.pointerId);this.updateStick(event,area);});
+ this.root.addEventListener('pointermove',event=>{if(!this.joystick.active||event.pointerId!==this.joystick.pointer)return;const area=this.root.querySelector('#joystick');if(area)this.updateStick(event,area);});
+ const clear=e=>{if(e.pointerId!==this.joystick.pointer)return;this.joystick.active=false;this.joystick.x=0;this.joystick.z=0;const stick=this.root.querySelector('#stick');if(stick)stick.style.transform='translate(-50%,-50%)';};this.root.addEventListener('pointerup',clear);this.root.addEventListener('pointercancel',clear);
+ this.renderer.canvas.addEventListener('click',e=>{if(this.screen!=='play'||this.game.run?.pending)return;const selected=this.renderer.screenTarget(e.clientX,e.clientY,this.game.run);if(selected){this.game.run.focusId=selected.id;this.game.setOrder('focus');this.draw();this.showToast(`Alvo prioritário: ${selected.name}`);}});
+ }
+ updateStick(event,area){const r=area.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=event.clientX-cx,dy=event.clientY-cy,len=Math.hypot(dx,dy),max=42,ratio=Math.min(1,len/max);this.joystick.x=len?dx/len*ratio:0;this.joystick.z=len?dy/len*ratio:0;const stick=this.root.querySelector('#stick');if(stick)stick.style.transform=`translate(calc(-50% + ${this.joystick.x*max}px),calc(-50% + ${this.joystick.z*max}px))`;}
+ closePanel(){this.root.querySelector('.floating-panel')?.remove();this.modal='';}
+ refreshPanel(){if(this.modal==='soldier')this.openPanel('soldier');}
+ isPaused(){return !!this.root.querySelector('.floating-panel')&&this.screen==='play';}
+ getInput(){if(this.screen!=='play'||this.isPaused()||this.game.run?.pending)return {x:0,z:0};const keys=this.keys;let x=0,z=0;if(keys.has('a')||keys.has('arrowleft'))x--;if(keys.has('d')||keys.has('arrowright'))x++;if(keys.has('w')||keys.has('arrowup'))z--;if(keys.has('s')||keys.has('arrowdown'))z++;if(this.joystick.active){x=this.joystick.x;z=this.joystick.z;}return {x,z};}
+ update(time){if(time-this.lastUI<180)return;this.lastUI=time;if(this.screen!=='play'||!this.game.run)return;const r=this.game.run,c=r.commander;const set=(id,text)=>{const el=this.root.querySelector('#'+id);if(el)el.textContent=text;};set('leader-hp',`${Math.ceil(c.hp)} / ${c.maxHp} PV`);const hp=this.root.querySelector('#leader-hp-fill');if(hp)hp.style.width=`${Math.max(0,c.hp/c.maxHp*100)}%`;
+ set('coins',r.coins);set('supplies',r.supplies);set('troopcount',r.soldiers.filter(s=>s.condition==='healthy').length);set('objective',`⚑ Estandartes: ${r.banners}/3`);set('clock',fmtTime(r.elapsed));set('formation-name',r.formation==='balanced'?'Equilibrada':'Defensiva');
+ const site=r.banners===3?r.world.sites.find(s=>s.kind==='boss'):r.world.sites.filter(s=>!s.done&&s.kind==='banner').sort((a,b)=>distance(c,a)-distance(c,b))[0];if(site){const d=Math.ceil(distance(c,site));set('direction',r.banners===3?'Vá até a fortaleza e vença o chefe':`${site.name} · ${d}m`);}const near=this.game.nearby;set('interact-label',near?(near.kind==='home'?'RETIRAR':near.kind==='rest'?'DESCANSAR':near.kind==='recruit'?'RECRUTAR':near.kind==='shrine'?'SANTUÁRIO':near.kind==='cache'?'ABRIR':'INTERAGIR'):'INTERAGIR');
+ for(const [key,elId] of [['ability1','cd1'],['ability2','cd2']]){const el=this.root.querySelector('#'+elId);if(el)el.textContent=c[key]>0?Math.ceil(c[key])+'s':'';}
+ this.drawMinimap();}
+ drawMinimap(){const cnv=this.root.querySelector('#minimap'),r=this.game.run;if(!cnv||!r)return;const ctx=cnv.getContext('2d'),w=cnv.width,h=cnv.height;ctx.clearRect(0,0,w,h);ctx.fillStyle='#1c3f3e';ctx.fillRect(0,0,w,h);const pos=(x,z)=>({x:(x+52)/104*w,y:(z+52)/104*h});
+ ctx.strokeStyle='#3d5e55';ctx.lineWidth=.5;for(let n=0;n<=8;n++){ctx.beginPath();ctx.moveTo(n*w/8,0);ctx.lineTo(n*w/8,h);ctx.stroke();ctx.beginPath();ctx.moveTo(0,n*h/8);ctx.lineTo(w,n*h/8);ctx.stroke();}
+ for(const s of r.world.sites){if(s.done)continue;const p=pos(s.x,s.z);ctx.fillStyle={banner:'#efc47d',boss:r.banners===3?'#f17e7f':'#9a6768',recruit:'#7acbb5',shrine:'#bda3ed',cache:'#e2d2a4',rest:'#9ed295',patrol:'#cb8584',home:'#ffffff'}[s.kind];ctx.beginPath();ctx.arc(p.x,p.y,['banner','boss','home'].includes(s.kind)?4.4:2.7,0,6.3);ctx.fill();}
+ for(const e of r.enemies)if(e.hp>0){const p=pos(e.x,e.z);ctx.fillStyle='#e57079';ctx.fillRect(p.x-1,p.y-1,2,2);}
+ const p=pos(r.commander.x,r.commander.z);ctx.beginPath();ctx.fillStyle='#ffffff';ctx.arc(p.x,p.y,4.5,0,6.29);ctx.fill();ctx.strokeStyle='#ffffff';ctx.beginPath();ctx.arc(p.x,p.y,8.5,0,6.29);ctx.stroke();}
+}
+
+
+// src/main.js
+
+
+
+
+const errorToUser=(err)=>{console.error(err);document.querySelector('#ui').innerHTML=`<div style="position:absolute;inset:0;background:#0c2426;padding:3rem;display:grid;place-items:center;color:#f5e0ba"><div><h1>Não foi possível iniciar Warband Legacy</h1><p>${String(err.message||err)}</p><p>É necessário um navegador atualizado com suporte a WebGL2.</p></div></div>`;};
+try{
+ const game=new Game(),renderer=new Renderer(document.querySelector('#scene'),document.querySelector('#overlay')),ui=new Interface(game,renderer),sound=new Sound();ui.sound=sound;game.sfx=sound;sound.enabled=game.meta.settings.sound;
+ renderer.canvas.addEventListener('wheel',e=>{e.preventDefault();renderer.zoom=Math.max(17,Math.min(35,renderer.zoom+Math.sign(e.deltaY)*1.8));},{passive:false});
+ game.onChange((event)=>{if(event==='finished'){sound.play(game.run?.victory?'victory':'hit');}if(event==='encounterStarted')sound.play('hit');if(event==='runStarted')renderer.setWorld(game.run.world);});
+ let last=performance.now();function loop(now){const dt=Math.min(.1,(now-last)/1000);last=now;game.input=ui.getInput();if(!ui.isPaused()&&ui.screen==='play'){game.update(dt);}renderer.render(game.run,game.run?.elapsed||now/1000);ui.update(now);requestAnimationFrame(loop);}requestAnimationFrame(loop);
+ // Objetos públicos apenas para inspeção manual em desenvolvimento.
+ if(new URLSearchParams(location.search).has('debug'))window.__warband={game,renderer,ui};
+}catch(error){errorToUser(error);}
+
+</script>
+</body>
+</html>
