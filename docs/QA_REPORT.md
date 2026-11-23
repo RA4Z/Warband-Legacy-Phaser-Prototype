@@ -33,3 +33,14 @@
 - Ajustar a dificuldade para manter recrutamento relevante sem tornar obrigatório comprar sempre as mesmas tropas.
 - Ajustar a duração típica e reequilibrar taxas de ferimento/morte.
 - Testar salvamento após fechar a aba no meio da expedição, incluindo Android real.
+
+## Revisão 0.2.0 — velocidade, câmera, modelos e animação
+
+- **11/11 testes automáticos aprovados** (9 regressões + 2 testes para movimento e modelos animados).
+- Validado numericamente: comandante com 7,8 unidades/segundo; velocidade dos soldados entre 5,85 e 6,75 unidades/segundo, mais bônus elástico de reagrupamento.
+- A câmera agora parte de zoom 14,8 no desktop / 16,8 em tela estreita e acompanha o comandante com amortecimento independente de FPS; zoom com roda do mouse (11,5 a 28).
+- As poses idle, walk e attack foram comparadas por testes de malha: produzem vértices finitos e geometrias distintas. A articulação utiliza pivôs dos ombros e quadris; armas acompanham o braço de ataque.
+- Foram adicionados modelos low poly distintos por classe e versão LOD para tropas afastadas. O gerador reduziu os segmentos de esfera e cilindro para limitar custo.
+- Repetidas **100 expedições simuladas com bot recrutador: 100 vitórias, média de 55,3 segundos**. A velocidade torna o ritmo ainda mais curto; **a dificuldade/duração seguem pendentes**.
+
+**Limitação importante:** o navegador headless deste ambiente impede abrir páginas locais e não fornece WebGL2, portanto **a aparência final e os FPS não foram validados visualmente**. A primeira execução manual em Chrome/Edge com WebGL2 continua obrigatória, principalmente para confirmar animações e desempenho com muitas tropas.

@@ -1,4 +1,4 @@
-# Status real da versão 0.1.0
+# Status real da versão 0.2.0
 
 ## Implementado no código
 
@@ -18,7 +18,7 @@
 
 - Renderizador escrito em WebGL2 nativo JavaScript, não Three.js/TypeScript; migração recomendada ao Codex.
 - Sem exportação Android nativa; pode ser usado no navegador mobile com WebGL2.
-- Modelos 3D geométricos básicos e animações procedurais simples; sem assets GLB/GLTF nem animações sofisticadas.
+- Modelos 3D low poly geométricos remodelados e três animações procedurais (idle/walk/attack) articuladas por pivôs. Ainda sem assets GLB/GLTF, rigging de estúdio ou animação esquelética sofisticada.
 - Sem colisões detalhadas de cenário, A* ou steering avançado de multidões; mapas evitam bloqueios sólidos.
 - Efeitos e sons básicos; chefe tem ataque telegráfico simplificado.
 - Sem equipamento individual inventariado, apenas visual modular por classe/graduação.
@@ -28,10 +28,19 @@
 
 ## Evidência de testes
 
-- Nove testes de domínio via `node --test` passaram; simulação de 100 expedições com estratégia de recrutamento concluiu 100/100 (ainda fácil e curta demais; ver relatório QA).
+- Onze testes de domínio via `node --test` passaram; simulação de 100 expedições com estratégia de recrutamento concluiu 100/100 (ainda fácil e curta demais; ver relatório QA).
 - Fluxos de menu, quartel e início de partida foram testados no Chromium headless com renderizador gráfico simulado.
 - O Chromium disponibilizado na máquina de geração não expõe WebGL/WebGL2, impedindo validar a imagem 3D ou FPS neste ambiente. Não alegar que os gráficos foram visualmente aprovados.
 
 ## Próximo marco
 
 Testar o arquivo HTML único no Chrome/Edge do Windows com WebGL2 e começar ajustes conforme bugs/prints reais, mantendo essa versão como ponto de partida para o Codex.
+
+## Alterações 0.2.0
+
+- Zoom inicial mais próximo; câmera segue o comandante com menos atraso.
+- Movimentação do comandante e das tropas acelerada, com tropas alcançando a formação após corridas longas.
+- Soldados, inimigos e comandante remodelados; silhuetas, equipamento e armadura mais reconhecíveis.
+- Poses de respiração, caminhada e ataque, sem arquivos de animação externos.
+- Malhas simplificadas à distância e testes automatizados para poses.
+- **11 testes passando**, 100 expedições simuladas (100 vitórias; duração média 55,3s); a jogabilidade continua em ajuste.

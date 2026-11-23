@@ -44,12 +44,12 @@ const round=(a)=>Math.round(a*10)/10;
 // src/game/data.js
 const VERSION=2;
 const CLASSES={
-  swordsman:{name:'Espadachim',icon:'⚔',hp:100,attack:15,defense:10,range:1.65,cooldown:1.1,speed:4.25,role:'front',color:'#e0c4a2'},
-  guardian:{name:'Guardião',icon:'⬡',hp:165,attack:9,defense:24,range:1.55,cooldown:1.4,speed:3.65,role:'front',color:'#9daec7'},
-  spearman:{name:'Lanceiro',icon:'↟',hp:110,attack:14,defense:11,range:2.65,cooldown:1.3,speed:4.1,role:'front',color:'#dec18a'},
-  archer:{name:'Arqueiro',icon:'➶',hp:72,attack:19,defense:4,range:10.5,cooldown:1.7,speed:4.35,role:'back',color:'#98cb8d'},
-  mystic:{name:'Místico',icon:'✦',hp:68,attack:24,defense:3,range:9,cooldown:2.2,speed:4.1,role:'back',color:'#c3a8e8'},
-  healer:{name:'Curandeiro',icon:'✚',hp:85,attack:5,defense:6,range:8.5,cooldown:2.6,speed:4.2,role:'back',color:'#f0e4ac'},
+  swordsman:{name:'Espadachim',icon:'⚔',hp:100,attack:15,defense:10,range:1.65,cooldown:1.1,speed:6.55,role:'front',color:'#e0c4a2'},
+  guardian:{name:'Guardião',icon:'⬡',hp:165,attack:9,defense:24,range:1.55,cooldown:1.4,speed:5.85,role:'front',color:'#9daec7'},
+  spearman:{name:'Lanceiro',icon:'↟',hp:110,attack:14,defense:11,range:2.65,cooldown:1.3,speed:6.3,role:'front',color:'#dec18a'},
+  archer:{name:'Arqueiro',icon:'➶',hp:72,attack:19,defense:4,range:10.5,cooldown:1.7,speed:6.75,role:'back',color:'#98cb8d'},
+  mystic:{name:'Místico',icon:'✦',hp:68,attack:24,defense:3,range:9,cooldown:2.2,speed:6.3,role:'back',color:'#c3a8e8'},
+  healer:{name:'Curandeiro',icon:'✚',hp:85,attack:5,defense:6,range:8.5,cooldown:2.6,speed:6.45,role:'back',color:'#f0e4ac'},
 };
 const TRAITS={sturdy:{name:'Resistente',desc:'+12% PV',hp:1.12},swift:{name:'Ágil',desc:'+10% velocidade',speed:1.1},precise:{name:'Preciso',desc:'+10% ataque',attack:1.1},careful:{name:'Prudente',desc:'-10 p.p. chance de morte',survive:0.1}};
 const GRADES=['recruit','veteran','elite','legendary'];
@@ -57,11 +57,11 @@ const GRADE_NAME={recruit:'Recruta',veteran:'Veterano',elite:'Elite',legendary:'
 const GRADE_MIN={veteran:3,elite:6,legendary:9};
 const GRADE_COST={veteran:3,elite:7,legendary:13};
 const ENEMIES={
-  raider:{name:'Saqueador',hp:75,attack:11,defense:5,range:1.5,cooldown:1.45,speed:3.75,color:'#a94e4d',classId:'swordsman'},
-  brute:{name:'Brutamontes',hp:135,attack:13,defense:16,range:1.65,cooldown:1.85,speed:2.85,color:'#ad6a53',classId:'guardian'},
-  marksman:{name:'Atirador',hp:58,attack:12,defense:3,range:9.2,cooldown:2.05,speed:3.6,color:'#9c576c',classId:'archer'},
-  shaman:{name:'Xamã',hp:72,attack:18,defense:3,range:8,cooldown:2.35,speed:3.25,color:'#9d6ea5',classId:'mystic'},
-  warlord:{name:'Lorde da Cinza',hp:560,attack:24,defense:20,range:2.15,cooldown:1.6,speed:3.5,color:'#e17b55',classId:'guardian',boss:true}
+  raider:{name:'Saqueador',hp:75,attack:11,defense:5,range:1.5,cooldown:1.45,speed:4.25,color:'#a94e4d',classId:'swordsman'},
+  brute:{name:'Brutamontes',hp:135,attack:13,defense:16,range:1.65,cooldown:1.85,speed:3.55,color:'#ad6a53',classId:'guardian'},
+  marksman:{name:'Atirador',hp:58,attack:12,defense:3,range:9.2,cooldown:2.05,speed:3.9,color:'#9c576c',classId:'archer'},
+  shaman:{name:'Xamã',hp:72,attack:18,defense:3,range:8,cooldown:2.35,speed:3.55,color:'#9d6ea5',classId:'mystic'},
+  warlord:{name:'Lorde da Cinza',hp:560,attack:24,defense:20,range:2.15,cooldown:1.6,speed:4.0,color:'#e17b55',classId:'guardian',boss:true}
 };
 const COMMANDERS={iron:{name:'Capitão de Ferro',subtitle:'Grito de guerra + Golpe heroico',color:'#dcb56e',a1:'Brado',a2:'Golpe'},valley:{name:'Estrategista do Vale',subtitle:'Proteção + Saraivada',color:'#74c7b9',a1:'Proteção',a2:'Saraivada'}};
 const PERKS=[
@@ -184,13 +184,13 @@ class Game {
   const number=++this.meta.runNumber,seed=(((Date.now()>>>0)^(number*1664525))>>>0)||42;this.r=rng(seed);
   const world=makeWorld(seed),soldiers=chosen.map((s,i)=>({...structuredClone(s),x:(i%3-1)*1.7,z:1.8+Math.floor(i/3)*1.7,team:'ally',attackClock:.1*i,flash:0,anim:0,phase:i*.8,face:0,state:'active',isCore:true}));
   const maxHP=Math.round(360*(1+this.meta.upgrades.command*.08));
-  this.run={id:`run-${number}`,number,seed,rngState:this.r.state,world,elapsed:0,banners:0,spawnCooldown:0,commanderId:this.meta.commander,commander:{id:'commander',name:COMMANDERS[this.meta.commander].name,team:'ally',x:0,z:0,hp:maxHP,maxHp:maxHP,attack:22,defense:14,range:2.1,cooldown:1.04,speed:4.6,attackClock:0,ability1:0,ability2:0,buff:0,shield:0,flash:0,anim:0,phase:0,face:0,condition:'healthy',state:'active',level:3,grade:'elite',classId:'swordsman'},soldiers,enemies:[],projectiles:[],fx:[],groupStats:{},order:'follow',formation:'balanced',focusId:null,perks:[],coins:16,supplies:2,revives:0,kills:0,encounters:0,wounded:0,dead:0,earnedLegacy:0,pending:null,finished:false,lastEnemyCount:0,log:[],runRecruits:[],victory:false};
+  this.run={id:`run-${number}`,number,seed,rngState:this.r.state,world,elapsed:0,banners:0,spawnCooldown:0,commanderId:this.meta.commander,commander:{id:'commander',name:COMMANDERS[this.meta.commander].name,team:'ally',x:0,z:0,hp:maxHP,maxHp:maxHP,attack:22,defense:14,range:2.1,cooldown:1.04,speed:7.8,attackClock:0,ability1:0,ability2:0,buff:0,shield:0,flash:0,anim:0,phase:0,face:0,condition:'healthy',state:'active',level:3,grade:'elite',classId:'swordsman'},soldiers,enemies:[],projectiles:[],fx:[],groupStats:{},order:'follow',formation:'balanced',focusId:null,perks:[],coins:16,supplies:2,revives:0,kills:0,encounters:0,wounded:0,dead:0,earnedLegacy:0,pending:null,finished:false,lastEnemyCount:0,log:[],runRecruits:[],victory:false};
   this.meta.activeRun=this.run;this.persist();this.notify('runStarted');this.msg('Expedição iniciada. Capture os três estandartes!');}
  get nearest(){return this.run?nearestSite(this.run.world,this.run.commander.x,this.run.commander.z,s=>!s.done):null;}
  get nearby(){if(!this.run)return null;return this.run.world.sites.filter(s=>!s.done&&!s.started||s.kind==='home').filter(s=>distance(s,this.run.commander)<4.1).sort((a,b)=>distance(a,this.run.commander)-distance(b,this.run.commander))[0]||null;}
  setOrder(order){if(!this.run)return;if(!['follow','defend','retreat','focus'].includes(order))return;this.run.order=order;this.run.defendAt=order==='defend'?{x:this.run.commander.x,z:this.run.commander.z}:null;this.msg({follow:'Tropas seguindo o comandante.',defend:'Tropas defendendo esta posição.',retreat:'Reagrupando: combatentes retornam.',focus:'Tropas concentradas no alvo mais próximo.'}[order]);this.persist();}
  changeFormation(){if(!this.run)return;this.run.formation=this.run.formation==='balanced'?'defensive':'balanced';this.msg(this.run.formation==='defensive'?'Formação defensiva.':'Formação equilibrada.');this.persist();}
- activateAbility(which){const run=this.run;if(!run||run.pending||run.finished)return;const c=run.commander;if(c.hp<=0)return;const key=which===1?'ability1':'ability2';if(c[key]>0)return;c[key]=which===1?19:13;c.anim=.7;
+ activateAbility(which){const run=this.run;if(!run||run.pending||run.finished)return;const c=run.commander;if(c.hp<=0)return;const key=which===1?'ability1':'ability2';if(c[key]>0)return;c[key]=which===1?19:13;c.anim=.48;
   if(run.commanderId==='iron'){
    if(which===1){c.buff=7;for(const s of run.soldiers){if(!alive(s)||distance(s,c)>15)continue;s.buff=7;}this.msg('Brado: +35% de dano por 7 segundos!');}
    else{for(const e of run.enemies){if(alive(e)&&distance(c,e)<8)this.hurt(e,48,c);}run.fx.push({type:'burst',x:c.x,z:c.z,t:0,ttl:.6,range:8,color:'#ffd18d'});this.msg('Golpe heroico!');}
@@ -237,21 +237,23 @@ class Game {
   this.saveAccumulator+=delta;if(this.saveAccumulator>4){this.saveAccumulator=0;this.persist();}}
  tick(dt){const run=this.run;if(!run)return;const rr=this.r;run.elapsed+=dt;this.now=run.elapsed;const commander=run.commander;
   commander.ability1=Math.max(0,commander.ability1-dt);commander.ability2=Math.max(0,commander.ability2-dt);
-  for(const a of [commander,...run.soldiers,...run.enemies]){a.attackClock=Math.max(0,(a.attackClock||0)-dt);a.flash=Math.max(0,(a.flash||0)-dt);a.anim=Math.max(0,(a.anim||0)-dt);a.buff=Math.max(0,(a.buff||0)-dt);a.shield=Math.max(0,(a.shield||0)-dt);a.phase=(a.phase||0)+dt*6;}
+  for(const a of [commander,...run.soldiers,...run.enemies]){a.attackClock=Math.max(0,(a.attackClock||0)-dt);a.flash=Math.max(0,(a.flash||0)-dt);a.anim=Math.max(0,(a.anim||0)-dt);a.buff=Math.max(0,(a.buff||0)-dt);a.shield=Math.max(0,(a.shield||0)-dt);a.phase=(a.phase||0)+dt*(a.walk?9.4:3.8);}
   const sx=this.input.x,sz=this.input.z;const mx=(sx+sz)*Math.SQRT1_2,mz=(sz-sx)*Math.SQRT1_2,n=Math.hypot(mx,mz);if(n>.02){const vx=mx/n,vz=mz/n;commander.x=clamp(commander.x+vx*commander.speed*dt,-49,49);commander.z=clamp(commander.z+vz*commander.speed*dt,-49,49);commander.face=Math.atan2(vx,vz);commander.walk=true;}else commander.walk=false;
   run.spawnCooldown=Math.max(0,(run.spawnCooldown||0)-dt);if(run.spawnCooldown===0&&!run.enemies.some(e=>alive(e)&&distance(e,commander)<18)&&run.enemies.filter(alive).length<24){const ready=run.world.sites.filter(site=>!site.done&&!site.started&&['banner','patrol','boss'].includes(site.kind)&&distance(commander,site)<10.5).sort((a,b)=>distance(commander,a)-distance(commander,b))[0];if(ready){this.spawnGroup(ready);run.spawnCooldown=4;}}
   for(let i=0;i<run.soldiers.length;i++){const s=run.soldiers[i];if(!alive(s))continue;const st=this.getStats(s),targets=run.enemies.filter(e=>alive(e)&&distance(s,e)<(run.order==='retreat'?8:15));const target=targets.sort((a,b)=>{if(run.order==='focus'&&run.focusId){if(a.id===run.focusId)return -1;if(b.id===run.focusId)return 1;}return distance(a,s)-distance(b,s);})[0];const anchor=run.order==='defend'&&run.defendAt?run.defendAt:commander;
    const slot=formationSlot(run.soldiers,s,run.formation,commander.face);let desired={x:anchor.x+slot.x,z:anchor.z+slot.z};let d=distance(s,desired),attackTarget=null;
    if(run.order!=='retreat'&&target&&(run.order!=='defend'||distance(target,anchor)<13)){attackTarget=target;const reach=st.range;const td=distance(s,target);if(td>Math.min(reach*.86,reach-0.3))desired={x:target.x+(s.x-target.x)/(td||1)*Math.max(.8,reach*.72),z:target.z+(s.z-target.z)/(td||1)*Math.max(.8,reach*.72)};else desired={x:s.x,z:s.z};}
-   const catchup=distance(s,desired)>5?1.4:1;const step=moveUnit(s,desired.x,desired.z,st.speed*catchup,dt,commander,run.enemies);s.walk=step;
-   if(s.classId==='healer'&&s.attackClock<=0){const nearby=[run.commander,...run.soldiers].filter(u=>alive(u)&&distance(u,s)<st.range);const wounded=nearby.filter(u=>u.hp<(u.id==='commander'?u.maxHp:this.getStats(u).hp)*.84).sort((a,b)=>a.hp/(a.id==='commander'?a.maxHp:this.getStats(a).hp)-b.hp/(b.id==='commander'?b.maxHp:this.getStats(b).hp))[0];if(wounded){s.attackClock=st.cooldown;s.anim=.5;this.launchProjectile(s,wounded,Math.round(18*(run.perks.includes('healing')?1.15:1)),true);}}
-   if(attackTarget&&distance(s,attackTarget)<st.range+.25&&s.attackClock<=0){s.attackClock=st.cooldown;s.anim=.38;if(st.range>3){this.launchProjectile(s,attackTarget,this.getAttack(s));}else{this.hurt(attackTarget,this.getAttack(s),s);} }
+   // Reagrupamento elástico: soldados alcançam o comandante veloz sem teleporte.
+   const gap=distance(s,desired);
+   const catchup=gap>8?2.35:gap>4?1.72:gap>2?1.2:1;const step=moveUnit(s,desired.x,desired.z,st.speed*catchup,dt,commander,run.enemies);s.walk=step;
+   if(s.classId==='healer'&&s.attackClock<=0){const nearby=[run.commander,...run.soldiers].filter(u=>alive(u)&&distance(u,s)<st.range);const wounded=nearby.filter(u=>u.hp<(u.id==='commander'?u.maxHp:this.getStats(u).hp)*.84).sort((a,b)=>a.hp/(a.id==='commander'?a.maxHp:this.getStats(a).hp)-b.hp/(b.id==='commander'?b.maxHp:this.getStats(b).hp))[0];if(wounded){s.attackClock=st.cooldown;s.anim=.48;this.launchProjectile(s,wounded,Math.round(18*(run.perks.includes('healing')?1.15:1)),true);}}
+   if(attackTarget&&distance(s,attackTarget)<st.range+.25&&s.attackClock<=0){s.attackClock=st.cooldown;s.anim=.48;if(st.range>3){this.launchProjectile(s,attackTarget,this.getAttack(s));}else{this.hurt(attackTarget,this.getAttack(s),s);} }
   }
   for(const e of run.enemies){if(!alive(e))continue;const target=[...run.soldiers,commander].filter(alive).filter(u=>distance(e,u)<22).sort((a,b)=>{const priority=u=>u.id==='commander'?1.6:u.classId==='guardian'?.65:u.classId==='spearman'?.85:['archer','mystic','healer'].includes(u.classId)?1.25:1;return distance(a,e)*priority(a)-distance(b,e)*priority(b);})[0];if(!target){e.walk=false;continue;}const d=distance(e,target);if(d>e.range*.83){e.walk=moveUnit(e,target.x,target.z,e.speed,dt,commander,run.soldiers);}else e.walk=false;
-   if(distance(e,target)<e.range+.2&&e.attackClock<=0){e.attackClock=e.cooldown;e.anim=.42;if(e.range>3)this.launchProjectile(e,target,e.attack);else this.hurt(target,e.boss&&e.hp<e.maxHp*.4?e.attack*1.4:e.attack,e);}
+   if(distance(e,target)<e.range+.2&&e.attackClock<=0){e.attackClock=e.cooldown;e.anim=.48;if(e.range>3)this.launchProjectile(e,target,e.attack);else this.hurt(target,e.boss&&e.hp<e.maxHp*.4?e.attack*1.4:e.attack,e);}
    if(e.boss){if(e.hp<e.maxHp*.45&&!e.phaseTwo){e.phaseTwo=true;this.msg('O Lorde da Cinza entrou em fúria!');}e.special=(e.special??5.5)-dt;if(e.special<=0){e.special=7;if(distance(commander,e)<12){e.telegraph=1.25;this.msg('Alerta: golpe devastador! Afaste-se do Lorde!');}}if(e.telegraph>0){e.telegraph-=dt;if(e.telegraph<=0){for(const ally of [commander,...run.soldiers])if(alive(ally)&&distance(e,ally)<6)this.hurt(ally,30,e);run.fx.push({type:'burst',x:e.x,z:e.z,t:0,ttl:.65,range:6,color:'#e58469'});}}}
   }
-  if(commander.attackClock<=0){const t=run.enemies.filter(alive).sort((a,b)=>distance(a,commander)-distance(b,commander))[0];if(t&&distance(commander,t)<commander.range+.3){commander.attackClock=commander.cooldown;commander.anim=.37;this.hurt(t,this.getAttack(commander),commander);}}
+  if(commander.attackClock<=0){const t=run.enemies.filter(alive).sort((a,b)=>distance(a,commander)-distance(b,commander))[0];if(t&&distance(commander,t)<commander.range+.3){commander.attackClock=commander.cooldown;commander.anim=.48;this.hurt(t,this.getAttack(commander),commander);}}
   for(let i=run.projectiles.length-1;i>=0;i--){const p=run.projectiles[i],target=[commander,...run.soldiers,...run.enemies].find(u=>u.id===p.targetId);p.ttl-=dt;if(!target||p.ttl<=0){run.projectiles.splice(i,1);continue;}let d=distance(p,target);const step=p.speed*dt;if(d<=step){if(p.healing){if(alive(target)){const max=target.id==='commander'?target.maxHp:this.getStats(target).hp;target.hp=Math.min(max,target.hp+p.amount);run.fx.push({type:'heal',x:target.x,z:target.z,t:0,ttl:.55,range:1.4,color:'#90edd6'});}}else this.hurt(target,p.amount,[commander,...run.soldiers,...run.enemies].find(u=>u.id===p.sourceId));run.projectiles.splice(i,1);}else{p.x+=(target.x-p.x)/d*step;p.z+=(target.z-p.z)/d*step;}}
   run.fx=run.fx.filter(f=>(f.t+=dt)<f.ttl);run.enemies=run.enemies.filter(e=>e.state!=='dead'||e.anim>0);
   for(const site of run.world.sites){if(!site.started||site.done||!site.groupId)continue;const group=run.groupStats[site.id];if(group&&!group.completed&&run.enemies.every(e=>e.groupId!==site.id||e.hp<=0))this.resolveGroup(site.id);}
@@ -300,7 +302,7 @@ function cylinder(sides,topRadius=.5,bottomRadius=.5){const result=[];for(let i=
  if(topRadius>0)for(const v of [[0,.5,0],v4,v3])result.push(...v,0,1,0);
  for(const v of [[0,-.5,0],v2,v1])result.push(...v,0,-1,0);
  }return result;}
-function sphere(){const result=[];const lat=5,lon=8;for(let i=0;i<lat;i++){
+function sphere(){const result=[];const lat=3,lon=6;for(let i=0;i<lat;i++){
  const y1=Math.cos(i/lat*Math.PI)*.5,y2=Math.cos((i+1)/lat*Math.PI)*.5;
  const r1=Math.sin(i/lat*Math.PI)*.5,r2=Math.sin((i+1)/lat*Math.PI)*.5;
  for(let j=0;j<lon;j++){
@@ -309,7 +311,7 @@ function sphere(){const result=[];const lat=5,lon=8;for(let i=0;i<lat;i++){
  for(const v of [p1,p2,p3,p1,p3,p4]){const d=Math.hypot(...v)||1;result.push(...v,v[0]/d,v[1]/d,v[2]/d);}
  }
  }return result;}
-const SHAPES={box:cube,cylinder:cylinder(7),cone:cylinder(7,0,.5),pyramid:cylinder(4,0,.5),sphere:sphere(),disc:cylinder(18,.5,.5),pole:cylinder(5)};
+const SHAPES={box:cube,cylinder:cylinder(6),armor:cylinder(6,.53,.38),skirt:cylinder(6,.38,.57),cone:cylinder(6,0,.5),pyramid:cylinder(4,0,.5),sphere:sphere(),disc:cylinder(10,.5,.5),pole:cylinder(5)};
 const parseColor=color=>{if(Array.isArray(color))return color;const n=parseInt(color.replace('#',''),16);return [(n>>16&255)/255,(n>>8&255)/255,(n&255)/255];};
 const colorCache=new Map();const rgb=c=>{if(!colorCache.has(c))colorCache.set(c,parseColor(c));return colorCache.get(c);};
 function addMesh(out,shape,x,y,z,sx,sy,sz,color,opts={}){
@@ -327,54 +329,199 @@ function addMesh(out,shape,x,y,z,sx,sy,sz,color,opts={}){
   out.push(x+px,y+py,z+pz,vx,vy,vz,c[0],c[1],c[2]);
  }
 }
+// Personagens montados por partes 3D articuladas. Os mesmos modelos e animações
+// são compartilhados por jogador, aliados e inimigos — sem spritesheets externos.
 function addActor(out,u,time=0){
- const x=u.x,z=u.z,face=u.face||0, isEnemy=u.team==='enemy',commander=u.id==='commander', boss=u.boss;
- const grade=u.grade||'recruit';const gold=grade==='legendary',elite=['elite','legendary'].includes(grade);
- const scale=boss?1.5:commander?1.22:1;const flash=u.flash>0;
- const bodyColor=flash?'#ffffff':isEnemy?'#873e49':commander?'#384956':u.classId==='healer'?'#d4c899':u.classId==='mystic'?'#6f6097':u.classId==='guardian'?'#718c9e':u.classId==='archer'?'#517b64':'#697f82';
- const accent=flash?'#ffffff':isEnemy?'#d77d6c':commander?'#e2b86d':gold?'#e7c879':elite?'#d2b682':'#7bd0c4';
- const skin=flash?'#ffffff':isEnemy?'#cda68d':'#ddb99b', metal=elite?'#e2cfab':'#b5b6ad';
- const walk=u.walk?Math.sin(u.phase||0)*.24:0,attack=u.anim>0?Math.sin((1-u.anim/.5)*Math.PI)*.75:0;
- const standing=u.condition!=='downed'&&u.state!=='downed'&&u.state!=='dead';
- function p(shape,dx,dy,dz,sx,sy,sz,col,extra={}){
-  const ly=standing?dy*scale:dy*.27*scale;
-  const lx=standing?dx*scale:dx*scale+.32;
-  const lz=standing?dz*scale:dz*scale;
-  const xx=lx*Math.cos(face)+lz*Math.sin(face),zz=-lx*Math.sin(face)+lz*Math.cos(face);
-  addMesh(out,shape,x+xx,ly,z+zz,sx*scale,sy*scale,sz*scale,col,{yaw:face+(extra.yaw||0),rx:extra.rx||0,rz:extra.rz||0});
+ const x=u.x,z=u.z,face=u.face||0,commander=u.id==='commander',enemy=u.team==='enemy',boss=!!u.boss;
+ const isDown=u.condition==='downed'||u.state==='downed'||u.state==='dead';
+ const grade=u.grade||'recruit',elite=grade==='elite'||grade==='legendary';
+ const legendary=grade==='legendary';
+ const cls=commander?'commander':u.classId||'swordsman';
+ const colors={
+  commander:['#334b5f','#536d7c','#c8a363','#263949'],
+  swordsman:['#426476','#7393a0','#d0a75f','#2d4452'],
+  guardian:['#536877','#8899a9','#d8b974','#324652'],
+  spearman:['#68735b','#93a17d','#d2b17a','#47503d'],
+  archer:['#3a6b56','#6e9a71','#e6c17f','#294d3a'],
+  mystic:['#63517f','#9784b4','#c6a5f2','#3e315a'],
+  healer:['#a5a08a','#e3d5ae','#68c4b3','#736f67']
+ };
+ let [coat,trim,accent,dark]=colors[cls]||colors.swordsman;
+ if(enemy){coat=boss?'#513840':'#753e48';trim=boss?'#9c5d55':'#a35b59';accent=boss?'#f3ad65':'#cb866b';dark='#3e2832';}
+ if(u.flash>0){coat='#efefe9';trim='#ffffff';accent='#ffffff';}
+ const skin=enemy?'#c39479':'#e2b995';
+ const metal=elite||commander||boss?'#e1d2aa':'#b4c0bf';
+ const shadow=commander?'#f0c879':enemy?'#cf6866':'#61c8ac';
+ const moving=!!u.walk&&!isDown;
+ const stride=moving?Math.sin((u.phase||0)*1.25):0;
+ const step=Math.abs(stride);
+ const breathing=Math.sin(time*2.7+(u.phase||0)*.32);
+ const bob=moving?.048*Math.sin((u.phase||0)*2.5):.028*breathing;
+ const attackDuration=.48;
+ const hit=Math.max(0,Math.min(1,(u.anim||0)/attackDuration));
+ const attack=hit>0?Math.sin((1-hit)*Math.PI):0;
+ const leftLeg=moving?stride*.58:0,rightLeg=-leftLeg;
+ const leftArm=moving?-stride*.36:.025*breathing;
+ const rightArm=moving?stride*.36:-.025*breathing;
+ const weaponSwing=attack*(cls==='spearman'?.95:1.48);
+ const bodySway=moving?stride*.045:breathing*.016;
+ const size=boss?1.55:commander?1.14:1;
+ const c=Math.cos(face),s=Math.sin(face);
+ // Transforma também a POSIÇÃO do componente em torno da articulação,
+ // não apenas sua orientação: braços, botas e armas ficam presos ao esqueleto.
+ function part(shape,dx,dy,dz,sx,sy,sz,color,opt={}){
+  const px=opt.pivot?.[0]??0,py=opt.pivot?.[1]??0,pz=opt.pivot?.[2]??0;
+  let lx=dx-px,ly=dy-py,lz=dz-pz;
+  const rx=opt.rx||0,rz=opt.rz||0;
+  const cx=Math.cos(rx),nx=Math.sin(rx),cz=Math.cos(rz),nz=Math.sin(rz);
+  let a=ly*cx-lz*nx,b=ly*nx+lz*cx;ly=a;lz=b;
+  a=lx*cz-ly*nz;b=lx*nz+ly*cz;lx=a;ly=b;
+  lx+=px;ly+=py;lz+=pz;
+  const worldX=x+size*(lx*c+lz*s),worldZ=z+size*(-lx*s+lz*c);
+  addMesh(out,shape,worldX,size*(ly+bob),worldZ,size*sx,size*sy,size*sz,color,{yaw:face+(opt.yaw||0),rx,rz});
  }
- const ground=commander?'#d6bf6a':isEnemy?'#c75b62':'#5dc9ba';
- addMesh(out,'disc',x,.015,z,.85,.025,.85,ground);
- if(!standing){p('box',0,.13,0,.65,.18,.6,bodyColor);p('sphere',.3,.2,.1,.34,.32,.32,skin);return;}
- // Pés, pernas e tronco. A silhueta é composta por partes animáveis, não caixas únicas.
- p('box',-.22,.40,0,.27,.80,.33,'#344b55',{rz:walk*.9});p('box',.22,.40,0,.27,.80,.33,'#344b55',{rz:-walk*.9});
- p('box',-.22,.08,-.12,.33,.19,.51,'#303c44');p('box',.22,.08,-.12,.33,.19,.51,'#303c44');
- p('box',0,1.10,0,.83,.94,.54,bodyColor);p('box',0,1.20,-.31,.65,.62,.12,accent);
- p('box',0,1.54,0,.2,.2,.22,skin);p('sphere',0,1.88,0,.56,.58,.52,skin);
- p('box',0,1.99,-.285,.09,.06,.045,'#473c3f');
- p('box',-.15,1.92,-.31,.052,.052,.045,'#262c38');p('box',.15,1.92,-.31,.052,.052,.045,'#262c38');
- if(elite||commander||u.classId==='guardian'){
-  p('cylinder',0,2.20,0,.57,.34,.57,metal);p('box',0,2.28,-.3,.17,.32,.17,accent);
- }else p('sphere',0,2.16,.03,.52,.20,.48,isEnemy?'#60414c':'#5d5b4d');
- if(gold){p('cone',0,2.55,0,.2,.60,.2,accent);p('box',0,1.18,-.39,.48,.44,.08,metal);}
- if(u.classId==='healer'||u.classId==='mystic'){p('cone',0,.65,0,.95,.82,.85,bodyColor);}
- if(commander){p('box',0,1.10,.40,.84,1.15,.11,'#b84c4f');p('box',0,1.40,.47,.72,.12,.08,accent);}
- const armSwing=attack*1.65;
- p('box',-.58,1.12,0,.30,.84,.33,skin,{rz:-walk*.43-.12});p('box',.58,1.12,0,.30,.84,.33,skin,{rz:walk*.43+armSwing});
- p('box',-.59,1.48,0,.43,.35,.43,metal);p('box',.59,1.48,0,.43,.35,.43,metal);
- const classId=u.classId;
- if(['swordsman','guardian'].includes(classId)||commander){
-  p('box',.63,.70,-.34,.13,.84,.14,metal,{rz:-.2-attack});p('box',.63,1.07,-.34,.29,.14,.14,accent);
-  p('box',-.75,1.12,-.30,classId==='guardian'?.78:.57,classId==='guardian'?1.05:.7,.17,metal);p('box',-.75,1.16,-.4,.36,.16,.06,accent);
- }else if(classId==='spearman'){
-  p('cylinder',.67,1.35,-.5,.12,2.6,.12,'#b68e62',{rz:attack*.35});p('cone',.67,2.78,-.5,.25,.55,.25,metal);
- }else if(classId==='archer'){
-  p('box',-.49,1.25,.36,.35,.66,.17,'#72543d');p('box',.72,1.24,-.40,.12,1.02,.12,'#b48962');p('box',.72,1.7,-.42,.13,.17,.13,accent);p('box',.72,.8,-.42,.13,.17,.13,accent);
+ const rightPivot=[.56,1.65,0],leftPivot=[-.56,1.65,0];
+ const legLeftPivot=[-.25,1.03,0],legRightPivot=[.25,1.03,0];
+ const leftPose={pivot:leftPivot,rx:-leftArm*.8+attack*.13,rz:-.06};
+ const rightPose={pivot:rightPivot,rx:-rightArm*.8-weaponSwing,rz:attack*.22+.09};
+ const lLeg={pivot:legLeftPivot,rx:leftLeg},rLeg={pivot:legRightPivot,rx:rightLeg};
+ addMesh(out,'disc',x,.015,z,size*.84,.019,size*.84,shadow);
+ if(isDown){
+  addMesh(out,'box',x,.18,z,.94*size,.20*size,.55*size,coat,{yaw:face});
+  addMesh(out,'sphere',x+size*(.40*c+.1*s),.29*size,z+size*(-.40*s+.1*c),.40*size,.36*size,.40*size,skin);
+  return;
+ }
+ // Pernas e botas seguem o quadril. Pequenos passos alternados no eixo frontal.
+ for(const [sSide,pose] of [[-1,lLeg],[1,rLeg]]){
+  part('cylinder',sSide*.25,.64,0,.26,.78,.28,dark,pose);
+  part('sphere',sSide*.25,.24,.12,.30,.28,.44,dark,pose);
+  part('box',sSide*.25,.22,.22,.32,.21,.54,coat,pose);
+  part('box',sSide*.25,.74,.20,.23,.17,.09,trim,pose);
+ }
+ // Túnica com silhueta trapezoidal, peito, ombreiras, cinto e insígnia.
+ part('skirt',0,.97,0,1.10,.53,.85,dark,{rz:bodySway});
+ part('armor',0,1.38,0,1.30,.96,.86,coat,{rz:bodySway});
+ part('box',0,1.45,.41,.81,.61,.105,trim,{rz:bodySway});
+ part('box',0,1.09,.44,1.13,.16,.15,accent);
+ part('box',0,1.09,.55,.22,.26,.13,metal);
+ part('box',0,1.55,.50,.28,.29,.12,accent);
+ part('box',0,1.56,.575,.11,.14,.08,dark);
+ // Capa curta ao comandante, camada traseira solta na marcha.
+ if(commander){
+  part('box',0,1.17,-.46,1.05,1.10,.11,'#ac4f49',{rx:bodySway*1.7});
+  part('box',0,1.66,-.48,1.09,.18,.14,accent);
+ }
+ // Cabeça, pescoço, olhos expressivos e cabelo/capacetes de cada classe.
+ part('cylinder',0,1.85,0,.25,.23,.25,skin);
+ part('sphere',0,2.21,.02,.57,.62,.54,skin,{rz:breathing*.017});
+ if(enemy){
+  part('box',0,2.23,.49,.43,.11,.07,'#442b30');
+  part('box',-.16,2.23,.52,.07,.085,.06,'#ffb58c');
+  part('box',.16,2.23,.52,.07,.085,.06,'#ffb58c');
  }else{
-  const staffColor=classId==='healer'?'#8ddcc1':'#bd9bed';p('cylinder',.68,1.12,-.48,.115,2.1,.115,'#896f5d');p('sphere',.68,2.21,-.48,.35,.35,.35,staffColor);
+  for(const side of [-1,1]){
+   part('sphere',side*.17,2.24,.49,.077,.09,.049,'#2f3838');
+   part('box',side*.17,2.36,.47,.15,.04,.06,'#6d4b3a');
+  }
  }
- if(u.buff>0)p('cone',0,2.73,0,.20,.34,.2,'#ffd478');
- if(u.shield>0)p('disc',0,.055,0,1.75,.02,1.75,'#73d8e0');
+ if(cls==='archer'){
+  part('cone',0,2.46,-.07,1.18,.52,1.11,'#2e564b');
+  part('box',0,2.43,.36,.70,.14,.35,trim);
+ }else if(cls==='mystic'){
+  part('disc',0,2.59,0,1.22,.12,1.13,dark);
+  part('cone',0,2.99,0,.94,.95,.94,coat);
+  part('sphere',0,3.43,0,.18,.20,.18,accent);
+ }else if(cls==='healer'){
+  part('sphere',0,2.57,-.06,.59,.28,.53,'#e4d6b4');
+  part('box',0,2.65,.39,.31,.27,.09,trim);
+  part('box',0,2.67,.455,.09,.27,.04,accent);
+ }else if(cls==='guardian'||commander||boss||elite){
+  part('cylinder',0,2.55,0,.64,.39,.59,metal);
+  part('box',0,2.42,.49,.23,.22,.16,accent);
+  part('box',0,2.64,.12,.18,.31,.66,dark);
+  if(commander||boss||legendary){
+   part('box',0,2.85,0,.19,.48,.32,accent);
+   part('cone',0,3.10,0,.29,.55,.30,accent);
+  }
+ }else{
+  part('sphere',0,2.58,-.08,.58,.27,.52,dark);
+  part('sphere',-.40,2.37,-.02,.23,.34,.28,dark);
+ }
+ // Braços articulados pelo ombro, com arma/escudo presos à mão.
+ for(const [side,pose] of [[-1,leftPose],[1,rightPose]]){
+  part('sphere',side*.58,1.68,0,.38,.35,.38,trim);
+  part('cylinder',side*.63,1.28,.04,.32,.70,.32,coat,pose);
+  part('sphere',side*.63,.91,.10,.24,.25,.25,skin,pose);
+  part('box',side*.63,1.04,.23,.29,.19,.35,trim,pose);
+ }
+ if(cls==='guardian'||cls==='swordsman'||commander||boss){
+  const large=cls==='guardian'||boss;
+  part('box',-.72,1.18,.41,large?.88:.70,large?1.17:.87,.20,metal,leftPose);
+  part('box',-.72,1.18,.53,large?.72:.55,large?1.00:.70,.13,trim,leftPose);
+  part('sphere',-.72,1.18,.63,.31,.35,.13,accent,leftPose);
+  part('box',.66,.92,.31,.15,.39,.16,'#795b45',rightPose);
+  part('box',.66,.98,.31,.40,.12,.20,accent,rightPose);
+  part('box',.66,1.61,.31,.20,1.16,.14,metal,rightPose);
+  part('pyramid',.66,2.21,.31,.21,.35,.16,'#eff0de',rightPose);
+  if(attack>.35){part('box',.92,1.52,.54,.09,.76,.08,'#f5e2aa',{...rightPose,rz:rightPose.rz-.35});}
+ }else if(cls==='spearman'){
+  part('cylinder',.68,1.43,.34,.12,2.35,.12,'#816348',rightPose);
+  part('cone',.68,2.74,.34,.27,.65,.25,metal,rightPose);
+  part('box',.68,1.09,.36,.21,.12,.17,accent,rightPose);
+ }else if(cls==='archer'){
+  part('box',-.22,1.38,-.47,.40,.93,.26,'#805b40');
+  for(const sign of [-1,1])part('box',.70,1.25+sign*.48,.35,.15,.88,.15,'#9b7147',{...rightPose,rz:sign*.31});
+  part('box',.70,1.25,.44,.045,1.60,.045,'#e2d2a7',rightPose);
+  if(attack>.1)part('box',.70,1.19,.71,.055,.12,.68,accent,rightPose);
+ }else{
+  part('cylinder',.70,1.43,.32,.12,2.35,.12,'#88694e',rightPose);
+  part('sphere',.70,2.71,.32,.30,.33,.30,accent,rightPose);
+  if(cls==='healer'){
+   part('box',.70,2.72,.66,.10,.35,.08,'#f4e9c3',rightPose);
+   part('box',.70,2.72,.74,.29,.10,.07,'#f4e9c3',rightPose);
+  }
+ }
+ if(boss){
+  for(const sign of [-1,1]){
+   part('cone',sign*.44,2.93,-.01,.39,.85,.39,'#d4b9a0',{rz:sign*.34});
+   part('box',sign*.48,1.53,-.05,.32,.34,.83,accent);
+  }
+ }
+ if(u.buff>0)part('sphere',0,3.36,0,.18,.22,.18,'#ffd478');
+ if(u.shield>0)addMesh(out,'disc',x,.045,z,1.53*size,.019,1.53*size,'#79d6d7');
+}
+// LOD reduzido para unidades distantes: mantém classe, cor e movimento, sem
+// pagar o custo de cada detalhe dos personagens próximos à câmera.
+function addActorLite(out,u,time=0){
+ const enemy=u.team==='enemy',boss=!!u.boss,leader=u.id==='commander';
+ const scale=boss?1.55:leader?1.14:1;
+ const face=u.face||0,c=Math.cos(face),s=Math.sin(face);
+ const hue=enemy?'#874c52':leader?'#486b80':({guardian:'#778e9c',swordsman:'#547d8b',archer:'#598b68',spearman:'#818c66',mystic:'#8b72a5',healer:'#d2c49f'}[u.classId]||'#687f87');
+ const accent=enemy?'#d08d71':leader?'#e0bd78':'#b9d0c1',metal='#d1d4c6';
+ const swing=u.walk?Math.sin(u.phase||0)*.18:0;
+ const attack=u.anim>0?Math.sin((1-Math.min(1,u.anim/.48))*Math.PI):0;
+ const bob=.02*Math.sin(time*2.7+(u.phase||0)*.3);
+ const put=(shape,dx,dy,dz,sx,sy,sz,color,rx=0)=>addMesh(out,shape,
+  u.x+(dx*c+dz*s)*scale,(dy+bob)*scale,u.z+(-dx*s+dz*c)*scale,
+  sx*scale,sy*scale,sz*scale,color,{yaw:face,rx});
+ addMesh(out,'disc',u.x,.019,u.z,.7*scale,.018,.7*scale,enemy?'#bf6660':'#6cbaaa');
+ if(u.state==='downed'||u.state==='dead'||u.condition==='downed'){
+  put('box',0,.17,0,.7,.20,.55,hue);return;
+ }
+ put('box',-.23,.52,swing,.27,.85,.32,'#47545d');
+ put('box',.23,.52,-swing,.27,.85,.32,'#47545d');
+ put('armor',0,1.34,0,1.16,1.04,.83,hue);
+ put('box',0,1.32,.39,.65,.36,.10,accent);
+ put('sphere',0,2.18,0,.54,.58,.52,enemy?'#c59a80':'#e0ba98');
+ put('cylinder',0,2.53,0,.62,.31,.62,metal);
+ put('cylinder',-.61,1.36,-swing,.31,.72,.30,hue);
+ put('cylinder',.61,1.36,swing,.31,.72,.30,hue,-attack*.8);
+ if(['guardian','swordsman'].includes(u.classId)||leader||boss){
+  put('box',-.75,1.15,.35,.68,.86,.15,metal);
+  put('box',.73,1.21,.28,.16,.84,.15,metal,-attack*.9);
+ }else if(['archer','spearman'].includes(u.classId)){
+  put('cylinder',.70,1.6,.3,.11,1.7,.11,'#a27f56',-attack*.7);
+ }else put('sphere',.70,2.13,.3,.22,.25,.22,u.classId==='mystic'?'#cab3ff':'#a4dfcc');
 }
 function addTree(out,x,z,scale=1,variant=0){addMesh(out,'cylinder',x,.52*scale,z,.31*scale,1.05*scale,.31*scale,'#80654c');
  if(variant){addMesh(out,'sphere',x,1.8*scale,z,1.55*scale,1.8*scale,1.55*scale,'#527b54');addMesh(out,'sphere',x-.45*scale,1.32*scale,z+.1*scale,1.05*scale,1.1*scale,1.05*scale,'#638d60');}
@@ -438,9 +585,11 @@ function dot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];}
 function lookAt(eye,target){const z=norm(eye.map((e,i)=>e-target[i])),x=norm(cross([0,1,0],z)),y=cross(z,x);return [x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-dot(x,eye),-dot(y,eye),-dot(z,eye),1];}
 function ortho(l,r,b,t,n,f){return [2/(r-l),0,0,0,0,2/(t-b),0,0,0,0,-2/(f-n),0,-(r+l)/(r-l),-(t+b)/(t-b),-(f+n)/(f-n),1];}
 function multiply(a,b){const out=new Array(16);for(let col=0;col<4;col++)for(let row=0;row<4;row++){out[col*4+row]=a[row]*b[col*4]+a[4+row]*b[col*4+1]+a[8+row]*b[col*4+2]+a[12+row]*b[col*4+3];}return out;}
+const DEFAULT_CAMERA_ZOOM=14.8;
+const CAMERA_ZOOM_LIMITS={min:11.5,max:28};
 class Renderer {
  constructor(canvas,over){this.canvas=canvas;this.overlay=over;this.ctx=over.getContext('2d');this.gl=canvas.getContext('webgl2',{antialias:true,alpha:false,powerPreference:'high-performance'});if(!this.gl)throw Error('WebGL2 não está disponível neste navegador.');
-  const gl=this.gl,program=gl.createProgram();gl.attachShader(program,compile(gl,gl.VERTEX_SHADER,vs));gl.attachShader(program,compile(gl,gl.FRAGMENT_SHADER,fs));gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(program));gl.useProgram(program);this.program=program;this.uVP=gl.getUniformLocation(program,'uVP');this.uEye=gl.getUniformLocation(program,'uEye');this.vbo=gl.createBuffer();this.staticVbo=gl.createBuffer();this.staticCount=0;this.dynamicCapacity=0;this.world=null;this.camera={x:0,z:0};this.zoom=24;this.settings={quality:'medium'};this.vp=null;this.preview=makeWorld(2026);this.setWorld(this.preview);this.resize();window.addEventListener('resize',()=>this.resize());}
+  const gl=this.gl,program=gl.createProgram();gl.attachShader(program,compile(gl,gl.VERTEX_SHADER,vs));gl.attachShader(program,compile(gl,gl.FRAGMENT_SHADER,fs));gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(program));gl.useProgram(program);this.program=program;this.uVP=gl.getUniformLocation(program,'uVP');this.uEye=gl.getUniformLocation(program,'uEye');this.vbo=gl.createBuffer();this.staticVbo=gl.createBuffer();this.staticCount=0;this.dynamicCapacity=0;this.world=null;this.camera={x:0,z:0};this.zoom=window.innerWidth<700?16.8:DEFAULT_CAMERA_ZOOM;this.lastRenderTime=0;this.settings={quality:'medium'};this.vp=null;this.preview=makeWorld(2026);this.setWorld(this.preview);this.resize();window.addEventListener('resize',()=>this.resize());}
  prepareBuffer(buffer){const gl=this.gl;gl.bindBuffer(gl.ARRAY_BUFFER,buffer);const stride=9*4;for(const [index,offset] of [[0,0],[1,3],[2,6]]){gl.enableVertexAttribArray(index);gl.vertexAttribPointer(index,3,gl.FLOAT,false,stride,offset*4);}}
  setQuality(q){this.settings.quality=q;this.resize();}
  resize(){const quality=this.settings.quality;const dpr=Math.min(devicePixelRatio||1,quality==='low'?1:quality==='high'?2:1.35);const w=Math.max(1,Math.floor(this.canvas.clientWidth*dpr)),h=Math.max(1,Math.floor(this.canvas.clientHeight*dpr));if(w!==this.canvas.width||h!==this.canvas.height){this.canvas.width=w;this.canvas.height=h;}this.overlay.width=Math.round(this.overlay.clientWidth*dpr);this.overlay.height=Math.round(this.overlay.clientHeight*dpr);this.ctx.setTransform(dpr,0,0,dpr,0,0);}
@@ -458,15 +607,27 @@ class Renderer {
  screenTarget(x,y,run){if(!run)return null;const targets=run.enemies.filter(e=>e.hp>0);const closest=targets.map(e=>({e,p:this.project(e.x,1.4,e.z)})).filter(a=>a.p?.visible).sort((a,b)=>Math.hypot(a.p.x-x,a.p.y-y)-Math.hypot(b.p.x-x,b.p.y-y))[0];return closest&&Math.hypot(closest.p.x-x,closest.p.y-y)<42?closest.e:null;}
  render(run,time=0){this.resize();const gl=this.gl,w=this.canvas.width,h=this.canvas.height;gl.viewport(0,0,w,h);gl.clearColor(.66,.79,.75,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.disable(gl.CULL_FACE);
   if(run&&run.world!==this.world)this.setWorld(run.world);else if(!run&&this.world!==this.preview)this.setWorld(this.preview);
-  const center=run?.commander||{x:0,z:0};let s=Math.min(1,(1/60)*Math.max(1,time?2:1));this.camera.x+=(center.x-this.camera.x)*s;this.camera.z+=(center.z-this.camera.z)*s;
-  const eye=[this.camera.x+29,35,this.camera.z+29],target=[this.camera.x,0,this.camera.z];const aspect=w/h;this.vp=multiply(ortho(-this.zoom*aspect,this.zoom*aspect,-this.zoom,this.zoom,.1,170),lookAt(eye,target));gl.useProgram(this.program);gl.uniformMatrix4fv(this.uVP,false,new Float32Array(this.vp));gl.uniform3fv(this.uEye,new Float32Array(eye));this.prepareBuffer(this.staticVbo);gl.drawArrays(gl.TRIANGLES,0,this.staticCount);
+  const center=run?.commander||{x:0,z:0};
+  // Seguimento responsivo e independente dos FPS. O anterior demorava
+  // quase 2 segundos para acompanhar o jogador e dava sensação de lentidão.
+  const now=performance.now(),delta=this.lastRenderTime?Math.min(.1,(now-this.lastRenderTime)/1000):1/60;
+  this.lastRenderTime=now;
+  const follow=1-Math.exp(-9*delta);
+  this.camera.x+=(center.x-this.camera.x)*follow;
+  this.camera.z+=(center.z-this.camera.z)*follow;
+  const eye=[this.camera.x+23,27,this.camera.z+23],target=[this.camera.x,1,this.camera.z];const aspect=w/h;this.vp=multiply(ortho(-this.zoom*aspect,this.zoom*aspect,-this.zoom,this.zoom,.1,170),lookAt(eye,target));gl.useProgram(this.program);gl.uniformMatrix4fv(this.uVP,false,new Float32Array(this.vp));gl.uniform3fv(this.uEye,new Float32Array(eye));this.prepareBuffer(this.staticVbo);gl.drawArrays(gl.TRIANGLES,0,this.staticCount);
   const arr=[];const world=run?.world||this.preview;
   for(const site of world.sites){if(site.done&&site.kind!=='home'&&site.kind!=='banner')continue;addSite(arr,site,time);if(!site.done&&site.kind!=='home'){
    const c=site.kind==='banner'?'#f3d598':site.kind==='boss'?'#ff9a8c':site.kind==='recruit'?'#7beac3':site.kind==='shrine'?'#d6b0f8':'#ffe0a6';
    const bob=.25+Math.sin(time*2+site.x)*.17;addMesh(arr,'sphere',site.x,3.1+bob,site.z,.37,.47,.37,c);
   }}
-  if(run){for(const u of run.soldiers){if(distance(u,run.commander)<37&&(u.condition==='healthy'||u.condition==='downed'))addActor(arr,u,time);}
-   for(const e of run.enemies){if(distance(e,run.commander)<39)addActor(arr,e,time);}
+  if(run){
+   const fullDetail=Math.max(13,this.zoom*.84);
+   const visibility=Math.max(25,this.zoom*1.9);
+   const drawUnit=u=>{const range=distance(u,run.commander);if(range>=visibility)return;
+    if(range<fullDetail)addActor(arr,u,time);else addActorLite(arr,u,time);};
+   for(const u of run.soldiers){if(u.condition==='healthy'||u.condition==='downed')drawUnit(u);}
+   for(const e of run.enemies)drawUnit(e);
    addActor(arr,run.commander,time);
    for(const p of run.projectiles)addMesh(arr,'sphere',p.x,1.25+Math.sin(time*10)*.15,p.z,.27,.26,.27,p.color);
    for(const fx of run.fx){if(fx.type==='burst'){let k=.15+fx.t/fx.ttl*fx.range;addMesh(arr,'disc',fx.x,.047,fx.z,k,.035,k,fx.color);}else if(fx.type==='heal'){addMesh(arr,'sphere',fx.x,1.5+fx.t*2,fx.z,.2+fx.t*.25,.2+fx.t*.25,.2+fx.t*.25,fx.color);}}
@@ -555,7 +716,7 @@ class Interface {
 const errorToUser=(err)=>{console.error(err);document.querySelector('#ui').innerHTML=`<div style="position:absolute;inset:0;background:#0c2426;padding:3rem;display:grid;place-items:center;color:#f5e0ba"><div><h1>Não foi possível iniciar Warband Legacy</h1><p>${String(err.message||err)}</p><p>É necessário um navegador atualizado com suporte a WebGL2.</p></div></div>`;};
 try{
  const game=new Game(),renderer=new Renderer(document.querySelector('#scene'),document.querySelector('#overlay')),ui=new Interface(game,renderer),sound=new Sound();ui.sound=sound;game.sfx=sound;sound.enabled=game.meta.settings.sound;
- renderer.canvas.addEventListener('wheel',e=>{e.preventDefault();renderer.zoom=Math.max(17,Math.min(35,renderer.zoom+Math.sign(e.deltaY)*1.8));},{passive:false});
+ renderer.canvas.addEventListener('wheel',e=>{e.preventDefault();renderer.zoom=Math.max(CAMERA_ZOOM_LIMITS.min,Math.min(CAMERA_ZOOM_LIMITS.max,renderer.zoom+Math.sign(e.deltaY)*1.25));},{passive:false});
  game.onChange((event)=>{if(event==='finished'){sound.play(game.run?.victory?'victory':'hit');}if(event==='encounterStarted')sound.play('hit');if(event==='runStarted')renderer.setWorld(game.run.world);});
  let last=performance.now();function loop(now){const dt=Math.min(.1,(now-last)/1000);last=now;game.input=ui.getInput();if(!ui.isPaused()&&ui.screen==='play'){game.update(dt);}renderer.render(game.run,game.run?.elapsed||now/1000);ui.update(now);requestAnimationFrame(loop);}requestAnimationFrame(loop);
  // Objetos públicos apenas para inspeção manual em desenvolvimento.

@@ -1,8 +1,16 @@
-# ⚔ Warband Legacy — Protótipo 0.1.0
+# ⚔ Warband Legacy — Protótipo 0.2.0
 
 **Every soldier has a story.**
 
 Roguelite 3D isométrico de exércitos para navegador e celulares compatíveis. Cada soldado possui identidade, progressão, ferimentos e risco de morte permanente.
+
+## 🎨 Atualização visual e de movimentação 0.2.0
+
+- Comandante agora corre a **7,8 unidades por segundo** (antes 4,6); as tropas receberam velocidade extra e uma regra de reagrupamento para não ficar para trás.
+- **Câmera mais próxima e responsiva**: zoom inicial 14,8 no desktop (antes 24), 16,8 em telas pequenas e controle pela rodinha (entre 11,5 e 28).
+- Modelos 3D low poly reconstruídos, com classe reconhecível, peças de armadura, escudos, armas, capacetes e proporções melhores. As unidades distantes usam modelos simplificados para evitar queda brusca de desempenho.
+- Animações procedurais **idle** (respiração), **walk** (passos e braços alternados) e **attack** (movimento de braço e arma), sem exigir arquivos externos.
+- É uma melhoria artística inicial: os personagens ainda são modelos procedurais e não substituem uma etapa futura de modelagem/rigging profissional.
 
 ## ▶ Jogar agora — mais fácil
 

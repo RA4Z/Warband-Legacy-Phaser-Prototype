@@ -1,4 +1,4 @@
-import {addMesh,addActor,addTree,addSite} from './geometry.js';
+import {addMesh,addActor,addActorLite,addTree,addSite} from './geometry.js';
 import {makeWorld} from '../game/world.js';
 import {distance,clamp} from '../core/random.js';
 import {statsFor} from '../game/units.js';
@@ -22,9 +22,11 @@ function dot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];}
 function lookAt(eye,target){const z=norm(eye.map((e,i)=>e-target[i])),x=norm(cross([0,1,0],z)),y=cross(z,x);return [x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-dot(x,eye),-dot(y,eye),-dot(z,eye),1];}
 function ortho(l,r,b,t,n,f){return [2/(r-l),0,0,0,0,2/(t-b),0,0,0,0,-2/(f-n),0,-(r+l)/(r-l),-(t+b)/(t-b),-(f+n)/(f-n),1];}
 function multiply(a,b){const out=new Array(16);for(let col=0;col<4;col++)for(let row=0;row<4;row++){out[col*4+row]=a[row]*b[col*4]+a[4+row]*b[col*4+1]+a[8+row]*b[col*4+2]+a[12+row]*b[col*4+3];}return out;}
+export const DEFAULT_CAMERA_ZOOM=14.8;
+export const CAMERA_ZOOM_LIMITS={min:11.5,max:28};
 export class Renderer {
  constructor(canvas,over){this.canvas=canvas;this.overlay=over;this.ctx=over.getContext('2d');this.gl=canvas.getContext('webgl2',{antialias:true,alpha:false,powerPreference:'high-performance'});if(!this.gl)throw Error('WebGL2 não está disponível neste navegador.');
-  const gl=this.gl,program=gl.createProgram();gl.attachShader(program,compile(gl,gl.VERTEX_SHADER,vs));gl.attachShader(program,compile(gl,gl.FRAGMENT_SHADER,fs));gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(program));gl.useProgram(program);this.program=program;this.uVP=gl.getUniformLocation(program,'uVP');this.uEye=gl.getUniformLocation(program,'uEye');this.vbo=gl.createBuffer();this.staticVbo=gl.createBuffer();this.staticCount=0;this.dynamicCapacity=0;this.world=null;this.camera={x:0,z:0};this.zoom=24;this.settings={quality:'medium'};this.vp=null;this.preview=makeWorld(2026);this.setWorld(this.preview);this.resize();window.addEventListener('resize',()=>this.resize());}
+  const gl=this.gl,program=gl.createProgram();gl.attachShader(program,compile(gl,gl.VERTEX_SHADER,vs));gl.attachShader(program,compile(gl,gl.FRAGMENT_SHADER,fs));gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(program));gl.useProgram(program);this.program=program;this.uVP=gl.getUniformLocation(program,'uVP');this.uEye=gl.getUniformLocation(program,'uEye');this.vbo=gl.createBuffer();this.staticVbo=gl.createBuffer();this.staticCount=0;this.dynamicCapacity=0;this.world=null;this.camera={x:0,z:0};this.zoom=window.innerWidth<700?16.8:DEFAULT_CAMERA_ZOOM;this.lastRenderTime=0;this.settings={quality:'medium'};this.vp=null;this.preview=makeWorld(2026);this.setWorld(this.preview);this.resize();window.addEventListener('resize',()=>this.resize());}
  prepareBuffer(buffer){const gl=this.gl;gl.bindBuffer(gl.ARRAY_BUFFER,buffer);const stride=9*4;for(const [index,offset] of [[0,0],[1,3],[2,6]]){gl.enableVertexAttribArray(index);gl.vertexAttribPointer(index,3,gl.FLOAT,false,stride,offset*4);}}
  setQuality(q){this.settings.quality=q;this.resize();}
  resize(){const quality=this.settings.quality;const dpr=Math.min(devicePixelRatio||1,quality==='low'?1:quality==='high'?2:1.35);const w=Math.max(1,Math.floor(this.canvas.clientWidth*dpr)),h=Math.max(1,Math.floor(this.canvas.clientHeight*dpr));if(w!==this.canvas.width||h!==this.canvas.height){this.canvas.width=w;this.canvas.height=h;}this.overlay.width=Math.round(this.overlay.clientWidth*dpr);this.overlay.height=Math.round(this.overlay.clientHeight*dpr);this.ctx.setTransform(dpr,0,0,dpr,0,0);}
@@ -42,15 +44,27 @@ export class Renderer {
  screenTarget(x,y,run){if(!run)return null;const targets=run.enemies.filter(e=>e.hp>0);const closest=targets.map(e=>({e,p:this.project(e.x,1.4,e.z)})).filter(a=>a.p?.visible).sort((a,b)=>Math.hypot(a.p.x-x,a.p.y-y)-Math.hypot(b.p.x-x,b.p.y-y))[0];return closest&&Math.hypot(closest.p.x-x,closest.p.y-y)<42?closest.e:null;}
  render(run,time=0){this.resize();const gl=this.gl,w=this.canvas.width,h=this.canvas.height;gl.viewport(0,0,w,h);gl.clearColor(.66,.79,.75,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.disable(gl.CULL_FACE);
   if(run&&run.world!==this.world)this.setWorld(run.world);else if(!run&&this.world!==this.preview)this.setWorld(this.preview);
-  const center=run?.commander||{x:0,z:0};let s=Math.min(1,(1/60)*Math.max(1,time?2:1));this.camera.x+=(center.x-this.camera.x)*s;this.camera.z+=(center.z-this.camera.z)*s;
-  const eye=[this.camera.x+29,35,this.camera.z+29],target=[this.camera.x,0,this.camera.z];const aspect=w/h;this.vp=multiply(ortho(-this.zoom*aspect,this.zoom*aspect,-this.zoom,this.zoom,.1,170),lookAt(eye,target));gl.useProgram(this.program);gl.uniformMatrix4fv(this.uVP,false,new Float32Array(this.vp));gl.uniform3fv(this.uEye,new Float32Array(eye));this.prepareBuffer(this.staticVbo);gl.drawArrays(gl.TRIANGLES,0,this.staticCount);
+  const center=run?.commander||{x:0,z:0};
+  // Seguimento responsivo e independente dos FPS. O anterior demorava
+  // quase 2 segundos para acompanhar o jogador e dava sensação de lentidão.
+  const now=performance.now(),delta=this.lastRenderTime?Math.min(.1,(now-this.lastRenderTime)/1000):1/60;
+  this.lastRenderTime=now;
+  const follow=1-Math.exp(-9*delta);
+  this.camera.x+=(center.x-this.camera.x)*follow;
+  this.camera.z+=(center.z-this.camera.z)*follow;
+  const eye=[this.camera.x+23,27,this.camera.z+23],target=[this.camera.x,1,this.camera.z];const aspect=w/h;this.vp=multiply(ortho(-this.zoom*aspect,this.zoom*aspect,-this.zoom,this.zoom,.1,170),lookAt(eye,target));gl.useProgram(this.program);gl.uniformMatrix4fv(this.uVP,false,new Float32Array(this.vp));gl.uniform3fv(this.uEye,new Float32Array(eye));this.prepareBuffer(this.staticVbo);gl.drawArrays(gl.TRIANGLES,0,this.staticCount);
   const arr=[];const world=run?.world||this.preview;
   for(const site of world.sites){if(site.done&&site.kind!=='home'&&site.kind!=='banner')continue;addSite(arr,site,time);if(!site.done&&site.kind!=='home'){
    const c=site.kind==='banner'?'#f3d598':site.kind==='boss'?'#ff9a8c':site.kind==='recruit'?'#7beac3':site.kind==='shrine'?'#d6b0f8':'#ffe0a6';
    const bob=.25+Math.sin(time*2+site.x)*.17;addMesh(arr,'sphere',site.x,3.1+bob,site.z,.37,.47,.37,c);
   }}
-  if(run){for(const u of run.soldiers){if(distance(u,run.commander)<37&&(u.condition==='healthy'||u.condition==='downed'))addActor(arr,u,time);}
-   for(const e of run.enemies){if(distance(e,run.commander)<39)addActor(arr,e,time);}
+  if(run){
+   const fullDetail=Math.max(13,this.zoom*.84);
+   const visibility=Math.max(25,this.zoom*1.9);
+   const drawUnit=u=>{const range=distance(u,run.commander);if(range>=visibility)return;
+    if(range<fullDetail)addActor(arr,u,time);else addActorLite(arr,u,time);};
+   for(const u of run.soldiers){if(u.condition==='healthy'||u.condition==='downed')drawUnit(u);}
+   for(const e of run.enemies)drawUnit(e);
    addActor(arr,run.commander,time);
    for(const p of run.projectiles)addMesh(arr,'sphere',p.x,1.25+Math.sin(time*10)*.15,p.z,.27,.26,.27,p.color);
    for(const fx of run.fx){if(fx.type==='burst'){let k=.15+fx.t/fx.ttl*fx.range;addMesh(arr,'disc',fx.x,.047,fx.z,k,.035,k,fx.color);}else if(fx.type==='heal'){addMesh(arr,'sphere',fx.x,1.5+fx.t*2,fx.z,.2+fx.t*.25,.2+fx.t*.25,.2+fx.t*.25,fx.color);}}

@@ -75,3 +75,36 @@ test('ferido recém-chegado da expedição não se recupera instantaneamente',()
 test('não há softlock quando todos os soldados do quartel morrem',()=>{
  globalThis.localStorage=storage();const g=new Game();g.startRun();g.finish('defeat');g.meta.roster=[];g.returnBarracks();assert.ok(g.meta.roster.some(s=>s.condition==='healthy'));assert.ok(g.meta.selectedIds.length>0);
 });
+
+test('comandante rápido e tropa alcança a formação durante a marcha',()=>{
+ globalThis.localStorage=storage();const g=new Game();g.startRun();
+ const r=g.run;r.world.sites=[];r.enemies=[];
+ assert.ok(r.commander.speed>=7.5);
+ assert.ok(r.soldiers.every(s=>statsFor(s).speed>=5.5));
+ g.input={x:0,z:1};
+ for(let t=0;t<30;t++)g.tick(1/30);
+ assert.ok(r.commander.x>5.2&&r.commander.z>5.2,`comandante: ${r.commander.x.toFixed(1)}, ${r.commander.z.toFixed(1)}`);
+ // Sem teleporte e sem deixar o esquadrão abandonado para trás.
+ for(let t=0;t<90;t++)g.tick(1/30);
+ assert.ok(r.soldiers.every(s=>Math.hypot(s.x-r.commander.x,s.z-r.commander.z)<10),
+   `distâncias: ${r.soldiers.map(s=>Math.hypot(s.x-r.commander.x,s.z-r.commander.z).toFixed(1))}`);
+});
+
+test('modelos procedurais possuem poses distintas e geometria válida',async()=>{
+ const {addActor,addActorLite}=await import('../src/render/geometry.js');
+ const {DEFAULT_CAMERA_ZOOM,CAMERA_ZOOM_LIMITS}=await import('../src/render/renderer.js');
+ assert.ok(DEFAULT_CAMERA_ZOOM<17&&CAMERA_ZOOM_LIMITS.min<DEFAULT_CAMERA_ZOOM);
+ const u={id:'commander',team:'ally',classId:'swordsman',grade:'elite',x:0,z:0,face:.3,phase:2,flash:0,anim:0,walk:false,condition:'healthy'};
+ const idle=[],idleLater=[],walk=[],strike=[],far=[];
+ addActor(idle,u,0);addActor(idleLater,u,1.1);
+ addActor(walk,{...u,walk:true},1.1);
+ addActor(strike,{...u,anim:.24},1.1);
+ addActorLite(far,{...u,walk:true,anim:.24},1.1);
+ assert.ok(idle.length>0&&far.length>0&&far.length<idle.length);
+ assert.equal(idle.length,idleLater.length);
+ assert.equal(idle.length,walk.length);
+ assert.ok([idle,idleLater,walk,strike,far].every(a=>a.every(Number.isFinite)));
+ assert.notDeepEqual(idle,idleLater,'animação de respiração em repouso');
+ assert.notDeepEqual(idleLater,walk,'animação de pernas e braços na caminhada');
+ assert.notDeepEqual(idleLater,strike,'animação da arma no golpe');
+});
