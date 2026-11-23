@@ -121,8 +121,34 @@ test('comandante ataca manualmente no arco frontal com recarga e feedback',()=>{
  const original=g.run.enemies.reduce((sum,e)=>sum+e.hp,0);assert.equal(g.basicAttack(),true);assert.ok(g.run.enemies.reduce((sum,e)=>sum+e.hp,0)<original);assert.equal(g.basicAttack(),false);assert.ok(g.run.fx.some(x=>x.type==='slash'));g.tick(.56);assert.equal(g.basicAttack(),true);
 });
 test('esquiva desloca, concede invulnerabilidade temporária e tem cooldown',()=>{
- globalThis.localStorage=storage();const g=new Game();g.startRun();const c=g.run.commander;g.input={x:0,z:1};const before=c.x;assert.equal(g.dodge(),true);assert.ok(c.x>before+3);assert.ok(c.invuln>0);const oldHp=c.hp;g.hurt(c,90,{id:'foe',team:'enemy'});assert.equal(c.hp,oldHp);assert.equal(g.dodge(),false);
+ globalThis.localStorage=storage();const g=new Game();g.startRun();const c=g.run.commander;g.input={x:0,z:1};const before=c.x;assert.equal(g.dodge(),true);assert.equal(c.x,before,'a esquiva começa sem teleporte');assert.ok(c.invuln>0);const oldHp=c.hp;g.hurt(c,90,{id:'foe',team:'enemy'});assert.equal(c.hp,oldHp);assert.equal(g.dodge(),false);g.tick(1/30);assert.ok(c.x>before&&c.x<before+3,'deslocamento incremental');for(let i=0;i<8;i++)g.tick(1/30);assert.ok(c.x>before+3,'ao final completa o dash');assert.equal(c.dashTime,0);
 });
 test('todos os andares têm nomes distintos e geram cenários válidos',()=>{
  assert.equal(TOTAL_FLOORS,4);const names=[];for(let floor=1;floor<=TOTAL_FLOORS;floor++){const w=makeWorld(7331+floor,floor);names.push(biomeForFloor(floor).name);assert.equal(w.floor,floor);assert.ok(w.details.length>300);assert.ok(w.biome.ground.length===3);assert.equal(w.sites.filter(s=>s.kind==='banner').length,2);}assert.equal(new Set(names).size,TOTAL_FLOORS);
+});
+
+test('combo de três golpes mantém cadência e reseta ao ficar inativo',()=>{
+ globalThis.localStorage=storage();const g=new Game();g.startRun();const c=g.run.commander;
+ assert.equal(g.basicAttack(),true);assert.equal(c.combo,1);g.tick(.3);
+ assert.equal(g.basicAttack(),true);assert.equal(c.combo,2);g.tick(.3);
+ assert.equal(g.basicAttack(),true);assert.equal(c.combo,3);assert.ok(g.run.fx.some(f=>f.type==='slash'&&f.combo===3));
+ g.tick(1.05);assert.equal(g.basicAttack(),true);assert.equal(c.combo,1);
+});
+test('cada frame de esquiva respeita limites e nunca cria salto instantâneo',()=>{
+ globalThis.localStorage=storage();const g=new Game();g.startRun();const c=g.run.commander;
+ c.x=47.9;c.z=47.9;g.input={x:0,z:1};g.dodge();for(let i=0;i<12;i++){const previous={x:c.x,z:c.z};g.tick(1/30);const distance=Math.hypot(c.x-previous.x,c.z-previous.z);assert.ok(distance<=1.5,'deslocamento sem teleporte');assert.ok(c.x<=48&&c.z<=48);}
+});
+
+test('inimigo pesado anuncia golpe antes do dano e pode ser evitado pela esquiva',()=>{
+ globalThis.localStorage=storage();const g=new Game();g.startRun();const c=g.run.commander;
+ for(const s of g.run.soldiers){s.x=35;s.z=35;}
+ g.run.banners=2;const post=g.run.world.sites.find(s=>s.kind==='boss');g.spawnGroup(post);
+ const e=g.run.enemies.find(x=>x.type==='brute');assert.ok(e);
+ e.x=0.8;e.z=0.5;e.range=2;e.attackClock=0;e.cooldown=9;
+ for(const other of g.run.enemies){if(other===e)continue;other.x=40;other.z=40;other.attackClock=10;}
+ const before=c.hp;g.tick(1/30);
+ assert.ok(e.windup>0,'inimigo precisa telegravar');assert.equal(c.hp,before);
+ g.input={x:1,z:0};assert.equal(g.dodge(),true);
+ for(let i=0;i<20;i++)g.tick(1/30);
+ assert.equal(c.hp,before,'esquiva impede que o golpe pesado acerte o antigo local');
 });

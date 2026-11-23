@@ -56,3 +56,12 @@
 - Esquiva: deslocamento, invulnerabilidade e recarga verificados.
 - **Não validado**: renderização real WebGL2 e legibilidade no dispositivo do usuário; o Chromium headless deste ambiente não disponibilizou captura visual confiável.
 - **Próxima rodada de QA real:** navegação por todos os locais, desempenho GPU (PC/Android), visibilidade dos indicadores, ausência de travamentos em quatro andares consecutivos.
+
+
+## Adendo 0.4.0 — 2026-11-23
+- Testes locais: 17/17 aprovados (`npm test`).
+- `npm run check` aprovado.
+- Quadro visual do quartel testado em Chromium usando implementação gráfica simulada, sem erros JS.
+- Responsividade mobile 390 px sem rolagem horizontal.
+- O WebGL2 real não está disponível no navegador de testes; estética do mundo, sombras e FPS precisam de avaliação manual.
+- O combo e a esquiva foram testados por ticks da simulação.

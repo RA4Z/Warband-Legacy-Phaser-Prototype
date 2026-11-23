@@ -32,3 +32,11 @@ Este protótipo foi desenvolvido dentro do ChatGPT sem acesso à instalação de
 - O nome internacional de trabalho é **Warband Legacy**, sujeito a pesquisa de marcas e lojas.
 - A versão offline não necessita de API, login ou conta.
 - Não é uma versão comercial pronta; é um primeiro protótipo funcional para testes e evolução.
+
+
+### Próximo passo depois da 0.4.0
+- Testar WebGL2 no Chrome/Edge com 30/60 FPS e investigar o relato de borrão em movimento com profiler e gravação.
+- Priorizar câmera, pós-processamento e shaders leves, sem sacrificar a legibilidade das tropas.
+- Migrar progressivamente para assets GLB/GLTF com rigging e animações retargetáveis caso o estilo final peça modelos mais sofisticados.
+- Testar responsividade e telegraph de ataques em tela touch.
+- Evitar transformar o projeto em MMO ou expandir o escopo antes de validar retenção e combate.

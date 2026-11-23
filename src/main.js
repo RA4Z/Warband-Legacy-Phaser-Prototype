@@ -6,7 +6,7 @@ const errorToUser=(err)=>{console.error(err);document.querySelector('#ui').inner
 try{
  const game=new Game(),renderer=new Renderer(document.querySelector('#scene'),document.querySelector('#overlay')),ui=new Interface(game,renderer),sound=new Sound();ui.sound=sound;game.sfx=sound;sound.enabled=game.meta.settings.sound;
  renderer.canvas.addEventListener('wheel',e=>{e.preventDefault();renderer.zoom=Math.max(CAMERA_ZOOM_LIMITS.min,Math.min(CAMERA_ZOOM_LIMITS.max,renderer.zoom+Math.sign(e.deltaY)*1.25));},{passive:false});
- game.onChange((event)=>{if(event==='finished'){sound.play(game.run?.victory?'victory':'hit');}if(event==='encounterStarted')sound.play('hit');if(event==='runStarted')renderer.setWorld(game.run.world);});
+ game.onChange((event)=>{if(event==='finished'){sound.play(game.run?.victory?'victory':'hit');}if(event==='encounterStarted')sound.play('hit');if(event==='combatHit'){renderer.shake=.12;sound.play('hit');}if(event==='runStarted')renderer.setWorld(game.run.world);});
  let last=performance.now();function loop(now){const dt=Math.min(.1,(now-last)/1000);last=now;game.input=ui.getInput();if(!ui.isPaused()&&ui.screen==='play'){game.update(dt);}renderer.render(game.run,game.run?.elapsed||now/1000);ui.update(now);requestAnimationFrame(loop);}requestAnimationFrame(loop);
  // Objetos públicos apenas para inspeção manual em desenvolvimento.
  if(new URLSearchParams(location.search).has('debug'))window.__warband={game,renderer,ui};

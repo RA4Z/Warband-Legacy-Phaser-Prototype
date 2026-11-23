@@ -1,4 +1,4 @@
-# Status real da versão 0.3.0
+# Status real da versão 0.4.0
 
 ## Implementado no código
 
@@ -54,3 +54,12 @@ Testar o arquivo HTML único no Chrome/Edge do Windows com WebGL2 e começar aju
 - Interações legíveis e HUD de progresso por andar.
 - Migração de saves anteriores do quartel.
 - 14 testes automatizados; validação visual e QA em celular pendentes.
+
+
+## v0.4.0 — dados de QA
+
+- 17/17 testes de domínio passando (incluindo dash contínuo, combo e aviso de golpes pesados).
+- Smoke test de UI em Chromium com renderizador simulado: menu → quartel → iniciar expedição sem erros.
+- Smoke test mobile a 390 px: sem rolagem horizontal e botão de iniciar acessível.
+- WebGL2 real, fluidez visual, legibilidade do cenário e desempenho ainda **não foram validados** neste ambiente; confirmar em dispositivo com WebGL2.
+- A qualidade artística de malhas procedurais ainda é de protótipo; para um visual comercial será necessária direção de arte e uma biblioteca de modelos/efeitos mais elaborados.

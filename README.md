@@ -1,8 +1,20 @@
-# ⚔ Warband Legacy — Protótipo 0.3.0
+# ⚔ Warband Legacy — Protótipo 0.4.0
 
 **Every soldier has a story.**
 
 Roguelite 3D isométrico de exércitos para navegador e celulares compatíveis. Cada soldado possui identidade, progressão, ferimentos e risco de morte permanente.
+
+## 🛡 Atualização 0.4.0 — War Room & combate responsivo
+
+- **Novo quartel War Room:** interface desenhada como tela de jogo de fantasia (identidade, brasão, seleção de comandante, composição de esquadrão, melhorias persistentes), substituindo a apresentação semelhante a um painel web. Preservados todos os botões de recrutamento, detalhes de unidades, promoções e melhorias.
+- **HUD refinado:** hierarquia visual compacta para objetivo atual, HP, quatro andares, ordens, minimapa e atalhos de combate. No celular a tela do quartel não ultrapassa a largura da viewport (validação a 390 px).
+- **Esquiva contínua:** percorre seu trajeto durante ~230 ms em ticks, tem rastros, recarga de 3,2 segundos e breve invulnerabilidade. Não modifica a posição de uma só vez.
+- **Ataque em três golpes:** janela de combo, velocidades diferentes e finalizador mais forte com avanço curto, arco visual, números, faíscas e reação de inimigos.
+- **Brutamontes e chefe:** golpes perigosos corpo a corpo possuem aviso visível antes do impacto; uma esquiva bem cronometrada permite escapar.
+- **Cenário e nitidez:** árvores e pedras maiores, pontos de interesse ampliados, ruínas, troncos, pilares, iluminação com mais contraste, câmera de acompanhamento mais rápida e DPR ajustado para evitar o aspecto lavado/embaçado.
+- **Som:** efeitos inéditos sintetizados para golpe, impacto, esquiva, poderes e vitória.
+
+**Limite da validação:** a lógica, o HTML standalone, o quartel e o layout mobile passaram nos testes automatizados. O Chromium disponível aqui não fornece WebGL2, então a renderização real 3D e o FPS ainda exigem teste manual no Chrome/Edge do computador/celular.
 
 ## 🌳 Atualização 0.3.0 — cenário, combate e andares roguelite
 
